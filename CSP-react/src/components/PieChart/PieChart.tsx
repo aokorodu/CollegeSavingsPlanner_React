@@ -1,26 +1,26 @@
 import styles from './PieChart.module.css';
 import React from 'react';
+import { useEffect } from 'react';
 
 interface PieChartProps {
     colors: string[];
+    percentage: number;
 }
 
-const PieChart = (props: PieChartProps) => {
-    //const colors = props.colors || ['#1086d5', '#f0f0f0'];
-    const colors = props.colors || ['#1086d5', '#00539B'];
+const PieChart = ({ colors, percentage }: PieChartProps) => {
     const savedPath = React.createRef<SVGCircleElement>();
 
-    React.useEffect(() => {
-        test();
-    }, []);
+    // useEffect(() => {
+    //     test();
+    // }, []);
 
-    const test = () => {
-        console.log('savedPath.current', savedPath.current);
-        savedPath.current?.setAttribute('stroke-dashoffset', '-25');
-        setTimeout(() => {
-            savedPath.current?.setAttribute('stroke-dashoffset', '0');
-        }, 5000);
-    }
+    // const test = () => {
+    //     console.log('savedPath.current', savedPath.current);
+    //     savedPath.current?.setAttribute('stroke-dashoffset', '-25');
+    //     setTimeout(() => {
+    //         savedPath.current?.setAttribute('stroke-dashoffset', '0');
+    //     }, 5000);
+    // }
     return (
         <div>
             <svg id="svg" width="500" height="500" viewBox="-100 -100 1200 1200">
@@ -100,7 +100,7 @@ const PieChart = (props: PieChartProps) => {
                             stroke-linecap="none"
                             pathLength="100"
                             stroke-dasharray="100 100"
-                            stroke-dashoffset={50}
+                            stroke-dashoffset={percentage > 100 ? 100 : -percentage}
                         ></circle>
 
                         <g id="dividerPath">
