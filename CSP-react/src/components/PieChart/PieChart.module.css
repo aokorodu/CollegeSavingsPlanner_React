@@ -1,0 +1,9 @@
+:root {
+  --transitionDuration: 333ms;
+}
+
+.savedPath {
+  fill: none;
+  transition-property: all;
+  transition-duration: var(--transitionDuration);
+}
