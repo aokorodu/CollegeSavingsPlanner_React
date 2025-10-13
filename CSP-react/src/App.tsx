@@ -21,7 +21,15 @@ function App() {
   useEffect(() => {
     //const colleges: College[] = getCollegesByState(selectedState);
     setColleges(getCollegesByState(selectedState));
-  }, [selectedState, colleges]);
+  }, [selectedState]);
+
+  const getCollegeSelections = () => {
+    console.log('getCollegeSelections');
+    const newArr = colleges.map((college) => {
+      return <option key={college.name} selected={false} value={String(college.cost)}>{college.name}</option>
+    });
+    return newArr;
+  }
   return (
     <>
       <h1>College Savings Planner</h1>
@@ -29,18 +37,18 @@ function App() {
       <div>
         <select onChange={(e) => {
           setSelectedState(e.target.value as string);
-          setColleges(getCollegesByState(selectedState));
+          //setColleges(getCollegesByState(selectedState));
         }}>
           {stateNames.map((state) => (
             <option key={String(state)} value={state}>{state}</option>
           ))}
         </select>
         <div>
-          <select>
-            <option disabled selected>select a college</option>
-            {getCollegesByState(selectedState).map((college) => {
-              return <option key={college.name} value={college.name}>{college.name}</option>
-            })}</select>
+          <select id="colleges" defaultValue={"placeholder"} onChange={(e) => { console.log('selected college cost', e.target.value) }}>
+            <option value="placeholder" selected>
+              Select an option...
+            </option>
+            {getCollegeSelections()}</select>
         </div>
 
       </div>
