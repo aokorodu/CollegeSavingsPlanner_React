@@ -10,20 +10,9 @@ interface PieChartProps {
 const PieChart = ({ colors, percentage }: PieChartProps) => {
     const savedPath = React.createRef<SVGCircleElement>();
 
-    // useEffect(() => {
-    //     test();
-    // }, []);
-
-    // const test = () => {
-    //     console.log('savedPath.current', savedPath.current);
-    //     savedPath.current?.setAttribute('stroke-dashoffset', '-25');
-    //     setTimeout(() => {
-    //         savedPath.current?.setAttribute('stroke-dashoffset', '0');
-    //     }, 5000);
-    // }
     return (
         <div>
-            <svg id="svg" width="500" height="500" viewBox="-100 -100 1200 1200">
+            <svg id="svg" width="500" height="500" viewBox="0 0 1000 1000">
                 <defs>
                     <linearGradient
                         id="numberBackgroundGradient"
