@@ -3,6 +3,7 @@ import './App.css'
 import PieChart from './components/PieChart/PieChart';
 import React, { useEffect, useState } from 'react';
 import { stateNames, getCollegesByState } from './data/costData';
+import { formatToDollarString } from './utils/Utils';
 
 
 type College = {
@@ -28,13 +29,12 @@ function App() {
   const [annualCostIncrease, setAnnualCostIncrease] = useState(5);
   const [periods, setPeriods] = useState(12);
   const [contribution, setContribution] = useState(0);
+  const [futureSaved, setFutureSaved] = useState(0);
+  const [futureCost, setfutureCost] = useState(0)
   //
   let yearlyCostByYear = [];
   let yearlySavedByYear = [];
   let maxYearlyCollegeCost = 0;
-  let monthlyContribution = 0;
-  let futureCost = 0;
-  let amountSaved = 0;
   let percentageSaved = 0;
   let percentages = [];
   //
@@ -45,7 +45,19 @@ function App() {
   }, [selectedState]);
 
   // useEffect for when college is selected and you have the cost
-  useEffect(() => { })
+  useEffect(() => {
+    const amt = calculateAmountSaved()
+    console.log('amount saved: ', amt);
+    setFutureSaved(amt);
+    let pct = futureSaved / futureCost * 100;
+    if (pct > 100) pct = 100;
+    setPercentage(pct)
+  }, [yearsToCollege, yearlyCost, initialBalance, annualRateOfReturn, periods, contribution, futureSaved, futureCost])
+
+  useEffect(() => {
+    const cst = calculateFutureCost();
+    setfutureCost(cst);
+  }, [yearlyCost])
 
   const getCollegeSelections = () => {
     console.log('getCollegeSelections');
@@ -58,6 +70,44 @@ function App() {
   const selectNewCost = (cost: number) => {
     console.log('selectNewCost', cost);
     setYearlyCost(cost);
+  }
+
+  const setStartBalanceFromInput = (input: string) => {
+    const cleanedInput = formatToDollarString(input);
+    setInitialBalance(parseInt(cleanedInput));
+  }
+
+  function calculateAmountSaved() {
+    const monthlyRateOfReturn = annualRateOfReturn / 100 / periods;
+
+    const totalMonths = yearsToCollege * periods;
+
+    let balance = initialBalance;
+    console.log("balance: ", balance)
+    for (let month = 0; month < totalMonths; month++) {
+      balance += contribution;
+      balance += balance * monthlyRateOfReturn;
+    }
+
+    return balance;
+  }
+
+  function calculateFutureCost() {
+    yearlyCostByYear = [];
+    const annualCollegeCostIncrease = 1 + annualCostIncrease / 100; // 5% increase per year
+    let futureYearlyCost = yearlyCost;
+    for (let i = 0; i < yearsToCollege; i++) {
+      futureYearlyCost *= annualCollegeCostIncrease;
+    }
+
+    let futureCost = 0;
+    for (let i = 0; i < yearsOfCollege; i++) {
+      futureCost += futureYearlyCost;
+      yearlyCostByYear.push(Math.round(futureYearlyCost));
+      futureYearlyCost *= annualCollegeCostIncrease;
+    }
+    // console.log("fix this  yearlyCostByYear", yearlyCostByYear);
+    return Math.round(futureCost);
   }
 
   return (
@@ -154,6 +204,21 @@ function App() {
           <div id="plannedContributionText">
             {contribution}
           </div>
+        </div>
+
+        <div>
+          <label htmlFor="startingAmountInput">current amount saved</label>
+          <input type="text" id="startingAmountInput" value={`$${initialBalance.toLocaleString()}`} onChange={(e) => setStartBalanceFromInput(e.target.value)} />
+        </div>
+
+        <div>
+          <label>future amount saved</label>{`$${futureSaved.toLocaleString()}`}
+        </div>
+        <div>
+          <label>future cost</label>{`$${futureCost.toLocaleString()}`}
+        </div>
+        <div>
+          <label>percent saved</label>{`${Math.round(futureSaved / futureCost * 100)}%`}
         </div>
 
       </div>

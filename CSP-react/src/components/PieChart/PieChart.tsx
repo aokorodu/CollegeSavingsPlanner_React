@@ -8,11 +8,12 @@ interface PieChartProps {
 }
 
 const PieChart = ({ colors, percentage }: PieChartProps) => {
+    console.log('PieChart render - percentage: ', percentage);
     const savedPath = React.createRef<SVGCircleElement>();
 
     return (
         <div>
-            <svg id="svg" width="500" height="500" viewBox="0 0 1000 1000">
+            <svg id="svg" width="300" height="300" viewBox="0 0 1000 1000">
                 <defs>
                     <linearGradient
                         id="numberBackgroundGradient"
@@ -22,8 +23,8 @@ const PieChart = ({ colors, percentage }: PieChartProps) => {
                         x2="0"
                         y2="0"
                     >
-                        <stop offset="0%" stop-color="#000" stop-opacity="0%" />
-                        <stop offset="100%" stop-color="#000" stop-opacity="25%" />
+                        <stop offset="0%" stopColor="#000" stopOpacity="0%" />
+                        <stop offset="100%" stopColor="#000" stopOpacity="25%" />
                     </linearGradient>
                     <g id="barGraphic">
                         <rect
@@ -62,8 +63,8 @@ const PieChart = ({ colors, percentage }: PieChartProps) => {
                             r="300"
                             fill="none"
                             stroke="#f0f0f0"
-                            stroke-opacity="1"
-                            stroke-width="270"
+                            strokeOpacity="1"
+                            strokeWidth="270"
                         ></circle>
 
                         <circle
@@ -73,8 +74,8 @@ const PieChart = ({ colors, percentage }: PieChartProps) => {
                             r="300"
                             fill="none"
                             stroke={colors[0]}
-                            stroke-opacity="1"
-                            stroke-width="250"
+                            strokeOpacity="1"
+                            strokeWidth="250"
                         ></circle>
 
                         <circle
@@ -85,19 +86,19 @@ const PieChart = ({ colors, percentage }: PieChartProps) => {
                             r="300"
                             fill="none"
                             stroke={colors[1]}
-                            stroke-width="250"
-                            stroke-linecap="none"
+                            strokeWidth="250"
+                            strokeLinecap="none"
                             pathLength="100"
-                            stroke-dasharray="100 100"
-                            stroke-dashoffset={percentage > 100 ? 100 : -percentage}
+                            strokeDasharray="100 100"
+                            strokeDashoffset={percentage > 100 ? 100 : -percentage}
                         ></circle>
 
                         <g id="dividerPath">
                             <path
                                 d="M175 0 H425"
                                 stroke="#fff"
-                                stroke-width="5"
-                                stroke-linecap="none"
+                                strokeWidth="5"
+                                strokeLinecap="none"
                             ></path>
                         </g>
                     </g>

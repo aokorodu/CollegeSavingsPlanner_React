@@ -12,3 +12,11 @@
   gap: 0.5rem;
   margin-bottom: 1rem;
 }
+
+input {
+  margin: 0 1rem;
+}
+
+select {
+  margin: 0.5rem;
+}
