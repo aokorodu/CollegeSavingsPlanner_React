@@ -4,6 +4,7 @@ import PieChart from './components/PieChart/PieChart';
 import React, { useEffect, useState } from 'react';
 import { stateNames, getCollegesByState } from './data/costData';
 import { formatToDollarString } from './utils/Utils';
+import { calculateAmountSaved } from './data/calculator';
 
 
 type College = {
@@ -46,7 +47,7 @@ function App() {
 
   // useEffect for when college is selected and you have the cost
   useEffect(() => {
-    const amt = calculateAmountSaved()
+    const amt = calculateAmountSaved({ rateOfReturn: annualRateOfReturn, periods, yearsToCollege, initialBalance, contribution });
     console.log('amount saved: ', amt);
     setFutureSaved(amt);
     let pct = futureSaved / futureCost * 100;
@@ -77,20 +78,6 @@ function App() {
     setInitialBalance(parseInt(cleanedInput));
   }
 
-  function calculateAmountSaved() {
-    const monthlyRateOfReturn = annualRateOfReturn / 100 / periods;
-
-    const totalMonths = yearsToCollege * periods;
-
-    let balance = initialBalance;
-    console.log("balance: ", balance)
-    for (let month = 0; month < totalMonths; month++) {
-      balance += contribution;
-      balance += balance * monthlyRateOfReturn;
-    }
-
-    return balance;
-  }
 
   function calculateFutureCost() {
     yearlyCostByYear = [];
