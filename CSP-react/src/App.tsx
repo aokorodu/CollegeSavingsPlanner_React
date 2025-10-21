@@ -70,15 +70,23 @@ function App() {
   const getCollegeSelections = () => {
     console.log('getCollegeSelections');
     const newArr = colleges.map((college) => {
-      return <option key={college.name} selected={false} value={`${college.cost}|${college.colors}`}>{college.name}</option>
+      return (
+        <option
+          key={college.name}
+          selected={false}
+          value={JSON.stringify(college)}
+        >
+          {college.name}
+        </option>
+      );
     });
     return newArr;
   }
 
-  const selectNewCollege = ({ cost, colors }: collegeData) => {
+  const selectNewCollege = ({ cost, colors }: College) => {
     console.log('selectNewCollege', cost);
     console.log('colors', colors);
-    setYearlyCost(cost);
+    setYearlyCost(cost !== null ? cost : 0);
   }
 
   const setStartBalanceFromInput = (input: string) => {
@@ -109,8 +117,8 @@ function App() {
         <div>
           {/* select college */}
           <select id="colleges" defaultValue={"placeholder"} onChange={(e) => {
-            const [costStr, colorsStr] = e.target.value.split('|');
-            selectNewCollege({ cost: parseInt(costStr), colors: colorsStr.split(',') })
+
+            selectNewCollege(JSON.parse(e.target.value) as College)
           }}>
             <option value="placeholder" selected>
               Select an option...
