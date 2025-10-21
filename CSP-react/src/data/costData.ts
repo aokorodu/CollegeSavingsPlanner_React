@@ -1,6 +1,6 @@
 export type College = {
   name: string;
-  cost: number | null;
+  cost: number;
   colors: string[];
 };
 const Average: College[] = [

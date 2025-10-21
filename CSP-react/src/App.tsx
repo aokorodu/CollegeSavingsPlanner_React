@@ -9,7 +9,7 @@ import { calculateAmountSaved, calculateFutureCost } from './data/calculator';
 
 type College = {
   name: string;
-  cost: number | null;
+  cost: number;
   colors: string[];
 };
 
@@ -30,7 +30,7 @@ function App() {
   const yearsOfCollege = 4;
   const defaultYearsToCollege = 17;
   const [yearsToCollege, setYearsToCollege] = useState(defaultYearsToCollege)
-  const [yearlyCost, setYearlyCost] = useState(0);
+  //const [yearlyCost, setYearlyCost] = useState(0);
   const [initialBalance, setInitialBalance] = useState(0);
   const [annualRateOfReturn, setAnnualRateOfReturn] = useState(6);
   const [annualCostIncrease, setAnnualCostIncrease] = useState(5);
@@ -59,20 +59,21 @@ function App() {
     let pct = futureSaved / futureCost * 100;
     if (pct > 100) pct = 100;
     setPercentage(pct)
-  }, [yearsToCollege, yearlyCost, initialBalance, annualRateOfReturn, periods, contribution, futureSaved, futureCost])
+  }, [yearsToCollege, selectedCollege, initialBalance, annualRateOfReturn, periods, contribution, futureSaved, futureCost])
 
   useEffect(() => {
-    const cst = calculateFutureCost({ yearlyCost, annualCostIncrease, yearsToCollege, yearsOfCollege });
-    setfutureCost(cst.futureCost);
-    yearlyCostByYear = cst.yearlyCostByYear;
-  }, [yearlyCost])
+    const cost = selectedCollege ? selectedCollege.cost : 0;
+    const futureCost = calculateFutureCost({ yearlyCost: cost, annualCostIncrease, yearsToCollege, yearsOfCollege });
+    setfutureCost(futureCost.futureCost);
+    yearlyCostByYear = futureCost.yearlyCostByYear;
+  }, [selectedCollege])
 
   const getCollegeSelections = () => {
     console.log('getCollegeSelections');
-    const newArr = colleges.map((college) => {
+    const newArr = colleges.map((college, index) => {
       return (
         <option
-          key={college.name}
+          key={`${college.name}_${index}`}
           selected={false}
           value={JSON.stringify(college)}
         >
@@ -83,10 +84,11 @@ function App() {
     return newArr;
   }
 
-  const selectNewCollege = ({ cost, colors }: College) => {
-    console.log('selectNewCollege', cost);
-    console.log('colors', colors);
-    setYearlyCost(cost !== null ? cost : 0);
+  const selectNewCollege = (newCollege: College) => {
+    console.log('selectNewCollege', newCollege.cost);
+    console.log('colors', newCollege.colors);
+    //setYearlyCost(newCollege.cost !== null ? newCollege.cost : 0);
+    setSelectedCollege(newCollege);
   }
 
   const setStartBalanceFromInput = (input: string) => {
@@ -97,7 +99,7 @@ function App() {
   return (
     <>
       <h1>College Savings Planner</h1>
-      <PieChart colors={schoolColors} percentage={percentage} />
+      <PieChart colors={selectedCollege?.colors || defaultColors} percentage={percentage} />
       {/* <div>
         Yearly Cost: {yearlyCost}
       </div> */}
@@ -141,15 +143,27 @@ function App() {
         </div>
 
         <div>
-          <label htmlFor="annualCollegeCostSlider">annual cost: {yearlyCost}</label>
+          <label htmlFor="annualCollegeCostSlider">annual cost: {selectedCollege?.cost}</label>
           <input
             id="annualCollegeCostSlider"
             type="range"
-            value={yearlyCost}
+            value={selectedCollege?.cost}
             min="0"
             max="100000"
             step="100"
-            onChange={(e) => setYearlyCost(parseInt(e.target.value))}
+            onChange={(e) => {
+              const college = selectedCollege;
+              if (college) {
+                const newCollegeData: College = {
+                  name: college.name,
+                  cost: parseInt(e.target.value),
+                  colors: college.colors
+                };
+                setSelectedCollege(newCollegeData);
+              }
+              // setYearlyCost(parseInt(e.target.value))
+
+            }}
           />
         </div>
 

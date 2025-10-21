@@ -9,6 +9,8 @@ interface PieChartProps {
 
 const PieChart = ({ colors, percentage }: PieChartProps) => {
     console.log('PieChart render - percentage: ', percentage);
+    console.log('PieChart render colors: ', colors);
+    const chartColors = colors.length === 0 ? ['#1086d5', '#00539B'] : colors;
     const savedPath = React.createRef<SVGCircleElement>();
 
     return (
@@ -73,7 +75,7 @@ const PieChart = ({ colors, percentage }: PieChartProps) => {
                             cy="0"
                             r="300"
                             fill="none"
-                            stroke={colors[0]}
+                            stroke={chartColors[0]}
                             strokeOpacity="1"
                             strokeWidth="250"
                         ></circle>
@@ -85,7 +87,7 @@ const PieChart = ({ colors, percentage }: PieChartProps) => {
                             cy="0"
                             r="300"
                             fill="none"
-                            stroke={colors[1]}
+                            stroke={chartColors[1]}
                             strokeWidth="250"
                             strokeLinecap="none"
                             pathLength="100"
