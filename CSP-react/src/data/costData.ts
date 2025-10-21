@@ -7,22 +7,22 @@ const Average: College[] = [
   {
     name: "Average in-state Public College",
     cost: 24920,
-    colors: ["#555879", "#98A1BC"],
+    colors: ["#98A1BC", "#555879"],
   },
   {
     name: "Average out-of-state Public College",
     cost: 44090,
-    colors: ["#555879", "#98A1BC"],
+    colors: ["#98A1BC", "#555879"],
   },
   {
     name: "Average Private College - Average",
     cost: 58600,
-    colors: ["#555879", "#98A1BC"],
+    colors: ["#98A1BC", "#555879"],
   },
   {
     name: "Average Private College - Expensive",
     cost: 70731,
-    colors: ["#555879", "#98A1BC"],
+    colors: ["#98A1BC", "#555879"],
   },
 ];
 
@@ -1708,44 +1708,44 @@ const Maryland: College[] = [
     cost: 19730,
     colors: ["#006747", "#FFFFFF"],
   },
-  { name: "Cecil College", cost: 10200, colors: ["#555879", "#98A1BC"] },
-  { name: "Chesapeake College", cost: 10200, colors: ["#555879", "#98A1BC"] },
+  { name: "Cecil College", cost: 10200, colors: ["#98A1BC", "#555879"] },
+  { name: "Chesapeake College", cost: 10200, colors: ["#98A1BC", "#555879"] },
   {
     name: "College of Southern Maryland",
     cost: 10200,
-    colors: ["#555879", "#98A1BC"],
+    colors: ["#98A1BC", "#555879"],
   },
   {
     name: "Community College of Baltimore County",
     cost: 10200,
-    colors: ["#555879", "#98A1BC"],
+    colors: ["#98A1BC", "#555879"],
   },
   {
     name: "Frederick Community College",
     cost: 10200,
-    colors: ["#555879", "#98A1BC"],
+    colors: ["#98A1BC", "#555879"],
   },
-  { name: "Garrett College", cost: 10200, colors: ["#555879", "#98A1BC"] },
+  { name: "Garrett College", cost: 10200, colors: ["#98A1BC", "#555879"] },
   {
     name: "Hagerstown Community College",
     cost: 10200,
-    colors: ["#555879", "#98A1BC"],
+    colors: ["#98A1BC", "#555879"],
   },
   {
     name: "Harford Community College",
     cost: 10200,
-    colors: ["#555879", "#98A1BC"],
+    colors: ["#98A1BC", "#555879"],
   },
   {
     name: "Howard Community College",
     cost: 10200,
-    colors: ["#555879", "#98A1BC"],
+    colors: ["#98A1BC", "#555879"],
   },
-  { name: "Montgomery College", cost: 10200, colors: ["#555879", "#98A1BC"] },
+  { name: "Montgomery College", cost: 10200, colors: ["#98A1BC", "#555879"] },
   {
     name: "Prince George's Community College",
     cost: 10200,
-    colors: ["#555879", "#98A1BC"],
+    colors: ["#98A1BC", "#555879"],
   },
   { name: "Salisbury University", cost: 25860, colors: ["#005A9C", "#FFFFFF"] },
   {
@@ -1756,7 +1756,7 @@ const Maryland: College[] = [
   {
     name: "Wor-Wic Community College",
     cost: 10200,
-    colors: ["#555879", "#98A1BC"],
+    colors: ["#98A1BC", "#555879"],
   },
 ];
 
@@ -6595,14 +6595,14 @@ const Virginia: College[] = [
   {
     name: "Germanna Community College",
     cost: 10200,
-    colors: ["#555879", "#98A1BC"],
+    colors: ["#98A1BC", "#555879"],
   },
   { name: "Goucher College", cost: 53500, colors: ["#8C1D40", "#231F20"] },
   { name: "Hollins University", cost: 41000, colors: ["#0033A0", "#FFD100"] },
   {
     name: "Lord Fairfax Community College",
     cost: 10200,
-    colors: ["#555879", "#98A1BC"],
+    colors: ["#98A1BC", "#555879"],
   },
   { name: "Lynchburg College", cost: 41000, colors: ["#0033A0", "#FFD100"] },
 ];
@@ -6632,49 +6632,49 @@ const West_Virginia: College[] = [
   {
     name: "West Virginia Wesleyan College",
     cost: 34500,
-    colors: ["#555879", "#98A1BC"],
+    colors: ["#98A1BC", "#555879"],
   },
-  { name: "Wheeling University", cost: 29500, colors: ["#555879", "#98A1BC"] },
+  { name: "Wheeling University", cost: 29500, colors: ["#98A1BC", "#555879"] },
   {
     name: "Alderson Broaddus University",
     cost: 29500,
-    colors: ["#555879", "#98A1BC"],
+    colors: ["#98A1BC", "#555879"],
   },
   {
     name: "Bluefield State College",
     cost: 16220,
-    colors: ["#555879", "#98A1BC"],
+    colors: ["#98A1BC", "#555879"],
   },
-  { name: "Concord University", cost: 19920, colors: ["#555879", "#98A1BC"] },
+  { name: "Concord University", cost: 19920, colors: ["#98A1BC", "#555879"] },
   {
     name: "Glenville State College",
     cost: 16220,
-    colors: ["#555879", "#98A1BC"],
+    colors: ["#98A1BC", "#555879"],
   },
   {
     name: "Potomac State College of West Virginia University",
     cost: 16220,
-    colors: ["#555879", "#98A1BC"],
+    colors: ["#98A1BC", "#555879"],
   },
   {
     name: "West Liberty University",
     cost: 19920,
-    colors: ["#555879", "#98A1BC"],
+    colors: ["#98A1BC", "#555879"],
   },
   {
     name: "West Virginia Northern Community College",
     cost: 10200,
-    colors: ["#555879", "#98A1BC"],
+    colors: ["#98A1BC", "#555879"],
   },
   {
     name: "West Virginia University at Parkersburg",
     cost: 10200,
-    colors: ["#555879", "#98A1BC"],
+    colors: ["#98A1BC", "#555879"],
   },
   {
     name: "West Virginia University Institute of Technology",
     cost: 19920,
-    colors: ["#555879", "#98A1BC"],
+    colors: ["#98A1BC", "#555879"],
   },
 ];
 

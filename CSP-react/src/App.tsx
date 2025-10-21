@@ -13,14 +13,8 @@ type College = {
   colors: string[];
 };
 
-type collegeData = {
-  cost: number;
-  colors: string[];
-}
-
 function App() {
-  const defaultColors = ['#1086d5', '#00539B'];
-  const schoolColors = defaultColors;
+  const defaultColors = ["#98A1BC", "#555879"];
   const [percentage, setPercentage] = React.useState(0);
   const [selectedState, setSelectedState] = React.useState('Average');
   const [colleges, setColleges] = React.useState<College[]>(getCollegesByState("Average"));
@@ -66,7 +60,7 @@ function App() {
     const futureCost = calculateFutureCost({ yearlyCost: cost, annualCostIncrease, yearsToCollege, yearsOfCollege });
     setfutureCost(futureCost.futureCost);
     yearlyCostByYear = futureCost.yearlyCostByYear;
-  }, [selectedCollege])
+  }, [annualCostIncrease, selectedCollege])
 
   const getCollegeSelections = () => {
     console.log('getCollegeSelections');
@@ -143,7 +137,7 @@ function App() {
         </div>
 
         <div>
-          <label htmlFor="annualCollegeCostSlider">annual cost: {selectedCollege?.cost}</label>
+          <label htmlFor="annualCollegeCostSlider">annual cost: ${selectedCollege?.cost.toLocaleString()}</label>
           <input
             id="annualCollegeCostSlider"
             type="range"
@@ -179,7 +173,18 @@ function App() {
             onChange={(e) => setAnnualRateOfReturn(parseInt(e.target.value))}
           />
         </div>
-
+        <div>
+          <label htmlFor="costIncreaseSlider">cost increase: {annualCostIncrease}%</label>
+          <input
+            id="costIncreaseSlider"
+            type="range"
+            min="0"
+            max="10"
+            value={annualCostIncrease}
+            step=".1"
+            onChange={(e) => setAnnualCostIncrease(parseFloat(e.target.value))}
+          />
+        </div>
         <div>
           <div>
             <select id="periodSelect" onChange={(e) => setPeriods(parseInt(e.target.value))}>
@@ -203,7 +208,7 @@ function App() {
             onChange={(e) => setContribution(parseInt(e.target.value))}
           />
           <div id="plannedContributionText">
-            {contribution}
+            {`$${contribution.toLocaleString()}`}
           </div>
         </div>
 

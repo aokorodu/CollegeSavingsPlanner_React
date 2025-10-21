@@ -10,7 +10,7 @@ interface PieChartProps {
 const PieChart = ({ colors, percentage }: PieChartProps) => {
     console.log('PieChart render - percentage: ', percentage);
     console.log('PieChart render colors: ', colors);
-    const chartColors = colors.length === 0 ? ['#1086d5', '#00539B'] : colors;
+    const chartColors = colors.length === 0 ? ["#98A1BC", "#555879"] : colors;
     const savedPath = React.createRef<SVGCircleElement>();
 
     return (
@@ -97,10 +97,12 @@ const PieChart = ({ colors, percentage }: PieChartProps) => {
 
                         <g id="dividerPath">
                             <path
+                                className={styles.savedPath}
                                 d="M175 0 H425"
                                 stroke="#fff"
                                 strokeWidth="5"
                                 strokeLinecap="none"
+                                transform={`rotate(${(percentage > 100 ? 360 : percentage / 100) * 360})`}
                             ></path>
                         </g>
                     </g>
