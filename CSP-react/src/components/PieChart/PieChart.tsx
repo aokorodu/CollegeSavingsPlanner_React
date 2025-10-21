@@ -1,6 +1,5 @@
 import styles from './PieChart.module.css';
 import React from 'react';
-import { useEffect } from 'react';
 
 interface PieChartProps {
     colors: string[];
@@ -89,7 +88,7 @@ const PieChart = ({ colors, percentage }: PieChartProps) => {
                             fill="none"
                             stroke={chartColors[1]}
                             strokeWidth="250"
-                            strokeLinecap="none"
+                            strokeLinecap="inherit"
                             pathLength="100"
                             strokeDasharray="100 100"
                             strokeDashoffset={percentage > 100 ? 100 : -percentage}
@@ -101,7 +100,7 @@ const PieChart = ({ colors, percentage }: PieChartProps) => {
                                 d="M175 0 H425"
                                 stroke="#fff"
                                 strokeWidth="5"
-                                strokeLinecap="none"
+                                strokeLinecap="inherit"
                                 transform={`rotate(${(percentage > 100 ? 360 : percentage / 100) * 360})`}
                             ></path>
                         </g>

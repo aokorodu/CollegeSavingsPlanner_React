@@ -1,6 +1,7 @@
 
 import './App.css'
 import PieChart from './components/PieChart/PieChart';
+import BarGraph from './components/BarGraph/BarGraph';
 import React, { useEffect, useState } from 'react';
 import { stateNames, getCollegesByState } from './data/costData';
 import { formatToDollarString } from './utils/Utils';
@@ -94,9 +95,7 @@ function App() {
     <>
       <h1>College Savings Planner</h1>
       <PieChart colors={selectedCollege?.colors || defaultColors} percentage={percentage} />
-      {/* <div>
-        Yearly Cost: {yearlyCost}
-      </div> */}
+      <BarGraph colors={selectedCollege?.colors || defaultColors} percentage={percentage} yearlyCosts={[]} maxYearlyCost={0} />
       <div className="uiHolder">
 
         <div>
