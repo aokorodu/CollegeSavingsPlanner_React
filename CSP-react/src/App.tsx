@@ -4,7 +4,7 @@ import PieChart from './components/PieChart/PieChart';
 import React, { useEffect, useState } from 'react';
 import { stateNames, getCollegesByState } from './data/costData';
 import { formatToDollarString } from './utils/Utils';
-import { calculateAmountSaved } from './data/calculator';
+import { calculateAmountSaved, calculateFutureCost } from './data/calculator';
 
 
 type College = {
@@ -56,8 +56,9 @@ function App() {
   }, [yearsToCollege, yearlyCost, initialBalance, annualRateOfReturn, periods, contribution, futureSaved, futureCost])
 
   useEffect(() => {
-    const cst = calculateFutureCost();
-    setfutureCost(cst);
+    const cst = calculateFutureCost({ yearlyCost, annualCostIncrease, yearsToCollege, yearsOfCollege });
+    setfutureCost(cst.futureCost);
+    yearlyCostByYear = cst.yearlyCostByYear;
   }, [yearlyCost])
 
   const getCollegeSelections = () => {
@@ -76,25 +77,6 @@ function App() {
   const setStartBalanceFromInput = (input: string) => {
     const cleanedInput = formatToDollarString(input);
     setInitialBalance(parseInt(cleanedInput));
-  }
-
-
-  function calculateFutureCost() {
-    yearlyCostByYear = [];
-    const annualCollegeCostIncrease = 1 + annualCostIncrease / 100; // 5% increase per year
-    let futureYearlyCost = yearlyCost;
-    for (let i = 0; i < yearsToCollege; i++) {
-      futureYearlyCost *= annualCollegeCostIncrease;
-    }
-
-    let futureCost = 0;
-    for (let i = 0; i < yearsOfCollege; i++) {
-      futureCost += futureYearlyCost;
-      yearlyCostByYear.push(Math.round(futureYearlyCost));
-      futureYearlyCost *= annualCollegeCostIncrease;
-    }
-    // console.log("fix this  yearlyCostByYear", yearlyCostByYear);
-    return Math.round(futureCost);
   }
 
   return (
