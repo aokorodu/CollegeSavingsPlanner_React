@@ -13,12 +13,18 @@ type College = {
   colors: string[];
 };
 
+type collegeData = {
+  cost: number;
+  colors: string[];
+}
+
 function App() {
   const defaultColors = ['#1086d5', '#00539B'];
   const schoolColors = defaultColors;
   const [percentage, setPercentage] = React.useState(0);
   const [selectedState, setSelectedState] = React.useState('Average');
   const [colleges, setColleges] = React.useState<College[]>(getCollegesByState("Average"));
+  const [selectedCollege, setSelectedCollege] = React.useState<College | null>(null);
 
   //
   const yearsOfCollege = 4;
@@ -64,13 +70,14 @@ function App() {
   const getCollegeSelections = () => {
     console.log('getCollegeSelections');
     const newArr = colleges.map((college) => {
-      return <option key={college.name} selected={false} value={String(college.cost)}>{college.name}</option>
+      return <option key={college.name} selected={false} value={`${college.cost}|${college.colors}`}>{college.name}</option>
     });
     return newArr;
   }
 
-  const selectNewCost = (cost: number) => {
-    console.log('selectNewCost', cost);
+  const selectNewCollege = ({ cost, colors }: collegeData) => {
+    console.log('selectNewCollege', cost);
+    console.log('colors', colors);
     setYearlyCost(cost);
   }
 
@@ -101,7 +108,10 @@ function App() {
 
         <div>
           {/* select college */}
-          <select id="colleges" defaultValue={"placeholder"} onChange={(e) => { selectNewCost(parseInt(e.target.value)) }}>
+          <select id="colleges" defaultValue={"placeholder"} onChange={(e) => {
+            const [costStr, colorsStr] = e.target.value.split('|');
+            selectNewCollege({ cost: parseInt(costStr), colors: colorsStr.split(',') })
+          }}>
             <option value="placeholder" selected>
               Select an option...
             </option>
