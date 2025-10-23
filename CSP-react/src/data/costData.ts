@@ -7461,6 +7461,6 @@ export const stateNames: string[] = [
 
 export const getCollegesByState = (stateName: string): College[] => {
   console.log("Getting colleges for state:", stateName);
-  const sn = stateName.replace(/ /g, "_") as keyof typeof allstates;
+  const sn = stateName.replace(/ /g, "_");
   return allstates[sn as keyof typeof allstates] || [];
 };
