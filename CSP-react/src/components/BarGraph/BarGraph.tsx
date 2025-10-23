@@ -23,14 +23,8 @@ const BarGraph = ({
     });
     const yearlyMax = Math.max(...yearlySaved, maxYearlyCost, defaultMax);
 
-    // const compCost = percentage > 100 ? maxYearlyCost * percentage / 100 : maxYearlyCost;
-    // const scaleCost = compCost > defaultMaxYearlyCost ? compCost : defaultMaxYearlyCost;
-    // const amountSavedArray = yearlyCosts.map(cost => (cost / scaleCost) * 100);
-
     const vbHeight = 1000;
     const vbWidth = 1000;
-    console.log("yearlyMax in BarGraph: ", yearlyMax);
-    console.log("colors in BarGraph: ", colors);
 
     const getCostBars = () => {
         return yearlyCosts.map((cost, index) => {
