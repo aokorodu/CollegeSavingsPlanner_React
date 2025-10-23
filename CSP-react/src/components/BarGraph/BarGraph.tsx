@@ -5,32 +5,79 @@ interface BarGraphProps {
     colors: string[];
     percentage: number;
     yearlyCosts: number[];
-    maxYearlyCost: number;
 }
+
+const years = ['first year', 'sohpmore', 'junior', 'senior'];
 
 const BarGraph = ({
     colors,
     percentage,
     yearlyCosts = [],
-    maxYearlyCost
 
 }: BarGraphProps) => {
 
+    const defaultMax = 200000;
+    const maxYearlyCost = Math.max(...yearlyCosts);
+    const yearlySaved = yearlyCosts.map((cost) => {
+        return Math.round(cost * (percentage / 100));
+    });
+    const yearlyMax = Math.max(...yearlySaved, maxYearlyCost, defaultMax);
+
+    // const compCost = percentage > 100 ? maxYearlyCost * percentage / 100 : maxYearlyCost;
+    // const scaleCost = compCost > defaultMaxYearlyCost ? compCost : defaultMaxYearlyCost;
+    // const amountSavedArray = yearlyCosts.map(cost => (cost / scaleCost) * 100);
+
     const vbHeight = 1000;
     const vbWidth = 1000;
-    return (
-        <svg width="300" height="300" viewBox={`0 0 ${vbWidth} ${vbHeight}`}>
-            <rect x={0} y={0} width={vbWidth} height={vbHeight} stroke="#ccc" fill="none" />
-            <text x={100} y={100} fill='#fff' stroke="none" fontSize={20}>{colors}{percentage}{yearlyCosts}{maxYearlyCost}</text>
-            <Bar value={100} x={0} percentage={20} color='#FF0000' />
-            <Bar value={100} x={250} percentage={40} color='#FF0000' />
-            <Bar value={100} x={500} percentage={60} color='#FF0000' />
-            <Bar value={100} x={750} percentage={80} color='#FF0000' />
+    console.log("yearlyMax in BarGraph: ", yearlyMax);
+    console.log("colors in BarGraph: ", colors);
 
-            <Bar value={100} x={0} percentage={10} color='#00ff00' />
-            <Bar value={100} x={250} percentage={20} color='#00ff00' />
-            <Bar value={100} x={500} percentage={30} color='#00ff00' />
-            <Bar value={100} x={750} percentage={40} color='#00ff00' />
+    const getCostBars = () => {
+        return yearlyCosts.map((cost, index) => {
+            const barHeightPercentage = yearlyCosts[index] / yearlyMax * 100;
+            console.log("barheightpercentage: ", barHeightPercentage); {/*(cost / maxYearlyCost) * 100*/ };
+            return (
+                <Bar
+                    key={`bar_${index}`}
+                    x={index * 250}
+                    percentage={barHeightPercentage}
+                    color={colors[0]}
+                    value={cost}
+                />
+            );
+        });
+    };
+
+    const getSavedBars = () => {
+        return yearlySaved.map((cost, index) => {
+            const barHeightPercentage = yearlySaved[index] / yearlyMax * 100;
+            return (
+                <Bar
+                    key={`bar_${index}`}
+                    x={(index * 250) + 125}
+                    percentage={barHeightPercentage}
+                    color={colors[1]}
+                    value={cost}
+                />
+            );
+        });
+    };
+
+    const getHorizontalAxis = () => {
+        return years.map((year, index) => {
+            return (
+                <text key={`yearLabel_${index}`} x={((index * 250) + 125)} y={vbHeight + 20} fill='#fff' stroke="none" fontSize={40} textAnchor="middle" dominantBaseline="hanging">{year}</text>
+            );
+        });
+    };
+
+
+    return (
+        <svg width="500" height="500" viewBox={`-100 -100 ${vbWidth + 200} ${vbHeight + 200}`}>
+            {getCostBars()}
+            {getSavedBars()}
+            {getHorizontalAxis()}
+            <path d={`M 0 ${0} V${vbHeight} H${vbWidth}`} stroke="#fff" fill="none" strokeWidth={2} />
         </svg>
     );
 };

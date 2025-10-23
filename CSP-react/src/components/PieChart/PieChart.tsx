@@ -14,7 +14,7 @@ const PieChart = ({ colors, percentage }: PieChartProps) => {
 
     return (
         <div>
-            <svg id="svg" width="300" height="300" viewBox="0 0 1000 1000">
+            <svg id="svg" width="500" height="500" viewBox="0 0 1000 1000">
                 <defs>
                     <linearGradient
                         id="numberBackgroundGradient"
@@ -91,7 +91,7 @@ const PieChart = ({ colors, percentage }: PieChartProps) => {
                             strokeLinecap="inherit"
                             pathLength="100"
                             strokeDasharray="100 100"
-                            strokeDashoffset={percentage > 100 ? 100 : -percentage}
+                            strokeDashoffset={percentage > 100 ? -100 : -percentage}
                         ></circle>
 
                         <g id="dividerPath">
@@ -101,7 +101,7 @@ const PieChart = ({ colors, percentage }: PieChartProps) => {
                                 stroke="#fff"
                                 strokeWidth="5"
                                 strokeLinecap="inherit"
-                                transform={`rotate(${(percentage > 100 ? 360 : percentage / 100) * 360})`}
+                                transform={`rotate(${percentage > 100 ? 360 : percentage / 100 * 360})`}
                             ></path>
                         </g>
                     </g>

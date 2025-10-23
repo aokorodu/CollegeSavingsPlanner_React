@@ -14,6 +14,11 @@ type College = {
   colors: string[];
 };
 
+type FCost = {
+  futureCost: number,
+  yearlyCostByYear: number[],
+};
+
 function App() {
   const defaultColors = ["#98A1BC", "#555879"];
   const [percentage, setPercentage] = React.useState(0);
@@ -32,7 +37,7 @@ function App() {
   const [periods, setPeriods] = useState(12);
   const [contribution, setContribution] = useState(0);
   const [futureSaved, setFutureSaved] = useState(0);
-  const [futureCost, setfutureCost] = useState(0)
+  const [futureCost, setfutureCost] = React.useState<FCost>({ futureCost: 0, yearlyCostByYear: [] });
   //
   let yearlyCostByYear = [];
   let yearlySavedByYear = [];
@@ -51,15 +56,15 @@ function App() {
     const amt = calculateAmountSaved({ rateOfReturn: annualRateOfReturn, periods, yearsToCollege, initialBalance, contribution });
     console.log('amount saved: ', amt);
     setFutureSaved(amt);
-    let pct = futureSaved / futureCost * 100;
+    let pct = getPercentage();
     if (pct > 100) pct = 100;
     setPercentage(pct)
   }, [yearsToCollege, selectedCollege, initialBalance, annualRateOfReturn, periods, contribution, futureSaved, futureCost])
 
   useEffect(() => {
     const cost = selectedCollege ? selectedCollege.cost : 0;
-    const futureCost = calculateFutureCost({ yearlyCost: cost, annualCostIncrease, yearsToCollege, yearsOfCollege });
-    setfutureCost(futureCost.futureCost);
+    const fc = calculateFutureCost({ yearlyCost: cost, annualCostIncrease, yearsToCollege, yearsOfCollege });
+    setfutureCost(fc);
     yearlyCostByYear = futureCost.yearlyCostByYear;
   }, [annualCostIncrease, selectedCollege])
 
@@ -91,11 +96,15 @@ function App() {
     setInitialBalance(parseInt(cleanedInput));
   }
 
+  const getPercentage = () => {
+    return futureSaved / futureCost.futureCost * 100
+  }
+
   return (
     <>
       <h1>College Savings Planner</h1>
-      <PieChart colors={selectedCollege?.colors || defaultColors} percentage={percentage} />
-      <BarGraph colors={selectedCollege?.colors || defaultColors} percentage={percentage} yearlyCosts={[]} maxYearlyCost={0} />
+      <PieChart colors={selectedCollege?.colors || defaultColors} percentage={getPercentage()} />
+      <BarGraph colors={selectedCollege?.colors || defaultColors} percentage={getPercentage()} yearlyCosts={futureCost.yearlyCostByYear} />
       <div className="uiHolder">
 
         <div>
@@ -220,10 +229,10 @@ function App() {
           <label>future amount saved</label>{`$${futureSaved.toLocaleString()}`}
         </div>
         <div>
-          <label>future cost</label>{`$${futureCost.toLocaleString()}`}
+          <label>future cost</label>{`$${futureCost.futureCost.toLocaleString()}`}
         </div>
         <div>
-          <label>percent saved</label>{`${Math.round(futureSaved / futureCost * 100)}%`}
+          <label>percent saved</label>{`${Math.round(getPercentage())}%`}
         </div>
 
       </div>
