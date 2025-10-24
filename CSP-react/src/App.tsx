@@ -21,7 +21,6 @@ type FCost = {
 
 function App() {
   const defaultColors = ["#98A1BC", "#555879"];
-  const [percentage, setPercentage] = React.useState(0);
   const [selectedState, setSelectedState] = React.useState('Average');
   const [colleges, setColleges] = React.useState<College[]>(getCollegesByState("Average"));
   const [selectedCollege, setSelectedCollege] = React.useState<College | null>(null);
@@ -30,7 +29,6 @@ function App() {
   const yearsOfCollege = 4;
   const defaultYearsToCollege = 17;
   const [yearsToCollege, setYearsToCollege] = useState(defaultYearsToCollege)
-  //const [yearlyCost, setYearlyCost] = useState(0);
   const [initialBalance, setInitialBalance] = useState(0);
   const [annualRateOfReturn, setAnnualRateOfReturn] = useState(6);
   const [annualCostIncrease, setAnnualCostIncrease] = useState(5);
@@ -40,10 +38,6 @@ function App() {
   const [futureCost, setfutureCost] = React.useState<FCost>({ futureCost: 0, yearlyCostByYear: [] });
   //
   let yearlyCostByYear = [];
-  let yearlySavedByYear = [];
-  let maxYearlyCollegeCost = 0;
-  let percentageSaved = 0;
-  let percentages = [];
   //
 
   useEffect(() => {
@@ -58,7 +52,6 @@ function App() {
     setFutureSaved(amt);
     let pct = getPercentage();
     if (pct > 100) pct = 100;
-    setPercentage(pct)
   }, [yearsToCollege, selectedCollege, initialBalance, annualRateOfReturn, periods, contribution, futureSaved, futureCost])
 
   useEffect(() => {
@@ -102,6 +95,12 @@ function App() {
 
   return (
     <>
+      <img
+        src="https://zuubadigital-bucket-test.s3.us-west-2.amazonaws.com/images/pieChartIcon.svg"
+        width={50}
+        height={50}
+        alt="College Savings Planner Banner"
+      />
       <h1>College Savings Planner</h1>
       <PieChart colors={selectedCollege?.colors || defaultColors} percentage={getPercentage()} />
       <BarGraph colors={selectedCollege?.colors || defaultColors} percentage={getPercentage()} yearlyCosts={futureCost.yearlyCostByYear} />

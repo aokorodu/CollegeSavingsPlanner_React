@@ -5,13 +5,14 @@ type BarProps = {
     value: number;
 };
 
-const barWidth = 125;
+const barWidth = 120;
+const barSpacing = 5;
 
 const Bar = ({ x, percentage, color, value }: BarProps) => {
     return (
         <>
             <g transform={`translate(${x} 1000) scale(1 -1)`}>
-                <rect x={0} y={0} width={barWidth} height={percentage * 10} stroke="#000" fill={color} />
+                <rect x={barSpacing / 2} y={0} width={barWidth} height={percentage * 10} stroke="#000" fill={color} />
                 <text transform={`scale(1 -1)`} x={barWidth / 2} y={-percentage * 10 - 20} fill='#fff' stroke="none" fontSize={20} textAnchor="middle" dominantBaseline="hanging">{`$${value.toLocaleString()}`}</text>
             </g>
         </>);
