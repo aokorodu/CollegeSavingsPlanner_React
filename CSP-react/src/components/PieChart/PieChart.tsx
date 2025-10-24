@@ -13,7 +13,7 @@ const PieChart = ({ colors, percentage }: PieChartProps) => {
     const savedPath = React.createRef<SVGCircleElement>();
 
     return (
-        <div>
+        <div className={styles.pieChartContainer}>
             <svg id="svg" width="500" height="500" viewBox="0 0 1000 1000">
                 <defs>
                     <linearGradient

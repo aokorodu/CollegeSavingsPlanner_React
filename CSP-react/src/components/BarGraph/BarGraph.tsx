@@ -1,5 +1,5 @@
-import React from 'react';
 import Bar from './Bar';
+import styles from './BarGraph.module.css';
 
 interface BarGraphProps {
     colors: string[];
@@ -71,13 +71,15 @@ const BarGraph = ({
 
 
     return (
-        <svg width="500" height="500" viewBox={`-100 -100 ${vbWidth + 200} ${vbHeight + 200}`}>
-            {getCostBars()}
-            {getSavedBars()}
-            {getHorizontalAxis()}
-            <path d={`M 0 ${0} V${vbHeight} H${vbWidth}`} stroke="#fff" strokeOpacity=".5" fill="none" strokeWidth={1} />
-            <rect x="-100" y="-100" width={vbWidth + 200} height={vbHeight + 200} fill="#fff" fillOpacity=".025" rx="20" ry="20" stroke="none" strokeOpacity="1" strokeWidth={5} />
-        </svg>
+        <div className={styles.barGraphContainer}>
+            <svg width="500" height="500" viewBox={`-100 -100 ${vbWidth + 200} ${vbHeight + 200}`}>
+                {getCostBars()}
+                {getSavedBars()}
+                {getHorizontalAxis()}
+                <path d={`M 0 ${0} V${vbHeight} H${vbWidth}`} stroke="#fff" strokeOpacity=".5" fill="none" strokeWidth={1} />
+                <rect x="-100" y="-100" width={vbWidth + 200} height={vbHeight + 200} fill="#fff" fillOpacity=".025" rx="20" ry="20" stroke="none" strokeOpacity="1" strokeWidth={5} />
+            </svg>
+        </div>
     );
 };
 

@@ -42,9 +42,8 @@ function App() {
   const [futureSaved, setFutureSaved] = useState(0);
   const [futureCost, setfutureCost] = React.useState<FCost>({ futureCost: 0, yearlyCostByYear: [] });
   //
-  let yearlyCostByYear = [];
-  //
 
+  // useEffect for when state is selected to get colleges
   useEffect(() => {
     //const colleges: College[] = getCollegesByState(selectedState);
     setColleges(getCollegesByState(selectedState));
@@ -63,7 +62,6 @@ function App() {
     const cost = selectedCollege ? selectedCollege.cost : 0;
     const fc = calculateFutureCost({ yearlyCost: cost, annualCostIncrease, yearsToCollege, yearsOfCollege });
     setfutureCost(fc);
-    yearlyCostByYear = futureCost.yearlyCostByYear;
   }, [annualCostIncrease, selectedCollege])
 
   const getCollegeSelections = () => {
@@ -110,8 +108,11 @@ function App() {
       </div>
 
       <h1>College Savings Planner</h1>
-      <PieChart colors={selectedCollege?.colors || defaultColors} percentage={getPercentage()} />
-      <BarGraph colors={selectedCollege?.colors || defaultColors} percentage={getPercentage()} yearlyCosts={futureCost.yearlyCostByYear} />
+      <div id="graphContainer">
+        <PieChart colors={selectedCollege?.colors || defaultColors} percentage={getPercentage()} />
+        <BarGraph colors={selectedCollege?.colors || defaultColors} percentage={getPercentage()} yearlyCosts={futureCost.yearlyCostByYear} />
+      </div>
+
       <div className="uiHolder">
 
         <div>
