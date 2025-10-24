@@ -13,7 +13,7 @@ const Bar = ({ x, percentage, color, value }: BarProps) => {
         <>
             <g transform={`translate(${x} 1000) scale(1 -1)`}>
                 <rect x={barSpacing / 2} y={0} width={barWidth} height={percentage * 10} stroke="#000" fill={color} />
-                <text transform={`scale(1 -1)`} x={barWidth / 2} y={-percentage * 10 - 20} fill='#fff' stroke="none" fontSize={20} textAnchor="middle" dominantBaseline="hanging">{`$${value.toLocaleString()}`}</text>
+                <text transform={`scale(1 -1)`} x={barWidth / 2} y={-percentage * 10 - 25} fill='#fff' stroke="none" fontSize={25} textAnchor="middle" dominantBaseline="hanging">{`$${value.toLocaleString()}`}</text>
             </g>
         </>);
 };

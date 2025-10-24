@@ -22,6 +22,10 @@ const BarGraph = ({
         return Math.round(cost * (percentage / 100));
     });
     const yearlyMax = Math.max(...yearlySaved, maxYearlyCost, defaultMax);
+    console.log("oo yearlyCosts: ", yearlyCosts);
+    console.log("oo yearlySaved: ", yearlySaved);
+    console.log("oo maxYearlyCost: ", maxYearlyCost);
+    console.log("oo defaultMax: ", defaultMax);
 
     const vbHeight = 1000;
     const vbWidth = 1000;
@@ -29,7 +33,7 @@ const BarGraph = ({
     const getCostBars = () => {
         return yearlyCosts.map((cost, index) => {
             const barHeightPercentage = yearlyCosts[index] / yearlyMax * 100;
-            console.log("barheightpercentage: ", barHeightPercentage); {/*(cost / maxYearlyCost) * 100*/ };
+            console.log("oo barheightpercentage: ", barHeightPercentage); {/*(cost / maxYearlyCost) * 100*/ };
             return (
                 <Bar
                     key={`bar_${index}`}
@@ -60,7 +64,7 @@ const BarGraph = ({
     const getHorizontalAxis = () => {
         return years.map((year, index) => {
             return (
-                <text key={`yearLabel_${index}`} x={((index * 250) + 125)} y={vbHeight + 20} fill='#fff' stroke="none" fontSize={40} textAnchor="middle" dominantBaseline="hanging">{year}</text>
+                <text key={`yearLabel_${index}`} x={((index * 250) + 125)} y={vbHeight + 30} fill='#fff' stroke="none" fontSize={40} textAnchor="middle" dominantBaseline="hanging">{year}</text>
             );
         });
     };
@@ -71,7 +75,8 @@ const BarGraph = ({
             {getCostBars()}
             {getSavedBars()}
             {getHorizontalAxis()}
-            <path d={`M 0 ${0} V${vbHeight} H${vbWidth}`} stroke="#fff" fill="none" strokeWidth={2} />
+            <path d={`M 0 ${0} V${vbHeight} H${vbWidth}`} stroke="#fff" strokeOpacity=".5" fill="none" strokeWidth={1} />
+            <rect x="-100" y="-100" width={vbWidth + 200} height={vbHeight + 200} fill="#fff" fillOpacity=".025" rx="20" ry="20" stroke="none" strokeOpacity="1" strokeWidth={5} />
         </svg>
     );
 };

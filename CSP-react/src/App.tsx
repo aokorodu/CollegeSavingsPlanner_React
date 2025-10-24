@@ -31,7 +31,7 @@ function App() {
   const [yearsToCollege, setYearsToCollege] = useState(defaultYearsToCollege)
   const [initialBalance, setInitialBalance] = useState(0);
   const [annualRateOfReturn, setAnnualRateOfReturn] = useState(6);
-  const [annualCostIncrease, setAnnualCostIncrease] = useState(5);
+  const [annualCostIncrease, setAnnualCostIncrease] = useState(4);
   const [periods, setPeriods] = useState(12);
   const [contribution, setContribution] = useState(0);
   const [futureSaved, setFutureSaved] = useState(0);
@@ -90,7 +90,11 @@ function App() {
   }
 
   const getPercentage = () => {
-    return futureSaved / futureCost.futureCost * 100
+    let percentage = futureSaved / futureCost.futureCost * 100;
+
+    if (isNaN(percentage)) percentage = 0;
+    console.log('percentage: ', percentage);
+    return percentage;
   }
 
   return (
@@ -123,7 +127,7 @@ function App() {
 
             selectNewCollege(JSON.parse(e.target.value) as College)
           }}>
-            <option value="placeholder" selected>
+            <option value="placeholder">
               Select an option...
             </option>
             {getCollegeSelections()}
