@@ -1,19 +1,24 @@
+import styles from './Bar.module.css';
+
 type BarProps = {
     x: number;
+    width?: number;
     percentage: number;
     color: string;
     value: number;
 };
 
-const barWidth = 120;
-const barSpacing = 5;
 
-const Bar = ({ x, percentage, color, value }: BarProps) => {
+
+const Bar = ({ x, width = 200, percentage, color, value }: BarProps) => {
+    const barWidth = width;
+    const barSpacing = 10;
+
     return (
         <>
-            <g transform={`translate(${x} 1000) scale(1 -1)`}>
-                <rect x={barSpacing / 2} y={0} width={barWidth} height={percentage * 10} stroke="#000" fill={color} />
-                <text transform={`scale(1 -1)`} x={barWidth / 2} y={-percentage * 10 - 25} fill='#fff' stroke="none" fontSize={25} textAnchor="middle" dominantBaseline="hanging">{`$${value.toLocaleString()}`}</text>
+            <g transform={`translate(${x} ${1000 - percentage * 10})`}>
+                <rect className={styles.barRect} x={barSpacing / 2} y={0} width={barWidth - barSpacing} height={1000} stroke="#000" fill={color} />
+                <text x={barWidth / 2} y={-40} fill='#fff' stroke="none" fontSize={40} textAnchor="middle" dominantBaseline="hanging">{`$${value.toLocaleString()}`}</text>
             </g>
         </>);
 };

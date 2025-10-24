@@ -28,7 +28,8 @@ const BarGraph = ({
     console.log("oo defaultMax: ", defaultMax);
 
     const vbHeight = 1000;
-    const vbWidth = 1000;
+    const vbWidth = 1600;
+    const barWidth = vbWidth / 8;
 
     const getCostBars = () => {
         return yearlyCosts.map((cost, index) => {
@@ -37,7 +38,8 @@ const BarGraph = ({
             return (
                 <Bar
                     key={`bar_${index}`}
-                    x={index * 250}
+                    x={index * vbWidth / 4}
+                    width={barWidth}
                     percentage={barHeightPercentage}
                     color={colors[0]}
                     value={cost}
@@ -52,7 +54,7 @@ const BarGraph = ({
             return (
                 <Bar
                     key={`bar_${index}`}
-                    x={(index * 250) + 125}
+                    x={(index * vbWidth / 4) + vbWidth / 8}
                     percentage={barHeightPercentage}
                     color={colors[1]}
                     value={cost}
@@ -64,7 +66,7 @@ const BarGraph = ({
     const getHorizontalAxis = () => {
         return years.map((year, index) => {
             return (
-                <text key={`yearLabel_${index}`} x={((index * 250) + 125)} y={vbHeight + 30} fill='#fff' stroke="none" fontSize={40} textAnchor="middle" dominantBaseline="hanging">{year}</text>
+                <text key={`yearLabel_${index}`} x={((index * vbWidth / 4) + vbWidth / 8)} y={vbHeight + 30} fill='#fff' stroke="none" fontSize={40} textAnchor="middle" dominantBaseline="hanging">{year}</text>
             );
         });
     };
@@ -72,7 +74,7 @@ const BarGraph = ({
 
     return (
         <div className={styles.barGraphContainer}>
-            <svg width="500" height="500" viewBox={`-100 -100 ${vbWidth + 200} ${vbHeight + 200}`}>
+            <svg width="100%" height="100%" viewBox={`-100 -100 ${vbWidth + 200} ${vbHeight + 200}`}>
                 {getCostBars()}
                 {getSavedBars()}
                 {getHorizontalAxis()}
