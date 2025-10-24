@@ -8,6 +8,11 @@ import { formatToDollarString } from './utils/Utils';
 import { calculateAmountSaved, calculateFutureCost } from './data/calculator';
 
 
+// ui
+import GraphButton from './components/GraphButton/graphButton';
+import { pieChartIconURL, barGraphIconURL } from './data/assetURLs';
+
+
 type College = {
   name: string;
   cost: number;
@@ -99,12 +104,11 @@ function App() {
 
   return (
     <>
-      <img
-        src="https://zuubadigital-bucket-test.s3.us-west-2.amazonaws.com/images/pieChartIcon.svg"
-        width={50}
-        height={50}
-        alt="College Savings Planner Banner"
-      />
+      <div>
+        <GraphButton imageURL={pieChartIconURL} altText='College Savings Planner Banner' onClick={() => { console.log("clicked") }} />
+        <GraphButton imageURL={barGraphIconURL} altText='College Savings Planner Banner' onClick={() => { console.log("clicked") }} />
+      </div>
+
       <h1>College Savings Planner</h1>
       <PieChart colors={selectedCollege?.colors || defaultColors} percentage={getPercentage()} />
       <BarGraph colors={selectedCollege?.colors || defaultColors} percentage={getPercentage()} yearlyCosts={futureCost.yearlyCostByYear} />
