@@ -3,7 +3,7 @@ export type College = {
   cost: number;
   colors: string[];
 };
-const Average: College[] = [
+export const Average: College[] = [
   {
     name: "Average in-state Public College",
     cost: 24920,

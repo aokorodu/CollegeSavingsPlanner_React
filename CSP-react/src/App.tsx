@@ -6,6 +6,7 @@ import React, { useEffect, useState } from 'react';
 import { stateNames, getCollegesByState } from './data/costData';
 import { formatToDollarString } from './utils/Utils';
 import { calculateAmountSaved, calculateFutureCost } from './data/calculator';
+import { Average } from './data/costData';
 
 
 // ui
@@ -42,6 +43,12 @@ function App() {
   const [futureSaved, setFutureSaved] = useState(0);
   const [futureCost, setfutureCost] = React.useState<FCost>({ futureCost: 0, yearlyCostByYear: [] });
   //
+
+  useEffect(() => {
+
+    setSelectedCollege(Average[2]);
+  }, []);
+
 
   // useEffect for when state is selected to get colleges
   useEffect(() => {
@@ -102,147 +109,149 @@ function App() {
 
   return (
     <>
-      <div>
+      {/* <div>
         <GraphButton imageURL={pieChartIconURL} altText='College Savings Planner Banner' onClick={() => { console.log("clicked") }} />
         <GraphButton imageURL={barGraphIconURL} altText='College Savings Planner Banner' onClick={() => { console.log("clicked") }} />
-      </div>
+      </div> */}
 
       <h1>College Savings Planner</h1>
-      <div id="graphContainer">
-        <PieChart colors={selectedCollege?.colors || defaultColors} percentage={getPercentage()} />
-        <BarGraph colors={selectedCollege?.colors || defaultColors} percentage={getPercentage()} yearlyCosts={futureCost.yearlyCostByYear} />
-      </div>
-
-      <div className="uiHolder">
-
-        <div>
-          <select onChange={(e) => {
-            setSelectedState(e.target.value as string);
-            //setColleges(getCollegesByState(selectedState));
-          }}>
-            {stateNames.map((state) => (
-              <option key={String(state)} value={state}>{state}</option>
-            ))}
-          </select>
+      <div className='contentHolder'>
+        <div id="graphContainer">
+          <PieChart colors={selectedCollege?.colors || defaultColors} percentage={getPercentage()} />
+          <BarGraph colors={selectedCollege?.colors || defaultColors} percentage={getPercentage()} yearlyCosts={futureCost.yearlyCostByYear} />
         </div>
 
-        <div>
-          {/* select college */}
-          <select id="colleges" defaultValue={"placeholder"} onChange={(e) => {
+        <div className="uiHolder">
 
-            selectNewCollege(JSON.parse(e.target.value) as College)
-          }}>
-            <option value="placeholder">
-              Select an option...
-            </option>
-            {getCollegeSelections()}
-          </select>
-        </div>
-
-        <div>
-          <label htmlFor="yearsSlider">years until college: {yearsToCollege}</label>
-          <input
-            id="yearsSlider"
-            type="range"
-            value={yearsToCollege}
-            min="1"
-            max="30"
-            step=".1"
-            onChange={(e) => setYearsToCollege(parseInt(e.target.value))}
-          />
-        </div>
-
-        <div>
-          <label htmlFor="annualCollegeCostSlider">annual cost: ${selectedCollege?.cost.toLocaleString()}</label>
-          <input
-            id="annualCollegeCostSlider"
-            type="range"
-            value={selectedCollege?.cost}
-            min="0"
-            max="100000"
-            step="100"
-            onChange={(e) => {
-              const college = selectedCollege;
-              if (college) {
-                const newCollegeData: College = {
-                  name: college.name,
-                  cost: parseInt(e.target.value),
-                  colors: college.colors
-                };
-                setSelectedCollege(newCollegeData);
-              }
-              // setYearlyCost(parseInt(e.target.value))
-
-            }}
-          />
-        </div>
-
-        <div>
-          <label htmlFor="ROfRSlider">rate of return: {annualRateOfReturn}%</label>
-          <input
-            id="ROfRSlider"
-            type="range"
-            min="0"
-            max="10"
-            value={annualRateOfReturn}
-            step=".1"
-            onChange={(e) => setAnnualRateOfReturn(parseInt(e.target.value))}
-          />
-        </div>
-        <div>
-          <label htmlFor="costIncreaseSlider">cost increase: {annualCostIncrease}%</label>
-          <input
-            id="costIncreaseSlider"
-            type="range"
-            min="0"
-            max="10"
-            value={annualCostIncrease}
-            step=".1"
-            onChange={(e) => setAnnualCostIncrease(parseFloat(e.target.value))}
-          />
-        </div>
-        <div>
           <div>
-            <select id="periodSelect" onChange={(e) => setPeriods(parseInt(e.target.value))}>
-              <option value="56">weekly</option>
-              <option value="26">bi-weekly</option>
-              <option value="24">bi-monthly</option>
-              <option value="12" selected>monthly</option>
-              <option value="4">quarterly</option>
-              <option value="1">yearly</option>
+            <select onChange={(e) => {
+              setSelectedState(e.target.value as string);
+              //setColleges(getCollegesByState(selectedState));
+            }}>
+              {stateNames.map((state) => (
+                <option key={String(state)} value={state}>{state}</option>
+              ))}
             </select>
-            <label htmlFor="plannedContributionSlider">contribution</label>
           </div>
 
-          <input
-            type="range"
-            id="plannedContributionSlider"
-            min="0"
-            max="3000"
-            value={contribution}
-            step="25"
-            onChange={(e) => setContribution(parseInt(e.target.value))}
-          />
-          <div id="plannedContributionText">
-            {`$${contribution.toLocaleString()}`}
+          <div>
+            {/* select college */}
+            <select id="colleges" defaultValue={selectedCollege?.name} onChange={(e) => {
+
+              selectNewCollege(JSON.parse(e.target.value) as College)
+            }}>
+              <option value="placeholder">
+                Select an option...
+              </option>
+              {getCollegeSelections()}
+            </select>
           </div>
-        </div>
 
-        <div>
-          <label htmlFor="startingAmountInput">current amount saved</label>
-          <input type="text" id="startingAmountInput" value={`$${initialBalance.toLocaleString()}`} onChange={(e) => setStartBalanceFromInput(e.target.value)} />
-        </div>
+          <div>
+            <label htmlFor="yearsSlider">years until college: {yearsToCollege}</label>
+            <input
+              id="yearsSlider"
+              type="range"
+              value={yearsToCollege}
+              min="1"
+              max="30"
+              step=".1"
+              onChange={(e) => setYearsToCollege(parseInt(e.target.value))}
+            />
+          </div>
 
-        <div>
-          <label>future amount saved</label>{`$${futureSaved.toLocaleString()}`}
-        </div>
-        <div>
-          <label>future cost</label>{`$${futureCost.futureCost.toLocaleString()}`}
-        </div>
-        <div>
-          <label>percent saved</label>{`${Math.round(getPercentage())}%`}
-        </div>
+          <div>
+            <label htmlFor="annualCollegeCostSlider">annual cost: ${selectedCollege?.cost.toLocaleString()}</label>
+            <input
+              id="annualCollegeCostSlider"
+              type="range"
+              value={selectedCollege?.cost}
+              min="0"
+              max="100000"
+              step="100"
+              onChange={(e) => {
+                const college = selectedCollege;
+                if (college) {
+                  const newCollegeData: College = {
+                    name: college.name,
+                    cost: parseInt(e.target.value),
+                    colors: college.colors
+                  };
+                  setSelectedCollege(newCollegeData);
+                }
+                // setYearlyCost(parseInt(e.target.value))
 
+              }}
+            />
+          </div>
+
+          <div>
+            <label htmlFor="ROfRSlider">rate of return: {annualRateOfReturn}%</label>
+            <input
+              id="ROfRSlider"
+              type="range"
+              min="0"
+              max="10"
+              value={annualRateOfReturn}
+              step=".1"
+              onChange={(e) => setAnnualRateOfReturn(parseInt(e.target.value))}
+            />
+          </div>
+          <div>
+            <label htmlFor="costIncreaseSlider">cost increase: {annualCostIncrease}%</label>
+            <input
+              id="costIncreaseSlider"
+              type="range"
+              min="0"
+              max="10"
+              value={annualCostIncrease}
+              step=".1"
+              onChange={(e) => setAnnualCostIncrease(parseFloat(e.target.value))}
+            />
+          </div>
+          <div>
+            <div>
+              <select id="periodSelect" onChange={(e) => setPeriods(parseInt(e.target.value))}>
+                <option value="56">weekly</option>
+                <option value="26">bi-weekly</option>
+                <option value="24">bi-monthly</option>
+                <option value="12" selected>monthly</option>
+                <option value="4">quarterly</option>
+                <option value="1">yearly</option>
+              </select>
+              <label htmlFor="plannedContributionSlider">contribution</label>
+            </div>
+
+            <input
+              type="range"
+              id="plannedContributionSlider"
+              min="0"
+              max="3000"
+              value={contribution}
+              step="25"
+              onChange={(e) => setContribution(parseInt(e.target.value))}
+            />
+            <div id="plannedContributionText">
+              {`$${contribution.toLocaleString()}`}
+            </div>
+          </div>
+
+          <div>
+            <label htmlFor="startingAmountInput">current amount saved</label>
+            <input type="text" id="startingAmountInput" value={`$${initialBalance.toLocaleString()}`} onChange={(e) => setStartBalanceFromInput(e.target.value)} />
+          </div>
+
+          <div>
+            <label>future amount saved</label>{`$${futureSaved.toLocaleString()}`}
+          </div>
+          <div>
+            <label>future cost</label>{`$${futureCost.futureCost.toLocaleString()}`}
+          </div>
+          <div>
+            <label>percent saved</label>{`${Math.round(getPercentage())}%`}
+          </div>
+
+        </div>
       </div>
     </>
   )
