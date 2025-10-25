@@ -29,7 +29,7 @@ function App() {
   const defaultColors = ["#98A1BC", "#555879"];
   const [selectedState, setSelectedState] = React.useState('Average');
   const [colleges, setColleges] = React.useState<College[]>(getCollegesByState("Average"));
-  const [selectedCollege, setSelectedCollege] = React.useState<College | null>(null);
+  const [selectedCollege, setSelectedCollege] = React.useState<College | null>(Average[2]);
 
   //
   const yearsOfCollege = 4;

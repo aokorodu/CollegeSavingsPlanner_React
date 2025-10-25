@@ -43,6 +43,7 @@ const BarGraph = ({
                     percentage={barHeightPercentage}
                     color={colors[0]}
                     value={cost}
+                    hasTransition={true}
                 />
             );
         });
@@ -58,6 +59,7 @@ const BarGraph = ({
                     percentage={barHeightPercentage}
                     color={colors[1]}
                     value={cost}
+                    hasTransition={false}
                 />
             );
         });
