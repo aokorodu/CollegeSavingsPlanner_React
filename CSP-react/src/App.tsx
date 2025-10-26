@@ -7,6 +7,7 @@ import { stateNames, getCollegesByState } from './data/costData';
 import { formatToDollarString } from './utils/Utils';
 import { calculateAmountSaved, calculateFutureCost } from './data/calculator';
 import { Average } from './data/costData';
+import SliderHolder from './components/SlideHolder/SlideHolder';
 
 
 // ui
@@ -84,7 +85,13 @@ function App() {
     }));
     let pct = getPercentage();
     if (pct > 100) pct = 100;
-  }, [data])
+  }, [selectedCollege,
+    data.annalCostIncrease,
+    data.yearsToCollege,
+    data.annualRateOfReturn,
+    data.periods,
+    data.initialBalance,
+    data.contribution])
 
   const getCollegeSelections = () => {
     console.log('getCollegeSelections');
@@ -142,7 +149,7 @@ function App() {
 
         <div className="uiHolder">
 
-          <div>
+          <SliderHolder>
             <select onChange={(e) => {
               setSelectedState(e.target.value as string);
               //setColleges(getCollegesByState(selectedState));
@@ -151,9 +158,9 @@ function App() {
                 <option key={String(state)} value={state}>{state}</option>
               ))}
             </select>
-          </div>
+          </SliderHolder>
 
-          <div>
+          <SliderHolder>
             {/* select college */}
             <select id="colleges" defaultValue={selectedCollege?.name} onChange={(e) => {
 
@@ -164,10 +171,10 @@ function App() {
               </option>
               {getCollegeSelections()}
             </select>
-          </div>
+          </SliderHolder>
 
-          <div>
-            <label htmlFor="yearsSlider">years until college: {data.yearsToCollege}</label>
+          <SliderHolder>
+            <label htmlFor="yearsSlider">years until college</label>
             <input
               id="yearsSlider"
               type="range"
@@ -182,10 +189,11 @@ function App() {
                 }));
               }}
             />
-          </div>
+            <span>{data.yearsToCollege}</span>
+          </SliderHolder>
 
-          <div>
-            <label htmlFor="annualCollegeCostSlider">annual cost: ${selectedCollege?.cost.toLocaleString()}</label>
+          <SliderHolder>
+            <label htmlFor="annualCollegeCostSlider">annual cost</label>
             <input
               id="annualCollegeCostSlider"
               type="range"
@@ -206,10 +214,11 @@ function App() {
 
               }}
             />
-          </div>
+            <span>{`$${selectedCollege?.cost.toLocaleString()}`}</span>
+          </SliderHolder>
 
-          <div>
-            <label htmlFor="ROfRSlider">rate of return: {data.annualRateOfReturn}%</label>
+          <SliderHolder>
+            <label htmlFor="ROfRSlider">rate of return</label>
             <input
               id="ROfRSlider"
               type="range"
@@ -224,9 +233,10 @@ function App() {
                 }));
               }}
             />
-          </div>
-          <div>
-            <label htmlFor="costIncreaseSlider">cost increase: {data.annalCostIncrease}%</label>
+            <span >{data.annualRateOfReturn}%</span>
+          </SliderHolder>
+          <SliderHolder>
+            <label htmlFor="costIncreaseSlider">cost increase</label>
             <input
               id="costIncreaseSlider"
               type="range"
@@ -235,14 +245,17 @@ function App() {
               value={data.annalCostIncrease}
               step=".1"
               onChange={(e) => {
+                const newVal = parseFloat(e.target.value).toFixed(1);
                 setData(prevData => ({
+
                   ...prevData, // Copy all existing properties
-                  annalCostIncrease: parseInt(e.target.value)
+                  annalCostIncrease: parseFloat(newVal)
                 }));
               }}
             />
-          </div>
-          <div>
+            <span >cost increase: {data.annalCostIncrease}%</span>
+          </SliderHolder>
+          <SliderHolder>
             <div>
               <select id="periodSelect" onChange={(e) => {
                 setData(prevData => ({
@@ -274,15 +287,15 @@ function App() {
                 }));
               }}
             />
-            <div id="plannedContributionText">
+            <span id="plannedContributionText">
               {`$${data.contribution.toLocaleString()}`}
-            </div>
-          </div>
+            </span>
+          </SliderHolder>
 
-          <div>
+          <SliderHolder>
             <label htmlFor="startingAmountInput">current amount saved</label>
             <input type="text" id="startingAmountInput" value={`$${data.initialBalance.toLocaleString()}`} onChange={(e) => setStartBalanceFromInput(e.target.value)} />
-          </div>
+          </SliderHolder>
 
           <div>
             <label>future amount saved</label>{`$${data.futureSaved.toLocaleString()}`}
