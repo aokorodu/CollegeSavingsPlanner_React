@@ -7350,8 +7350,26 @@ const Wyoming: College[] = [
     colors: [],
   },
 ];
+export const expandStatesToJSON = <T extends Record<string, College[]>>(
+  states: T
+): { [K in keyof T]: College[] } => {
+  const result = {} as { [K in keyof T]: College[] };
+  for (const k in states) {
+    if (Object.prototype.hasOwnProperty.call(states, k)) {
+      result[k as keyof T] = JSON.parse(JSON.stringify(states[k]));
+    }
+  }
+  return result;
+};
 
-const allstates = {
+export const replaceStatesWithJSONInPlace = (
+  states: Record<string, College[]>
+): void => {
+  Object.keys(states).forEach((k) => {
+    states[k] = JSON.parse(JSON.stringify(states[k]));
+  });
+};
+export const allstates = {
   Average: Average,
   Alabama: Alabama,
   Alaska: Alaska,
@@ -7404,6 +7422,56 @@ const allstates = {
   Wisconsin: Wisconsin,
   Wyoming: Wyoming,
 };
+
+// const twostates = {
+//   Alabama: [
+//     { name: "Alabama A & M University", cost: 30036, colors: [] },
+//     { name: "Alabama State University", cost: 27266, colors: [] },
+//     { name: "Auburn University", cost: 49340, colors: [] },
+//     { name: "Auburn University at Montgomery", cost: 27460, colors: [] },
+//     { name: "Birmingham-Southern College", cost: 37050, colors: [] },
+//     { name: "Columbia Southern University", cost: 5808, colors: [] },
+//     { name: "Faulkner University", cost: 31940, colors: [] },
+//     { name: "Fortis Institute-Birmingham", cost: 14561, colors: [] },
+//     { name: "Heritage Christian University", cost: 19543, colors: [] },
+//     { name: "Herzing University-Birmingham", cost: 13420, colors: [] },
+//     { name: "Huntingdon College", cost: 39572, colors: [] },
+//     { name: "Huntsville Bible College", cost: 4730, colors: [] },
+//     { name: "J F Ingram State Technical College", cost: 6084, colors: [] },
+//     { name: "Jacksonville State University", cost: 31610, colors: [] },
+//     { name: "Marion Military Institute", cost: 20488, colors: [] },
+//     { name: "Miles College", cost: 20062, colors: [] },
+//     { name: "Oakwood University", cost: 31222, colors: [] },
+//     { name: "Reid State Technical College", cost: 10700, colors: [] },
+//     { name: "Remington College-Mobile Campus", cost: 20476, colors: [] },
+//     { name: "Samford University", cost: 50304, colors: [] },
+//     { name: "Spring Hill College", cost: 35482, colors: [] },
+//     { name: "Stillman College", cost: 20974, colors: [] },
+//     { name: "Strayer University-Alabama", cost: 13920, colors: [] },
+//     { name: "Talladega College", cost: 22354, colors: [] },
+//     { name: "The University of Alabama", cost: 48040, colors: [] },
+//     { name: "Troy University", cost: 27580, colors: [] },
+//     { name: "Tuskegee University", cost: 33284, colors: [] },
+//     { name: "United States Sports Academy", cost: 18900, colors: [] },
+//     { name: "University of Alabama at Birmingham", cost: 35454, colors: [] },
+//     { name: "University of Alabama in Huntsville", cost: 35784, colors: [] },
+//     { name: "University of Mobile", cost: 36796, colors: [] },
+//     { name: "University of Montevallo", cost: 37498, colors: [] },
+//     { name: "University of North Alabama", cost: 30090, colors: [] },
+//     { name: "University of South Alabama", cost: 27482, colors: [] },
+//     { name: "University of West Alabama", cost: 28256, colors: [] },
+//   ],
+//   Alaska: [
+//     { name: "Alaska Bible College", cost: 17930, colors: [] },
+//     { name: "Alaska Christian College", cost: 21164, colors: [] },
+//     { name: "Alaska Pacific University", cost: 29692, colors: [] },
+//     { name: "Charter College", cost: 18678, colors: [] },
+//     { name: "Ilisagvik College", cost: 18260, colors: [] },
+//     { name: "University of Alaska Anchorage", cost: 34105, colors: [] },
+//     { name: "University of Alaska Fairbanks", cost: 33202, colors: [] },
+//     { name: "University of Alaska Southeast", cost: 33916, colors: [] },
+//   ],
+// };
 
 export const stateNames: string[] = [
   "Average",
