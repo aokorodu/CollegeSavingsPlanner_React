@@ -1,0 +1,6 @@
+.infoHolder {
+  width: 500px;
+  display: grid;
+  grid-template-columns: 215px 1fr;
+  gap: 1rem;
+}
