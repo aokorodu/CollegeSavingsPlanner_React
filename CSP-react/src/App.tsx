@@ -10,8 +10,8 @@ import { Average } from './data/costData';
 
 
 // ui
-import GraphButton from './components/GraphButton/graphButton';
-import { pieChartIconURL, barGraphIconURL } from './data/assetURLs';
+// import GraphButton from './components/GraphButton/graphButton';
+// import { pieChartIconURL, barGraphIconURL } from './data/assetURLs';
 
 
 type College = {
@@ -25,7 +25,29 @@ type FCost = {
   yearlyCostByYear: number[],
 };
 
+type calcObject = {
+  selectedCollege?: College | null;
+  yearsToCollege: number;
+  initialBalance: number;
+  annualRateOfReturn: number;
+  annalCostIncrease: number;
+  periods: number;
+  contribution: number;
+  futureSaved: number;
+  futureCost: FCost;
+}
+
 function App() {
+  const defaultData: calcObject = {
+    yearsToCollege: 17,
+    initialBalance: 0,
+    annualRateOfReturn: 6,
+    annalCostIncrease: 4,
+    periods: 12,
+    contribution: 0,
+    futureSaved: 0,
+    futureCost: { futureCost: 0, yearlyCostByYear: [0, 0, 0, 0] },
+  };
   const defaultColors = ["#98A1BC", "#555879"];
   const [selectedState, setSelectedState] = React.useState('Average');
   const [colleges, setColleges] = React.useState<College[]>(getCollegesByState("Average"));
@@ -33,20 +55,21 @@ function App() {
 
   //
   const yearsOfCollege = 4;
-  const defaultYearsToCollege = 17;
-  const [yearsToCollege, setYearsToCollege] = useState(defaultYearsToCollege)
-  const [initialBalance, setInitialBalance] = useState(0);
-  const [annualRateOfReturn, setAnnualRateOfReturn] = useState(6);
-  const [annualCostIncrease, setAnnualCostIncrease] = useState(4);
-  const [periods, setPeriods] = useState(12);
-  const [contribution, setContribution] = useState(0);
-  const [futureSaved, setFutureSaved] = useState(0);
-  const [futureCost, setfutureCost] = React.useState<FCost>({ futureCost: 0, yearlyCostByYear: [] });
+  const [data, setData] = useState<calcObject>(defaultData);
+
+  // const [yearsToCollege, setYearsToCollege] = useState(defaultYearsToCollege)
+  // const [initialBalance, setInitialBalance] = useState(0);
+  // const [annualRateOfReturn, setAnnualRateOfReturn] = useState(6);
+  // const [annualCostIncrease, setAnnualCostIncrease] = useState(4);
+  // const [periods, setPeriods] = useState(12);
+  // const [contribution, setContribution] = useState(0);
+  // const [futureSaved, setFutureSaved] = useState(0);
+  // const [futureCost, setfutureCost] = React.useState<FCost>({ futureCost: 0, yearlyCostByYear: [] });
   //
 
   useEffect(() => {
 
-    setSelectedCollege(Average[2]);
+    setData(defaultData);
   }, []);
 
 
@@ -58,18 +81,36 @@ function App() {
 
   // useEffect for when college is selected and you have the cost
   useEffect(() => {
-    const amt = calculateAmountSaved({ rateOfReturn: annualRateOfReturn, periods, yearsToCollege, initialBalance, contribution });
+    console.log('useEffect college selected or cost changed');
+    const cost = selectedCollege ? selectedCollege.cost : 0;
+    const fc = calculateFutureCost({ yearlyCost: cost, annualCostIncrease: data.annalCostIncrease, yearsToCollege: data.yearsToCollege, yearsOfCollege });
+
+
+    // setData((prev) => {
+    //   prev.futureCost = fc;
+    //   return prev;
+    // });
+
+    const amt = calculateAmountSaved({ rateOfReturn: data.annualRateOfReturn, periods: data.periods, yearsToCollege: data.yearsToCollege, initialBalance: data.initialBalance, contribution: data.contribution });
     console.log('amount saved: ', amt);
-    setFutureSaved(amt);
+    // setData((prev) => {
+    //   prev.futureSaved = amt;
+    //   return prev;
+    // });
+    setData((prevData) => ({
+      ...prevData, // Copy all existing properties
+      futureSaved: amt,
+      futureCost: fc,
+    }));
     let pct = getPercentage();
     if (pct > 100) pct = 100;
-  }, [yearsToCollege, selectedCollege, initialBalance, annualRateOfReturn, periods, contribution, futureSaved, futureCost])
+  }, [data, data.contribution])
 
-  useEffect(() => {
-    const cost = selectedCollege ? selectedCollege.cost : 0;
-    const fc = calculateFutureCost({ yearlyCost: cost, annualCostIncrease, yearsToCollege, yearsOfCollege });
-    setfutureCost(fc);
-  }, [annualCostIncrease, selectedCollege])
+  // useEffect(() => {
+  //   const cost = selectedCollege ? selectedCollege.cost : 0;
+  //   const fc = calculateFutureCost({ yearlyCost: cost, annualCostIncrease, yearsToCollege, yearsOfCollege });
+  //   setfutureCost(fc);
+  // }, [data.annalCostIncrease, data.selectedCollege])
 
   const getCollegeSelections = () => {
     console.log('getCollegeSelections');
@@ -96,11 +137,20 @@ function App() {
 
   const setStartBalanceFromInput = (input: string) => {
     const cleanedInput = formatToDollarString(input);
-    setInitialBalance(parseInt(cleanedInput));
+    // setData((prev) => {
+    //   prev.initialBalance = parseInt(cleanedInput);
+    //   return prev;
+    // });
+    setData(prevData => ({
+      ...prevData, // Copy all existing properties
+      initialBalance: parseInt(cleanedInput)
+    }));
+    //setInitialBalance(parseInt(cleanedInput));
   }
 
   const getPercentage = () => {
-    let percentage = futureSaved / futureCost.futureCost * 100;
+
+    let percentage = data.futureSaved / data.futureCost.futureCost * 100;
 
     if (isNaN(percentage)) percentage = 0;
     console.log('percentage: ', percentage);
@@ -118,7 +168,7 @@ function App() {
       <div className='contentHolder'>
         <div id="graphContainer">
           <PieChart colors={selectedCollege?.colors || defaultColors} percentage={getPercentage()} />
-          <BarGraph colors={selectedCollege?.colors || defaultColors} percentage={getPercentage()} yearlyCosts={futureCost.yearlyCostByYear} />
+          <BarGraph colors={selectedCollege?.colors || defaultColors} percentage={getPercentage()} yearlyCosts={data.futureCost.yearlyCostByYear} />
         </div>
 
         <div className="uiHolder">
@@ -148,15 +198,25 @@ function App() {
           </div>
 
           <div>
-            <label htmlFor="yearsSlider">years until college: {yearsToCollege}</label>
+            <label htmlFor="yearsSlider">years until college: {data.yearsToCollege}</label>
             <input
               id="yearsSlider"
               type="range"
-              value={yearsToCollege}
+              value={data.yearsToCollege}
               min="1"
               max="30"
               step=".1"
-              onChange={(e) => setYearsToCollege(parseInt(e.target.value))}
+              onChange={(e) => {
+                // setData((prev) => {
+                //   prev.yearsToCollege = parseInt(e.target.value)
+                //   return prev;
+                // })
+                setData(prevData => ({
+                  ...prevData, // Copy all existing properties
+                  yearsToCollege: parseInt(e.target.value)
+                }));
+              }}
+            // onChange={(e) => setYearsToCollege(parseInt(e.target.value))}
             />
           </div>
 
@@ -186,32 +246,62 @@ function App() {
           </div>
 
           <div>
-            <label htmlFor="ROfRSlider">rate of return: {annualRateOfReturn}%</label>
+            <label htmlFor="ROfRSlider">rate of return: {data.annualRateOfReturn}%</label>
             <input
               id="ROfRSlider"
               type="range"
               min="0"
               max="10"
-              value={annualRateOfReturn}
+              value={data.annualRateOfReturn}
               step=".1"
-              onChange={(e) => setAnnualRateOfReturn(parseInt(e.target.value))}
+              // onChange={(e) => setData((prev) => {
+              //   prev.annualRateOfReturn = parseFloat(e.target.value);
+              //   return prev;
+              // })}
+
+              onChange={(e) => {
+                setData(prevData => ({
+                  ...prevData, // Copy all existing properties
+                  annualRateOfReturn: parseInt(e.target.value)
+                }));
+              }}
+            //setAnnualRateOfReturn(parseInt(e.target.value))}
             />
           </div>
           <div>
-            <label htmlFor="costIncreaseSlider">cost increase: {annualCostIncrease}%</label>
+            <label htmlFor="costIncreaseSlider">cost increase: {data.annalCostIncrease}%</label>
             <input
               id="costIncreaseSlider"
               type="range"
               min="0"
               max="10"
-              value={annualCostIncrease}
+              value={data.annalCostIncrease}
               step=".1"
-              onChange={(e) => setAnnualCostIncrease(parseFloat(e.target.value))}
+              onChange={(e) => {
+                // setData((prev) => {
+                //   prev.annalCostIncrease = parseFloat(e.target.value);
+                //   return prev;
+                // })
+                setData(prevData => ({
+                  ...prevData, // Copy all existing properties
+                  annalCostIncrease: parseInt(e.target.value)
+                }));
+              }}
+            //setAnnualCostIncrease(parseFloat(e.target.value))
             />
           </div>
           <div>
             <div>
-              <select id="periodSelect" onChange={(e) => setPeriods(parseInt(e.target.value))}>
+              <select id="periodSelect" onChange={(e) => {
+                // setData((prev) => {
+                //   prev.periods = parseInt(e.target.value);
+                //   return prev;
+                // })
+                setData(prevData => ({
+                  ...prevData, // Copy all existing properties
+                  periods: parseInt(e.target.value)
+                }));
+              }}>
                 <option value="56">weekly</option>
                 <option value="26">bi-weekly</option>
                 <option value="24">bi-monthly</option>
@@ -227,25 +317,37 @@ function App() {
               id="plannedContributionSlider"
               min="0"
               max="3000"
-              value={contribution}
+              value={data.contribution}
               step="25"
-              onChange={(e) => setContribution(parseInt(e.target.value))}
+              onChange={(e) => {
+                // setData((prev) => {
+                //   prev.contribution = parseInt(e.target.value);
+                //   console.log('contribution: ', prev.contribution);
+                //   return prev;
+                // })
+
+
+                setData(prevData => ({
+                  ...prevData, // Copy all existing properties
+                  contribution: parseInt(e.target.value)
+                }));
+              }}
             />
             <div id="plannedContributionText">
-              {`$${contribution.toLocaleString()}`}
+              {`$${data.contribution.toLocaleString()}`}
             </div>
           </div>
 
           <div>
             <label htmlFor="startingAmountInput">current amount saved</label>
-            <input type="text" id="startingAmountInput" value={`$${initialBalance.toLocaleString()}`} onChange={(e) => setStartBalanceFromInput(e.target.value)} />
+            <input type="text" id="startingAmountInput" value={`$${data.initialBalance.toLocaleString()}`} onChange={(e) => setStartBalanceFromInput(e.target.value)} />
           </div>
 
           <div>
-            <label>future amount saved</label>{`$${futureSaved.toLocaleString()}`}
+            <label>future amount saved</label>{`$${data.futureSaved.toLocaleString()}`}
           </div>
           <div>
-            <label>future cost</label>{`$${futureCost.futureCost.toLocaleString()}`}
+            <label>future cost</label>{`$${data.futureCost.futureCost.toLocaleString()}`}
           </div>
           <div>
             <label>percent saved</label>{`${Math.round(getPercentage())}%`}
