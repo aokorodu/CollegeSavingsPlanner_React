@@ -61,8 +61,6 @@ function App() {
     const amt = calculateAmountSaved({ rateOfReturn: annualRateOfReturn, periods, yearsToCollege, initialBalance, contribution });
     console.log('amount saved: ', amt);
     setFutureSaved(amt);
-    let pct = getPercentage();
-    if (pct > 100) pct = 100;
   }, [yearsToCollege, selectedCollege, initialBalance, annualRateOfReturn, periods, contribution, futureSaved, futureCost])
 
   useEffect(() => {
