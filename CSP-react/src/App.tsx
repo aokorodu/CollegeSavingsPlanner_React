@@ -10,8 +10,8 @@ import { Average } from './data/costData';
 
 
 // ui
-import GraphButton from './components/GraphButton/graphButton';
-import { pieChartIconURL, barGraphIconURL } from './data/assetURLs';
+// import GraphButton from './components/GraphButton/graphButton';
+// import { pieChartIconURL, barGraphIconURL } from './data/assetURLs';
 
 
 type College = {
@@ -116,7 +116,7 @@ function App() {
       <div className='contentHolder'>
         <div id="graphContainer">
           <PieChart colors={selectedCollege?.colors || defaultColors} percentage={getPercentage()} />
-          <BarGraph colors={selectedCollege?.colors || defaultColors} percentage={getPercentage()} yearlyCosts={futureCost.yearlyCostByYear} />
+          <BarGraph colors={selectedCollege?.colors || defaultColors} amountSaved={futureSaved} yearlyCosts={futureCost.yearlyCostByYear} />
         </div>
 
         <div className="uiHolder">

@@ -3,27 +3,28 @@ import styles from './BarGraph.module.css';
 
 interface BarGraphProps {
     colors: string[];
-    percentage: number;
     yearlyCosts: number[];
+    amountSaved: number;
 }
 
 const years = ['first year', 'sohpmore', 'junior', 'senior'];
 
 const BarGraph = ({
     colors,
-    percentage,
     yearlyCosts = [],
+    amountSaved,
 
 }: BarGraphProps) => {
 
     const defaultMax = 200000;
+    const totalCosts = yearlyCosts.reduce((a, b) => a + b, 0);
+    const percentageSaved = amountSaved / totalCosts;
+    const yearlySaved = yearlyCosts.map(cost => cost * percentageSaved);
     const maxYearlyCost = Math.max(...yearlyCosts);
-    const yearlySaved = yearlyCosts.map((cost) => {
-        return Math.round(cost * (percentage / 100));
-    });
     const yearlyMax = Math.max(...yearlySaved, maxYearlyCost, defaultMax);
+
     console.log("oo yearlyCosts: ", yearlyCosts);
-    console.log("oo yearlySaved: ", yearlySaved);
+    console.log("oo yearlySaved: ", totalCosts);
     console.log("oo maxYearlyCost: ", maxYearlyCost);
     console.log("oo defaultMax: ", defaultMax);
 
