@@ -3,13 +3,12 @@ import './App.css'
 import PieChart from './components/PieChart/PieChart';
 import BarGraph from './components/BarGraph/BarGraph';
 import React, { useEffect, useState } from 'react';
-import { stateNames } from './data/costData';
 import { formatToDollarString } from './utils/Utils';
 import { calculateAmountSaved, calculateFutureCost } from './data/calculator';
-import { Average } from './data/costData';
+// import { Average } from './data/costData';
 import SliderHolder from './components/SlideHolder/SlideHolder';
 import InfoHolder from './components/InfoHolder/InfoHolder';
-import { getCollegesByState2 } from './data/costData2';
+import { getCollegesByState2, stateNames } from './data/costData2';
 
 
 // ui
@@ -54,7 +53,7 @@ function App() {
   const defaultColors = ["#98A1BC", "#555879"];
   const [selectedState, setSelectedState] = React.useState('Average');
   const [colleges, setColleges] = React.useState<College[]>(getCollegesByState2("Average"));
-  const [selectedCollege, setSelectedCollege] = React.useState<College | null>(Average[2]);
+  const [selectedCollege, setSelectedCollege] = React.useState<College | null>(getCollegesByState2("Average")[2]);
 
   //
   const yearsOfCollege = 4;
