@@ -1,7 +1,14 @@
 .barRect {
   rx: 20px;
   ry: 20px;
+  transition-property: fill;
+  transition-duration: 100ms;
+  transition-timing-function: ease-out;
 }
 
 .barHolder {
+  transition-property: transform;
+  transition-duration: 200ms;
+  transition-timing-function: ease-out;
+  will-change: transform;
 }

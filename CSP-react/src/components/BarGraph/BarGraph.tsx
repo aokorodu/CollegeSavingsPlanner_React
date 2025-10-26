@@ -43,7 +43,7 @@ const BarGraph = ({
                     percentage={barHeightPercentage}
                     color={colors[0]}
                     value={cost}
-                    hasTransition={true}
+                    hasTransition={false}
                 />
             );
         });

@@ -8,6 +8,7 @@ import { formatToDollarString } from './utils/Utils';
 import { calculateAmountSaved, calculateFutureCost } from './data/calculator';
 import { Average } from './data/costData';
 import SliderHolder from './components/SlideHolder/SlideHolder';
+import InfoHolder from './components/InfoHolder/InfoHolder';
 
 
 // ui
@@ -149,7 +150,7 @@ function App() {
 
         <div className="uiHolder">
 
-          <SliderHolder>
+          <InfoHolder>
             <select onChange={(e) => {
               setSelectedState(e.target.value as string);
               //setColleges(getCollegesByState(selectedState));
@@ -158,9 +159,6 @@ function App() {
                 <option key={String(state)} value={state}>{state}</option>
               ))}
             </select>
-          </SliderHolder>
-
-          <SliderHolder>
             {/* select college */}
             <select id="colleges" defaultValue={selectedCollege?.name} onChange={(e) => {
 
@@ -171,7 +169,7 @@ function App() {
               </option>
               {getCollegeSelections()}
             </select>
-          </SliderHolder>
+          </InfoHolder>
 
           <SliderHolder>
             <label htmlFor="yearsSlider">years until college</label>
@@ -253,7 +251,7 @@ function App() {
                 }));
               }}
             />
-            <span >cost increase: {data.annalCostIncrease}%</span>
+            <span>{data.annalCostIncrease}%</span>
           </SliderHolder>
           <SliderHolder>
             <div>
@@ -263,14 +261,13 @@ function App() {
                   periods: parseInt(e.target.value)
                 }));
               }}>
-                <option value="56">weekly</option>
-                <option value="26">bi-weekly</option>
-                <option value="24">bi-monthly</option>
-                <option value="12" selected>monthly</option>
-                <option value="4">quarterly</option>
-                <option value="1">yearly</option>
+                <option value="56">weekly contribution</option>
+                <option value="26">bi-weekly contribution</option>
+                <option value="24">bi-monthly contribution</option>
+                <option value="12" selected>monthly contribution</option>
+                <option value="4">quarterly contribution</option>
+                <option value="1">yearly contribution</option>
               </select>
-              <label htmlFor="plannedContributionSlider">contribution</label>
             </div>
 
             <input
@@ -297,15 +294,17 @@ function App() {
             <input type="text" id="startingAmountInput" value={`$${data.initialBalance.toLocaleString()}`} onChange={(e) => setStartBalanceFromInput(e.target.value)} />
           </SliderHolder>
 
-          <div>
-            <label>future amount saved</label>{`$${data.futureSaved.toLocaleString()}`}
-          </div>
-          <div>
-            <label>future cost</label>{`$${data.futureCost.futureCost.toLocaleString()}`}
-          </div>
-          <div>
-            <label>percent saved</label>{`${Math.round(getPercentage())}%`}
-          </div>
+
+          <InfoHolder>
+            <label>future amount saved</label><span>{`$${data.futureSaved.toLocaleString()}`}</span>
+          </InfoHolder>
+
+          <InfoHolder>
+            <label>future cost</label><span>{`$${data.futureCost.futureCost.toLocaleString()}`}</span>
+          </InfoHolder>
+          <InfoHolder>
+            <label>percent saved</label><span>{`${Math.round(getPercentage())}%`}</span>
+          </InfoHolder>
 
         </div>
       </div>
