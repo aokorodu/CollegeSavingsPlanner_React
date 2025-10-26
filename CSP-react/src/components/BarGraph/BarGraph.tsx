@@ -19,7 +19,7 @@ const BarGraph = ({
     const defaultMax = 200000;
     const totalCosts = yearlyCosts.reduce((a, b) => a + b, 0);
     const percentageSaved = amountSaved / totalCosts;
-    const yearlySaved = yearlyCosts.map(cost => cost * percentageSaved);
+    const yearlySaved = yearlyCosts.map(cost => Math.round(cost * percentageSaved));
     const maxYearlyCost = Math.max(...yearlyCosts);
     const yearlyMax = Math.max(...yearlySaved, maxYearlyCost, defaultMax);
 
