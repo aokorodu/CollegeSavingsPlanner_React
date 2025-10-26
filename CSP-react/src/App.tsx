@@ -145,7 +145,7 @@ function App() {
       <div className='contentHolder'>
         <div id="graphContainer">
           <PieChart colors={selectedCollege?.colors || defaultColors} percentage={getPercentage()} />
-          <BarGraph colors={selectedCollege?.colors || defaultColors} percentage={getPercentage()} yearlyCosts={data.futureCost.yearlyCostByYear} />
+          <BarGraph colors={selectedCollege?.colors || defaultColors} amountSaved={data.futureSaved} yearlyCosts={data.futureCost.yearlyCostByYear} />
         </div>
 
         <div className="uiHolder">

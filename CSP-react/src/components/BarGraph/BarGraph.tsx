@@ -23,10 +23,12 @@ const BarGraph = ({
     const maxYearlyCost = Math.max(...yearlyCosts);
     const yearlyMax = Math.max(...yearlySaved, maxYearlyCost, defaultMax);
 
-    console.log("oo yearlyCosts: ", yearlyCosts);
-    console.log("oo yearlySaved: ", totalCosts);
+    console.log("oo ------------------");
+    console.log("oo totalCosts: ", totalCosts);
+    console.log("oo amountSaved: ", amountSaved);
+    console.log("oo percentageSaved: ", percentageSaved);
+    console.log("oo yearlySaved: ", yearlySaved);
     console.log("oo maxYearlyCost: ", maxYearlyCost);
-    console.log("oo defaultMax: ", defaultMax);
 
     const vbHeight = 1000;
     const vbWidth = 1600;
@@ -34,7 +36,9 @@ const BarGraph = ({
 
     const getCostBars = () => {
         return yearlyCosts.map((cost, index) => {
-            const barHeightPercentage = yearlyCosts[index] / yearlyMax * 100;
+            console.log("oo cost: ", cost);
+            console.log("oo yearlyMax: ", yearlyMax);
+            const barHeightPercentage = cost / yearlyMax * 100;
             console.log("oo barheightpercentage: ", barHeightPercentage); {/*(cost / maxYearlyCost) * 100*/ };
             return (
                 <Bar

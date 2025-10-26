@@ -16,6 +16,7 @@ const Bar = ({ x, width = 200, percentage, color, value, hasTransition = false }
     const barSpacing = 10;
     const barHeight = 1000;
     const barY = barHeight - (percentage * 10);
+    console.log("oo barheight: ", barHeight);
 
     return (
         <>
