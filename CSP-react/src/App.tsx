@@ -8,7 +8,7 @@ import { calculateAmountSaved, calculateFutureCost } from './data/calculator';
 // import { Average } from './data/costData';
 import SliderHolder from './components/SlideHolder/SlideHolder';
 import InfoHolder from './components/InfoHolder/InfoHolder';
-import { getCollegesByState2, stateNames } from './data/costData2';
+import { getCollegesByState2, stateNames } from './data/costData';
 
 
 // ui
