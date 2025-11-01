@@ -56,6 +56,10 @@ function App() {
   let selectedCollege: College | null = initialColleges[2] ?? null;
   let data = defaultData;
 
+  // graph refs
+  const pieChartRef = React.useRef<{ updatePercentage: (p: number) => void } | null>(null);
+  //const barGraphRef = React.useRef<BarGraphHandle>(null);
+
   // dropdowns refs
   const stateDropdownRef = React.useRef<HTMLSelectElement>(null);
   const collegeDropdownRef = React.useRef<HTMLSelectElement>(null);
@@ -152,6 +156,7 @@ function App() {
     data.futureSaved = futureSaved;
 
     updateContent();
+    updateGraphs();
   }
 
   const updateContent = () => {
@@ -167,6 +172,14 @@ function App() {
       percentSavedRef.current.innerText = `${percentage.toFixed(2)}%`;
     }
 
+  }
+
+  const updateGraphs = () => {
+    const percentage = data.futureSaved / data.futureCost.futureCost * 100;
+    if (pieChartRef.current) {
+      pieChartRef.current?.updatePercentage(percentage);
+      //pieChartRef.current.updateColors(selectedCollege?.colors || defaultColors);
+    }
   }
 
   const getCollegeSelections = () => {
@@ -216,7 +229,7 @@ function App() {
       <h1>College Savings Planner</h1>
       <div className='contentHolder'>
         <div id="graphContainer">
-          <PieChart colors={selectedCollege?.colors || defaultColors} percentage={getPercentage()} />
+          <PieChart ref={pieChartRef} />
           <BarGraph colors={selectedCollege?.colors || defaultColors} amountSaved={data.futureSaved} yearlyCosts={data.futureCost.yearlyCostByYear} />
         </div>
 
@@ -408,4 +421,4 @@ function App() {
   )
 }
 
-export default App
+export default App;

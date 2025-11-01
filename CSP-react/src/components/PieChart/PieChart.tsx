@@ -1,16 +1,38 @@
 import styles from './PieChart.module.css';
-import React from 'react';
+import React, { forwardRef, useImperativeHandle } from 'react';
 
-interface PieChartProps {
-    colors: string[];
-    percentage: number;
-}
 
-const PieChart = ({ colors, percentage }: PieChartProps) => {
-    console.log('PieChart render - percentage: ', percentage);
-    console.log('PieChart render colors: ', colors);
-    const chartColors = colors.length === 0 ? ["#98A1BC", "#555879"] : colors;
-    const savedPath = React.createRef<SVGCircleElement>();
+const PieChart = forwardRef((props, ref) => {
+
+    const outlineRef = React.useRef<SVGCircleElement | null>(null);
+    const bgRef = React.useRef<SVGCircleElement | null>(null);
+    const arcRef = React.useRef<SVGCircleElement | null>(null);
+    const dividerRef = React.useRef<SVGPathElement | null>(null);
+    const strokeWidth = 250;
+    const radius = 300;
+
+    const updatePercentage = (percentage: number) => {
+        if (arcRef.current) {
+            const offset = percentage > 100 ? -100 : -percentage;
+            arcRef.current.setAttribute("stroke-dashoffset", offset.toString());
+            const angle = percentage > 100 ? 360 : (percentage / 100) * 360;
+            dividerRef.current?.setAttribute("transform", `rotate(${angle})`);
+        }
+    };
+
+    const updateColors = (colors: string[]) => {
+        if (bgRef.current) {
+            bgRef.current.setAttribute("stroke", colors[0]);
+        }
+        if (arcRef.current) {
+            arcRef.current.setAttribute("stroke", colors[1]);
+        }
+    }
+
+    useImperativeHandle(ref, () => ({
+        updatePercentage,
+        updateColors
+    }));
 
     return (
         <div className={styles.pieChartContainer}>
@@ -58,50 +80,51 @@ const PieChart = ({ colors, percentage }: PieChartProps) => {
                 <g id="pieChart" className="graph">
                     <g transform="translate(500 500) rotate(-90)">
                         <circle
-                            id="circleOutline"
+                            ref={outlineRef}
                             cx="0"
                             cy="0"
-                            r="300"
+                            r={radius}
                             fill="none"
-                            stroke="#f0f0f0"
+                            stroke="#e0e0e0"
                             strokeOpacity="1"
-                            strokeWidth="270"
+                            strokeWidth={strokeWidth + 20}
                         ></circle>
 
                         <circle
-                            id="circleBG"
+                            ref={bgRef}
                             cx="0"
                             cy="0"
-                            r="300"
+                            r={radius}
                             fill="none"
-                            stroke={chartColors[0]}
+                            stroke="#555879"
                             strokeOpacity="1"
-                            strokeWidth="250"
+                            strokeWidth={strokeWidth}
                         ></circle>
 
                         <circle
-                            ref={savedPath}
+                            ref={arcRef}
                             className={styles.savedPath}
                             cx="0"
                             cy="0"
-                            r="300"
+                            r={radius}
                             fill="none"
-                            stroke={chartColors[1]}
-                            strokeWidth="250"
+                            stroke="#98A1BC"
+                            strokeWidth={strokeWidth}
                             strokeLinecap="inherit"
                             pathLength="100"
                             strokeDasharray="100 100"
-                            strokeDashoffset={percentage > 100 ? -100 : -percentage}
+                            strokeDashoffset=" -100 "
                         ></circle>
 
                         <g id="dividerPath">
                             <path
+                                ref={dividerRef}
                                 className={styles.savedPath}
                                 d="M175 0 H425"
                                 stroke="#fff"
                                 strokeWidth="5"
                                 strokeLinecap="inherit"
-                                transform={`rotate(${percentage > 100 ? 360 : percentage / 100 * 360})`}
+                                transform="rotate(0)"
                             ></path>
                         </g>
                     </g>
@@ -110,6 +133,6 @@ const PieChart = ({ colors, percentage }: PieChartProps) => {
             </svg>
         </div>
     );
-};
+});
 
 export default PieChart;
