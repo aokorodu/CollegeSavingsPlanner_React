@@ -69,6 +69,7 @@ function App() {
   const annualCostSliderRef = React.useRef<HTMLInputElement>(null);
   const rateOfReturnSliderRef = React.useRef<HTMLInputElement>(null);
   const costIncreaseSliderRef = React.useRef<HTMLInputElement>(null);
+  const plannedContributionRef = React.useRef<HTMLInputElement>(null);
 
   // text refs
   const yearsToCollegeRef = React.useRef<HTMLSpanElement>(null);
@@ -77,7 +78,7 @@ function App() {
   const costIncreaseRef = React.useRef<HTMLSpanElement>(null);
   const contributionRef = React.useRef<HTMLSpanElement>(null);
   const initialContributionRef = React.useRef<HTMLInputElement>(null);
-  const plannedContributionRef = React.useRef<HTMLInputElement>(null);
+
 
   // refs for future values
   const futureAmountSavedRef = React.useRef<HTMLSpanElement>(null);
@@ -144,6 +145,7 @@ function App() {
   }
   // college selected or cost changed
   const calculateAmounts = () => {
+    console.log("data: contribution", data.contribution);
     data.currentCost = selectedCollege ? selectedCollege.cost : 0;
 
     const futureCostResult = calculateFutureCost({ yearlyCost: data.currentCost, annualCostIncrease: data.annalCostIncrease, yearsToCollege: data.yearsToCollege, yearsOfCollege });
@@ -154,6 +156,8 @@ function App() {
     data.futureCost.futureCost = futureCostResult.futureCost;
     data.futureCost.yearlyCostByYear = futureCostResult.yearlyCostByYear;
     data.futureSaved = futureSaved;
+
+    console.log('data: ', data);
 
     updateContent();
     updateGraphs();
@@ -202,9 +206,16 @@ function App() {
     const collegeArray = getCollegesByState2(selectedState);
     setColleges(collegeArray);
     selectedCollege = collegeArray[0] || null;
+    console.log('data: selectNewState - contribution: ', data.contribution);
+    setTimeout(() => {
+      console.log('data: selectNewState2 - contribution: ', data.contribution);
+    }, 1000); // wait for colleges state to update
   }
 
   const selectNewCollege = (newCollege: College) => {
+    data.contribution = parseInt(plannedContributionRef.current?.value || "0"); // retain contribution value
+    console.log('data: selectNewCollege - contribution: ', data.contribution);
+    console.log("data: contribute slider value", plannedContributionRef.current?.value);
     selectedCollege = newCollege;
     data.selectedCollege = newCollege;
     data.currentCost = newCollege.cost;
@@ -214,6 +225,8 @@ function App() {
     if (annualCostSliderRef.current) {
       annualCostSliderRef.current.value = newCollege.cost.toString();
     }
+
+
     calculateAmounts();
   }
 
