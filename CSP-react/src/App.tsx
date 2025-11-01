@@ -57,7 +57,7 @@ function App() {
   let data = defaultData;
 
   // graph refs
-  const pieChartRef = React.useRef<{ updatePercentage: (p: number) => void } | null>(null);
+  const pieChartRef = React.useRef<{ updatePercentage: (p: number) => void; updateColors: (c: string[]) => void } | null>(null);
   //const barGraphRef = React.useRef<BarGraphHandle>(null);
 
   // dropdowns refs
@@ -145,7 +145,7 @@ function App() {
   }
   // college selected or cost changed
   const calculateAmounts = () => {
-    console.log("data: contribution", data.contribution);
+    data.contribution = parseInt(plannedContributionRef.current?.value || "0"); // retain contribution value
     data.currentCost = selectedCollege ? selectedCollege.cost : 0;
 
     const futureCostResult = calculateFutureCost({ yearlyCost: data.currentCost, annualCostIncrease: data.annalCostIncrease, yearsToCollege: data.yearsToCollege, yearsOfCollege });
@@ -180,9 +180,10 @@ function App() {
 
   const updateGraphs = () => {
     const percentage = data.futureSaved / data.futureCost.futureCost * 100;
+    const colors = selectedCollege?.colors || defaultColors;
     if (pieChartRef.current) {
       pieChartRef.current?.updatePercentage(percentage);
-      //pieChartRef.current.updateColors(selectedCollege?.colors || defaultColors);
+      pieChartRef.current.updateColors(colors);
     }
   }
 
@@ -206,16 +207,9 @@ function App() {
     const collegeArray = getCollegesByState2(selectedState);
     setColleges(collegeArray);
     selectedCollege = collegeArray[0] || null;
-    console.log('data: selectNewState - contribution: ', data.contribution);
-    setTimeout(() => {
-      console.log('data: selectNewState2 - contribution: ', data.contribution);
-    }, 1000); // wait for colleges state to update
   }
 
   const selectNewCollege = (newCollege: College) => {
-    data.contribution = parseInt(plannedContributionRef.current?.value || "0"); // retain contribution value
-    console.log('data: selectNewCollege - contribution: ', data.contribution);
-    console.log("data: contribute slider value", plannedContributionRef.current?.value);
     selectedCollege = newCollege;
     data.selectedCollege = newCollege;
     data.currentCost = newCollege.cost;
@@ -230,12 +224,12 @@ function App() {
     calculateAmounts();
   }
 
-  const getPercentage = () => {
-    let percentage = data.futureSaved / data.futureCost.futureCost * 100;
-    if (isNaN(percentage)) percentage = 0;
-    console.log('percentage: ', percentage);
-    return percentage;
-  }
+  // const getPercentage = () => {
+  //   let percentage = data.futureSaved / data.futureCost.futureCost * 100;
+  //   if (isNaN(percentage)) percentage = 0;
+  //   console.log('percentage: ', percentage);
+  //   return percentage;
+  // }
 
   return (
     <>
