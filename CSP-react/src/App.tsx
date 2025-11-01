@@ -3,7 +3,7 @@ import './App.css'
 import PieChart from './components/PieChart/PieChart';
 import BarGraph from './components/BarGraph/BarGraph';
 import React, { useEffect, useState } from 'react';
-import { formatToDollarString, getDollarString, convertToDollarString } from './utils/Utils';
+import { getDollarString, convertToDollarString } from './utils/Utils';
 import { calculateAmountSaved, calculateFutureCost } from './data/calculator';
 import SliderHolder from './components/SlideHolder/SlideHolder';
 import InfoHolder from './components/InfoHolder/InfoHolder';
@@ -66,7 +66,7 @@ function App() {
   const rateOfReturnSliderRef = React.useRef<HTMLInputElement>(null);
   const costIncreaseSliderRef = React.useRef<HTMLInputElement>(null);
 
-  //
+  // text refs
   const yearsToCollegeRef = React.useRef<HTMLSpanElement>(null);
   const annualCostRef = React.useRef<HTMLSpanElement>(null);
   const rateOfReturnRef = React.useRef<HTMLSpanElement>(null);
@@ -88,7 +88,7 @@ function App() {
   const init = () => {
     data.currentCost = selectedCollege ? selectedCollege.cost : 0;
     // select menus
-    console.log('selectedCollege: ', selectedCollege);
+
     if (collegeDropdownRef.current && selectedCollege) {
       collegeDropdownRef.current.value = JSON.stringify(selectedCollege);
     }
@@ -150,7 +150,6 @@ function App() {
     data.futureCost.futureCost = futureCostResult.futureCost;
     data.futureCost.yearlyCostByYear = futureCostResult.yearlyCostByYear;
     data.futureSaved = futureSaved;
-    console.log('calculated amounts', data);
 
     updateContent();
   }
@@ -160,7 +159,6 @@ function App() {
       futureAmountSavedRef.current.innerText = getDollarString(data.futureSaved);
     }
     if (futureCostRef.current) {
-      console.log('data.futureCost.futureCost: ', data.futureCost.futureCost);
       futureCostRef.current.innerText = getDollarString(data.futureCost.futureCost);
     }
     if (percentSavedRef.current) {
@@ -172,7 +170,6 @@ function App() {
   }
 
   const getCollegeSelections = () => {
-    console.log('getCollegeSelections');
     const newArr = colleges.map((college, index) => {
       return (
         <option
@@ -200,6 +197,9 @@ function App() {
     data.currentCost = newCollege.cost;
     if (annualCostRef.current) {
       annualCostRef.current.innerText = getDollarString(newCollege.cost);
+    }
+    if (annualCostSliderRef.current) {
+      annualCostSliderRef.current.value = newCollege.cost.toString();
     }
     calculateAmounts();
   }
