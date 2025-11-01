@@ -86,6 +86,7 @@ function App() {
   }, []);
 
   const init = () => {
+    data.currentCost = selectedCollege ? selectedCollege.cost : 0;
     // select menus
     console.log('selectedCollege: ', selectedCollege);
     if (collegeDropdownRef.current && selectedCollege) {
@@ -196,6 +197,10 @@ function App() {
   const selectNewCollege = (newCollege: College) => {
     selectedCollege = newCollege;
     data.selectedCollege = newCollege;
+    data.currentCost = newCollege.cost;
+    if (annualCostRef.current) {
+      annualCostRef.current.innerText = getDollarString(newCollege.cost);
+    }
     calculateAmounts();
   }
 
