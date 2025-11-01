@@ -56,6 +56,16 @@ function App() {
   let selectedCollege: College | null = initialColleges[2] ?? null;
   let data = defaultData;
 
+  // dropdowns refs
+  const stateDropdownRef = React.useRef<HTMLSelectElement>(null);
+  const collegeDropdownRef = React.useRef<HTMLSelectElement>(null);
+
+  // slider refs
+  const yearsToCollegeSliderRef = React.useRef<HTMLInputElement>(null);
+  const annualCostSliderRef = React.useRef<HTMLInputElement>(null);
+  const rateOfReturnSliderRef = React.useRef<HTMLInputElement>(null);
+  const costIncreaseSliderRef = React.useRef<HTMLInputElement>(null);
+
   //
   const yearsToCollegeRef = React.useRef<HTMLSpanElement>(null);
   const annualCostRef = React.useRef<HTMLSpanElement>(null);
@@ -63,12 +73,70 @@ function App() {
   const costIncreaseRef = React.useRef<HTMLSpanElement>(null);
   const contributionRef = React.useRef<HTMLSpanElement>(null);
   const initialContributionRef = React.useRef<HTMLInputElement>(null);
+  const plannedContributionRef = React.useRef<HTMLInputElement>(null);
 
   // refs for future values
   const futureAmountSavedRef = React.useRef<HTMLSpanElement>(null);
   const futureCostRef = React.useRef<HTMLSpanElement>(null);
   const percentSavedRef = React.useRef<HTMLSpanElement>(null);
 
+  useEffect(() => {
+    init();
+    calculateAmounts();
+  }, []);
+
+  const init = () => {
+    // select menus
+    console.log('selectedCollege: ', selectedCollege);
+    if (collegeDropdownRef.current && selectedCollege) {
+      collegeDropdownRef.current.value = JSON.stringify(selectedCollege);
+    }
+    // initialize sliders
+    if (yearsToCollegeSliderRef.current) {
+      yearsToCollegeSliderRef.current.value = data.yearsToCollege.toString();
+    }
+    if (annualCostSliderRef.current) {
+      annualCostSliderRef.current.value = data.currentCost?.toString() || "0";
+    }
+    if (rateOfReturnSliderRef.current) {
+      rateOfReturnSliderRef.current.value = data.annualRateOfReturn.toString();
+    }
+
+    if (costIncreaseSliderRef.current) {
+      costIncreaseSliderRef.current.value = data.annalCostIncrease.toString();
+    }
+    if (plannedContributionRef.current) {
+      plannedContributionRef.current.value = data.contribution.toString();
+    }
+    // initialize text refs
+    if (yearsToCollegeRef.current) {
+      yearsToCollegeRef.current.innerText = data.yearsToCollege.toString();
+    }
+    if (annualCostRef.current) {
+      annualCostRef.current.innerText = getDollarString(data.currentCost || 0);
+    }
+    if (rateOfReturnRef.current) {
+      rateOfReturnRef.current.innerText = `${data.annualRateOfReturn}%`;
+    }
+    if (costIncreaseRef.current) {
+      costIncreaseRef.current.innerText = `${data.annalCostIncrease}%`;
+    }
+    if (contributionRef.current) {
+      contributionRef.current.innerText = getDollarString(data.contribution);
+    }
+    if (initialContributionRef.current) {
+      initialContributionRef.current.value = convertToDollarString(data.initialBalance);
+    }
+    if (futureCostRef.current) {
+      futureCostRef.current.innerText = getDollarString(data.futureCost.futureCost);
+    }
+    if (futureAmountSavedRef.current) {
+      futureAmountSavedRef.current.innerText = getDollarString(0);
+    }
+    if (percentSavedRef.current) {
+      percentSavedRef.current.innerText = "0%";
+    }
+  }
   // college selected or cost changed
   const calculateAmounts = () => {
     data.currentCost = selectedCollege ? selectedCollege.cost : 0;
@@ -91,6 +159,7 @@ function App() {
       futureAmountSavedRef.current.innerText = getDollarString(data.futureSaved);
     }
     if (futureCostRef.current) {
+      console.log('data.futureCost.futureCost: ', data.futureCost.futureCost);
       futureCostRef.current.innerText = getDollarString(data.futureCost.futureCost);
     }
     if (percentSavedRef.current) {
@@ -130,11 +199,6 @@ function App() {
     calculateAmounts();
   }
 
-  const setStartBalanceFromInput = (input: string) => {
-    const cleanedInput = formatToDollarString(input);
-    data.initialBalance = parseInt(cleanedInput);
-  }
-
   const getPercentage = () => {
     let percentage = data.futureSaved / data.futureCost.futureCost * 100;
     if (isNaN(percentage)) percentage = 0;
@@ -155,14 +219,14 @@ function App() {
 
           {/* select state and college */}
           <InfoHolder>
-            <select onChange={(e) => {
+            <select ref={stateDropdownRef} onChange={(e) => {
               selectNewState(e.target.value as string);
             }}>
               {stateNames.map((state) => (
                 <option key={String(state)} value={state}>{state}</option>
               ))}
             </select>
-            <select id="colleges" defaultValue={selectedCollege?.name} onChange={(e) => {
+            <select ref={collegeDropdownRef} defaultValue={selectedCollege?.name} onChange={(e) => {
 
               selectNewCollege(JSON.parse(e.target.value) as College)
             }}>
@@ -177,7 +241,7 @@ function App() {
           <SliderHolder>
             <label htmlFor="yearsSlider">years until college</label>
             <input
-              id="yearsSlider"
+              ref={yearsToCollegeSliderRef}
               type="range"
               min="1"
               max="30"
@@ -199,26 +263,32 @@ function App() {
           <SliderHolder>
             <label htmlFor="annualCollegeCostSlider">annual cost</label>
             <input
-              id="annualCollegeCostSlider"
+              ref={annualCostSliderRef}
               type="range"
               min="0"
               max="100000"
               step="100"
               onChange={(e) => {
                 const cost = parseInt(e.target.value);
+                selectedCollege = {
+                  name: "Custom College",
+                  cost: cost,
+                  colors: defaultColors,
+                };
+                data.selectedCollege = selectedCollege;
                 data.currentCost = cost;
                 annualCostRef.current!.innerText = getDollarString(cost);
                 calculateAmounts();
               }}
             />
-            <span ref={annualCostRef}>000</span>
+            <span ref={annualCostRef}>$0</span>
           </SliderHolder>
 
           {/* select rate of return */}
           <SliderHolder>
             <label htmlFor="ROfRSlider">rate of return</label>
             <input
-              id="ROfRSlider"
+              ref={rateOfReturnSliderRef}
               type="range"
               min="0"
               max="10"
@@ -240,7 +310,7 @@ function App() {
           <SliderHolder>
             <label htmlFor="costIncreaseSlider">cost increase</label>
             <input
-              id="costIncreaseSlider"
+              ref={costIncreaseSliderRef}
               type="range"
               min="0"
               max="10"
@@ -276,7 +346,7 @@ function App() {
 
             <input
               type="range"
-              id="plannedContributionSlider"
+              ref={plannedContributionRef}
               min="0"
               max="3000"
               step="25"
