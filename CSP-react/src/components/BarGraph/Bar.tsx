@@ -25,13 +25,10 @@ const Bar = forwardRef(({ x, width }: BarProps, ref) => {
     const textRef = React.useRef<SVGTextElement | null>(null);
 
     const updateSize = (percentage: number, value: number) => {
-        console.log('bar: updating bar size:', { percentage, value });
         if (barRef.current) {
-
             const height = (percentage / 100) * barHeight;
             const ypos = barHeight - height;
             const transformString = `translate(${xpos} ${ypos})`;
-            console.log('bar:', { percentage, barHeight, transformString });
             barRef.current!.setAttribute("transform", transformString);
             //textRef.current!.textContent = `$${value.toLocaleString()}`;
         }
@@ -51,7 +48,7 @@ const Bar = forwardRef(({ x, width }: BarProps, ref) => {
     return (
         <>
             <g ref={barRef} className={styles.barHolder} transform={`translate(${x} ${barY})`}>
-                <rect className={styles.barRect} x={barSpacing / 2} y="0" width={barWidth - barSpacing} height={barHeight + 20} stroke="#eaeaea" strokeWidth={5} strokeOpacity={.2} fill="red" />
+                <rect ref={rectRef} className={styles.barRect} x={barSpacing / 2} y="0" width={barWidth - barSpacing} height={barHeight + 20} stroke="#eaeaea" strokeWidth={5} strokeOpacity={.2} fill="red" />
                 <text x={barWidth / 2} y={-40} fill='#fff' stroke="none" fontSize={40} textAnchor="middle" dominantBaseline="hanging">$123.45</text>
             </g>
         </>);

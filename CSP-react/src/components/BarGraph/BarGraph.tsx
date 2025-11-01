@@ -43,59 +43,6 @@ const BarGraph = forwardRef((props, ref) => {
     const vbWidth = 1600;
     const barWidth = vbWidth / 8;
 
-    // const addToCostBarRefs = (el: BarRef | null) => {
-    //     if (!el) return;
-    //     if (!costBarRefs.current.includes(el)) {
-    //         costBarRefs.current.push(el);
-    //     }
-    // };
-
-    // const addToSavedBarRefs = (el: BarRef | null) => {
-    //     if (!el) return;
-    //     if (!savedBarRefs.current.includes(el)) {
-    //         savedBarRefs.current.push(el);
-    //     }
-    // };
-
-    // const getCostBars = () => {
-    //     console.log('bar: bargraph: getting cost bars');
-    //     if (costBarRefs.current.length === 4) {
-    //         console.log('bar: bargraph: already have cost bars');
-    //         return costBarRefs.current;
-    //     }
-    //     const arr = [];
-    //     for (let index = 0; index < years.length; index++) {
-    //         arr.push(
-    //             <Bar
-    //                 ref={addToCostBarRefs}
-    //                 key={`bar_${index}`}
-    //                 x={index * vbWidth / 4}
-    //                 width={barWidth}
-    //             />
-    //         );
-    //     }
-    //     return arr;
-    // };
-
-    // const getSavedBars = () => {
-    //     if (savedBarRefs.current.length === 4) {
-    //         console.log('bar: bargraph: already have saved bars');
-    //         return savedBarRefs.current;
-    //     }
-    //     const arr = [];
-    //     for (let index = 0; index < years.length; index++) {
-    //         arr.push(
-    //             <Bar
-    //                 ref={addToSavedBarRefs}
-    //                 key={`bar_${index}`}
-    //                 x={index * vbWidth / 4 + 200}
-    //                 width={barWidth}
-    //             />
-    //         );
-    //     }
-    //     return arr;
-    // };
-
     const getHorizontalAxis = () => {
         return years.map((year, index) => {
             return (
@@ -106,32 +53,23 @@ const BarGraph = forwardRef((props, ref) => {
 
     const updateBarValues = (futureSaved: number, yearlyCostsByYear: number[]) => {
 
-        console.log("bar: bargraph: total cost bars: ", costBarRefs.length);
-        console.log("bar: bargraph: updateBarValues called with:", { futureSaved, yearlyCostsByYear });
         yearlyCosts = yearlyCostsByYear;
         totalCosts = yearlyCostsByYear.reduce((a, b) => a + b, 0);
         percentageSaved = futureSaved / totalCosts;
         yearlySaved = yearlyCostsByYear.map(cost => Math.round(cost * percentageSaved));
         maxYearlyCost = Math.max(...yearlyCostsByYear);
         yearlyMax = Math.max(...yearlySaved, maxYearlyCost, defaultMax);
-        console.log("bar: bargraph:", { yearlyCosts, totalCosts, percentageSaved, yearlySaved, maxYearlyCost, yearlyMax });
-        console.log("bar: bargraph: -------------");
-        console.log("bar: bargraph: costbars:", costBarRefs.length);
         // iterate cost bars
         costBarRefs.forEach((barRef, index) => {
             if (!barRef.current) return;
             const percentage = (yearlyCosts[index] / yearlyMax) * 100;
-            console.log('bar: bargraph: costBarRef', { index, cost: yearlyCosts[index], percentage });
             const value = yearlyCosts[index];
             barRef.current.updateSize(percentage, value);
         });
-        console.log("bar: bargraph: -------------");
-        console.log("bar: bargraph: savedbars:", savedBarRefs.length);
         // iterate saved bars
         savedBarRefs.forEach((barRef, index) => {
             if (!barRef.current) return;
             const percentage = (yearlySaved[index] / yearlyMax) * 100;
-            console.log('bar: bargraph: savedBarRef', { index, cost: yearlySaved[index], percentage });
             const value = yearlySaved[index];
             barRef.current.updateSize(percentage, value);
         });
@@ -139,15 +77,15 @@ const BarGraph = forwardRef((props, ref) => {
 
     const updateaBarColors = (colors: string[]) => {
         // iterate saved bars
-        savedBarRefs.forEach((barRef, index) => {
-            const color = colors[index];
+        savedBarRefs.forEach((barRef) => {
+            const color = colors[0];
             if (color !== undefined) {
                 barRef.current != null && barRef.current.updateColors(color);
             }
         });
         // iterate cost bars
-        costBarRefs.forEach((barRef, index) => {
-            const color = colors[index];
+        costBarRefs.forEach((barRef) => {
+            const color = colors[1];
             if (color !== undefined) {
                 barRef.current != null && barRef.current.updateColors(color);
             }

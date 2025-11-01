@@ -157,8 +157,6 @@ function App() {
     data.futureCost.yearlyCostByYear = futureCostResult.yearlyCostByYear;
     data.futureSaved = futureSaved;
 
-    console.log('data: ', data);
-
     updateContent();
     updateGraphs();
   }
@@ -228,13 +226,6 @@ function App() {
 
     calculateAmounts();
   }
-
-  // const getPercentage = () => {
-  //   let percentage = data.futureSaved / data.futureCost.futureCost * 100;
-  //   if (isNaN(percentage)) percentage = 0;
-  //   console.log('percentage: ', percentage);
-  //   return percentage;
-  // }
 
   return (
     <>
