@@ -1,4 +1,7 @@
 .barGraphContainer {
+  transition-property: transform;
+  transition-duration: 0.5s;
+  transition-timing-function: ease-in-out;
   position: absolute;
   width: 800px;
   height: 500px;

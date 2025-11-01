@@ -50,7 +50,7 @@ const Bar = forwardRef(({ x, width }: BarProps, ref) => {
 
     return (
         <>
-            <g ref={barRef} transform={`translate(${x} ${barY})`}>
+            <g ref={barRef} className={styles.barHolder} transform={`translate(${x} ${barY})`}>
                 <rect className={styles.barRect} x={barSpacing / 2} y="0" width={barWidth - barSpacing} height={barHeight + 20} stroke="#eaeaea" strokeWidth={5} strokeOpacity={.2} fill="red" />
                 <text x={barWidth / 2} y={-40} fill='#fff' stroke="none" fontSize={40} textAnchor="middle" dominantBaseline="hanging">$123.45</text>
             </g>
