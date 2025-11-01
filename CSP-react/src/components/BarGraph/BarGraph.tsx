@@ -1,74 +1,100 @@
 import Bar from './Bar';
 import styles from './BarGraph.module.css';
-
-interface BarGraphProps {
-    colors: string[];
-    yearlyCosts: number[];
-    amountSaved: number;
-}
+import React, { forwardRef, useImperativeHandle, useRef } from 'react';
+import type { BarSizeProps } from './Bar';
 
 const years = ['first year', 'sohpmore', 'junior', 'senior'];
 
-const BarGraph = ({
-    colors,
-    yearlyCosts = [],
-    amountSaved,
+type BarRef = {
+    updateSize: ({ percentage, value }: BarSizeProps) => void;
+    updateColors: (c: string) => void;
+};
 
-}: BarGraphProps) => {
+const BarGraph = forwardRef((props, ref) => {
 
     const defaultMax = 200000;
-    const totalCosts = yearlyCosts.reduce((a, b) => a + b, 0);
-    const percentageSaved = amountSaved / totalCosts;
-    const yearlySaved = yearlyCosts.map(cost => Math.round(cost * percentageSaved));
-    const maxYearlyCost = Math.max(...yearlyCosts);
-    const yearlyMax = Math.max(...yearlySaved, maxYearlyCost, defaultMax);
+    // const totalCosts = yearlyCosts.reduce((a, b) => a + b, 0);
+    // const percentageSaved = amountSaved / totalCosts;
+    // const yearlySaved = yearlyCosts.map(cost => Math.round(cost * percentageSaved));
+    // const maxYearlyCost = Math.max(...yearlyCosts);
+    // const yearlyMax = Math.max(...yearlySaved, maxYearlyCost, defaultMax);
 
-    console.log("oo ------------------");
-    console.log("oo totalCosts: ", totalCosts);
-    console.log("oo amountSaved: ", amountSaved);
-    console.log("oo percentageSaved: ", percentageSaved);
-    console.log("oo yearlySaved: ", yearlySaved);
-    console.log("oo maxYearlyCost: ", maxYearlyCost);
+    const costBar1Ref = React.useRef<{ updateSize: (p: number, v: number) => void; updateColors: (c: string) => void } | null>(null);
+    const costBar2Ref = React.useRef<{ updateSize: (p: number, v: number) => void; updateColors: (c: string) => void } | null>(null);
+    const costBar3Ref = React.useRef<{ updateSize: (p: number, v: number) => void; updateColors: (c: string) => void } | null>(null);
+    const costBar4Ref = React.useRef<{ updateSize: (p: number, v: number) => void; updateColors: (c: string) => void } | null>(null);
+    const savedBar1Ref = React.useRef<{ updateSize: (p: number, v: number) => void; updateColors: (c: string) => void } | null>(null);
+    const savedBar2Ref = React.useRef<{ updateSize: (p: number, v: number) => void; updateColors: (c: string) => void } | null>(null);
+    const savedBar3Ref = React.useRef<{ updateSize: (p: number, v: number) => void; updateColors: (c: string) => void } | null>(null);
+    const savedBar4Ref = React.useRef<{ updateSize: (p: number, v: number) => void; updateColors: (c: string) => void } | null>(null);
+    const savedBarRefs = [savedBar1Ref, savedBar2Ref, savedBar3Ref, savedBar4Ref];
+    const costBarRefs = [costBar1Ref, costBar2Ref, costBar3Ref, costBar4Ref];
+
+
+    let totalCosts = 0;
+    let yearlyCosts: number[] = [];
+    let yearlySaved: number[] = [];
+    let percentageSaved = 0;
+    let maxYearlyCost = 0;
+    let yearlyMax = 0;
+
 
     const vbHeight = 1000;
     const vbWidth = 1600;
     const barWidth = vbWidth / 8;
 
-    const getCostBars = () => {
-        return yearlyCosts.map((cost, index) => {
-            console.log("oo cost: ", cost);
-            console.log("oo yearlyMax: ", yearlyMax);
-            const barHeightPercentage = cost / yearlyMax * 100;
-            console.log("oo barheightpercentage: ", barHeightPercentage); {/*(cost / maxYearlyCost) * 100*/ };
-            return (
-                <Bar
-                    key={`bar_${index}`}
-                    x={index * vbWidth / 4}
-                    width={barWidth}
-                    percentage={barHeightPercentage}
-                    color={colors[0]}
-                    value={cost}
-                    hasTransition={false}
-                />
-            );
-        });
-    };
+    // const addToCostBarRefs = (el: BarRef | null) => {
+    //     if (!el) return;
+    //     if (!costBarRefs.current.includes(el)) {
+    //         costBarRefs.current.push(el);
+    //     }
+    // };
 
-    const getSavedBars = () => {
-        return yearlySaved.map((cost, index) => {
-            const barHeightPercentage = yearlySaved[index] / yearlyMax * 100;
-            return (
-                <Bar
-                    key={`bar_${index}`}
-                    x={(index * vbWidth / 4) + vbWidth / 8}
-                    percentage={barHeightPercentage}
-                    color={colors[1]}
-                    value={cost}
-                    hasTransition={false}
-                />
-            );
-        });
-    };
+    // const addToSavedBarRefs = (el: BarRef | null) => {
+    //     if (!el) return;
+    //     if (!savedBarRefs.current.includes(el)) {
+    //         savedBarRefs.current.push(el);
+    //     }
+    // };
+
+    // const getCostBars = () => {
+    //     console.log('bar: bargraph: getting cost bars');
+    //     if (costBarRefs.current.length === 4) {
+    //         console.log('bar: bargraph: already have cost bars');
+    //         return costBarRefs.current;
+    //     }
+    //     const arr = [];
+    //     for (let index = 0; index < years.length; index++) {
+    //         arr.push(
+    //             <Bar
+    //                 ref={addToCostBarRefs}
+    //                 key={`bar_${index}`}
+    //                 x={index * vbWidth / 4}
+    //                 width={barWidth}
+    //             />
+    //         );
+    //     }
+    //     return arr;
+    // };
+
+    // const getSavedBars = () => {
+    //     if (savedBarRefs.current.length === 4) {
+    //         console.log('bar: bargraph: already have saved bars');
+    //         return savedBarRefs.current;
+    //     }
+    //     const arr = [];
+    //     for (let index = 0; index < years.length; index++) {
+    //         arr.push(
+    //             <Bar
+    //                 ref={addToSavedBarRefs}
+    //                 key={`bar_${index}`}
+    //                 x={index * vbWidth / 4 + 200}
+    //                 width={barWidth}
+    //             />
+    //         );
+    //     }
+    //     return arr;
+    // };
 
     const getHorizontalAxis = () => {
         return years.map((year, index) => {
@@ -78,6 +104,60 @@ const BarGraph = ({
         });
     };
 
+    const updateBarValues = (futureSaved: number, yearlyCostsByYear: number[]) => {
+
+        console.log("bar: bargraph: total cost bars: ", costBarRefs.length);
+        console.log("bar: bargraph: updateBarValues called with:", { futureSaved, yearlyCostsByYear });
+        yearlyCosts = yearlyCostsByYear;
+        totalCosts = yearlyCostsByYear.reduce((a, b) => a + b, 0);
+        percentageSaved = futureSaved / totalCosts;
+        yearlySaved = yearlyCostsByYear.map(cost => Math.round(cost * percentageSaved));
+        maxYearlyCost = Math.max(...yearlyCostsByYear);
+        yearlyMax = Math.max(...yearlySaved, maxYearlyCost, defaultMax);
+        console.log("bar: bargraph:", { yearlyCosts, totalCosts, percentageSaved, yearlySaved, maxYearlyCost, yearlyMax });
+        console.log("bar: bargraph: -------------");
+        console.log("bar: bargraph: costbars:", costBarRefs.length);
+        // iterate cost bars
+        costBarRefs.forEach((barRef, index) => {
+            if (!barRef.current) return;
+            const percentage = (yearlyCosts[index] / yearlyMax) * 100;
+            console.log('bar: bargraph: costBarRef', { index, cost: yearlyCosts[index], percentage });
+            const value = yearlyCosts[index];
+            barRef.current.updateSize(percentage, value);
+        });
+        console.log("bar: bargraph: -------------");
+        console.log("bar: bargraph: savedbars:", savedBarRefs.length);
+        // iterate saved bars
+        savedBarRefs.forEach((barRef, index) => {
+            if (!barRef.current) return;
+            const percentage = (yearlySaved[index] / yearlyMax) * 100;
+            console.log('bar: bargraph: savedBarRef', { index, cost: yearlySaved[index], percentage });
+            const value = yearlySaved[index];
+            barRef.current.updateSize(percentage, value);
+        });
+    }
+
+    const updateaBarColors = (colors: string[]) => {
+        // iterate saved bars
+        savedBarRefs.forEach((barRef, index) => {
+            const color = colors[index];
+            if (color !== undefined) {
+                barRef.current != null && barRef.current.updateColors(color);
+            }
+        });
+        // iterate cost bars
+        costBarRefs.forEach((barRef, index) => {
+            const color = colors[index];
+            if (color !== undefined) {
+                barRef.current != null && barRef.current.updateColors(color);
+            }
+        });
+    };
+
+    useImperativeHandle(ref, () => ({
+        updateBarValues,
+        updateaBarColors
+    }));
 
     return (
         <div className={styles.barGraphContainer}>
@@ -88,8 +168,58 @@ const BarGraph = ({
                     </clipPath>
                 </defs>
                 <g clipPath="url(#barGraphClipPath)">
-                    {getCostBars()}
-                    {getSavedBars()}
+                    <g id="costBars">
+                        <Bar
+                            ref={costBar1Ref}
+                            key={`cbar_0`}
+                            x={0 * vbWidth / 4}
+                            width={barWidth}
+                        />
+                        <Bar
+                            ref={costBar2Ref}
+                            key={`cbar_1`}
+                            x={1 * vbWidth / 4}
+                            width={barWidth}
+                        />
+                        <Bar
+                            ref={costBar3Ref}
+                            key={`cbar_2`}
+                            x={2 * vbWidth / 4}
+                            width={barWidth}
+                        />
+                        <Bar
+                            ref={costBar4Ref}
+                            key={`cbar_3`}
+                            x={3 * vbWidth / 4}
+                            width={barWidth}
+                        />
+                    </g>
+                    <g id="savedBars">
+                        <Bar
+                            ref={savedBar1Ref}
+                            key={`sbar_${0}`}
+                            x={0 * vbWidth / 4 + 200}
+                            width={barWidth}
+                        />
+                        <Bar
+                            ref={savedBar2Ref}
+                            key={`sbar_${1}`}
+                            x={1 * vbWidth / 4 + 200}
+                            width={barWidth}
+                        />
+                        <Bar
+                            ref={savedBar3Ref}
+                            key={`sbar_${2}`}
+                            x={2 * vbWidth / 4 + 200}
+                            width={barWidth}
+                        />
+                        <Bar
+                            ref={savedBar4Ref}
+                            key={`sbar_${3}`}
+                            x={3 * vbWidth / 4 + 200}
+                            width={barWidth}
+                        />
+                    </g>
                 </g>
                 {getHorizontalAxis()}
 
@@ -98,6 +228,6 @@ const BarGraph = ({
             </svg>
         </div>
     );
-};
+});
 
 export default BarGraph;

@@ -58,7 +58,7 @@ function App() {
 
   // graph refs
   const pieChartRef = React.useRef<{ updatePercentage: (p: number) => void; updateColors: (c: string[]) => void } | null>(null);
-  //const barGraphRef = React.useRef<BarGraphHandle>(null);
+  const barGraphRef = React.useRef<{ updateBarValues: (f: number, c: number[]) => void; updateaBarColors: (c: string[]) => void } | null>(null);
 
   // dropdowns refs
   const stateDropdownRef = React.useRef<HTMLSelectElement>(null);
@@ -185,6 +185,11 @@ function App() {
       pieChartRef.current?.updatePercentage(percentage);
       pieChartRef.current.updateColors(colors);
     }
+
+    if (barGraphRef.current) {
+      barGraphRef.current.updateBarValues(data.futureSaved, data.futureCost.yearlyCostByYear);
+      barGraphRef.current.updateaBarColors(colors);
+    }
   }
 
   const getCollegeSelections = () => {
@@ -237,7 +242,7 @@ function App() {
       <div className='contentHolder'>
         <div id="graphContainer">
           <PieChart ref={pieChartRef} />
-          <BarGraph colors={selectedCollege?.colors || defaultColors} amountSaved={data.futureSaved} yearlyCosts={data.futureCost.yearlyCostByYear} />
+          <BarGraph ref={barGraphRef} />
         </div>
 
         <div className="uiHolder">
