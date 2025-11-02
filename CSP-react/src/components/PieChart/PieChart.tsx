@@ -21,6 +21,7 @@ const PieChart = forwardRef((props, ref) => {
     };
 
     const updateColors = (colors: string[]) => {
+        console.log("updating colors", colors);
         if (bgRef.current) {
             bgRef.current.setAttribute("stroke", colors[0]);
         }

@@ -180,7 +180,10 @@ function App() {
 
   const updateGraphs = () => {
     const percentage = data.futureSaved / data.futureCost.futureCost * 100;
-    const colors = collegeDropdownRef.current?.value ? JSON.parse(collegeDropdownRef.current.value).colors : defaultColors;
+    let colors = collegeDropdownRef.current?.value ? JSON.parse(collegeDropdownRef.current.value).colors : defaultColors;
+    if (colors.length === 0) {
+      colors = defaultColors;
+    }
     if (pieChartRef.current) {
       pieChartRef.current?.updatePercentage(percentage);
       pieChartRef.current.updateColors(colors);
@@ -233,27 +236,6 @@ function App() {
     <>
       <h1>College Savings Planner</h1>
       <div className='contentHolder'>
-        <div id="graphContainer">
-          <div className={`chartContainer ${pieChartActive ? '' : 'chartContainerHiddenLeft'}`}>
-            <PieChart ref={pieChartRef} />
-          </div>
-          <div className={`chartContainer ${pieChartActive ? 'chartContainerHiddenRight' : ''}`}>
-            <BarGraph ref={barGraphRef} />
-          </div>
-        </div>
-        <div className="graphButtonHolder">
-          {/* bar graph button */}
-          <GraphButton isActive={!pieChartActive} imageURL="https://zuubadigital-bucket-test.s3.us-west-2.amazonaws.com/images/barGraphIcon.svg" altText="Reset Graphs" onClick={() => {
-            console.log("change graphs clicked");
-            setPieChartActive(false);
-          }} />
-          {/* pie chart button */}
-          <GraphButton isActive={pieChartActive} imageURL="https://zuubadigital-bucket-test.s3.us-west-2.amazonaws.com/images/pieChartIcon.svg" altText="Change Graph Type" onClick={() => {
-            console.log("change graphs clicked");
-            setPieChartActive(true);
-          }} />
-        </div>
-
         <div className="uiHolder">
 
           {/* select state and college */}
@@ -437,6 +419,32 @@ function App() {
           </InfoHolder>
 
         </div>
+
+
+        <div className="graphButtonHolder">
+          {/* bar graph button */}
+          <GraphButton isActive={!pieChartActive} imageURL="https://zuubadigital-bucket-test.s3.us-west-2.amazonaws.com/images/barGraphIcon.svg" altText="Reset Graphs" onClick={() => {
+            console.log("change graphs clicked");
+            setPieChartActive(false);
+          }} />
+          {/* pie chart button */}
+          <GraphButton isActive={pieChartActive} imageURL="https://zuubadigital-bucket-test.s3.us-west-2.amazonaws.com/images/pieChartIcon.svg" altText="Change Graph Type" onClick={() => {
+            console.log("change graphs clicked");
+            setPieChartActive(true);
+          }} />
+        </div>
+
+        <div id="graphContainer">
+          <div className={`chartContainer ${pieChartActive ? '' : 'chartContainerHiddenLeft'}`}>
+            <PieChart ref={pieChartRef} />
+          </div>
+          <div className={`chartContainer ${pieChartActive ? 'chartContainerHiddenRight' : ''}`}>
+            <BarGraph ref={barGraphRef} />
+          </div>
+        </div>
+
+
+
       </div>
     </>
   )
