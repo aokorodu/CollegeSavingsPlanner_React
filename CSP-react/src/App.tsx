@@ -148,7 +148,7 @@ function App() {
   // college selected or cost changed
   const calculateAmounts = () => {
     data.contribution = parseInt(plannedContributionRef.current?.value || "0"); // retain contribution value
-    data.currentCost = selectedCollege ? selectedCollege.cost : 0;
+    data.currentCost = parseInt(annualCostSliderRef.current?.value || "0"); // selectedCollege ? selectedCollege.cost : 0;
 
     const futureCostResult = calculateFutureCost({ yearlyCost: data.currentCost, annualCostIncrease: data.annalCostIncrease, yearsToCollege: data.yearsToCollege, yearsOfCollege });
 
@@ -180,7 +180,7 @@ function App() {
 
   const updateGraphs = () => {
     const percentage = data.futureSaved / data.futureCost.futureCost * 100;
-    const colors = selectedCollege?.colors || defaultColors;
+    const colors = collegeDropdownRef.current?.value ? JSON.parse(collegeDropdownRef.current.value).colors : defaultColors;
     if (pieChartRef.current) {
       pieChartRef.current?.updatePercentage(percentage);
       pieChartRef.current.updateColors(colors);
