@@ -87,3 +87,12 @@ select {
   transition-duration: var(--transition-duration);
   transition-timing-function: ease-out;
 }
+
+.keyContainer {
+  position: relative;
+  width: 400px;
+  height: 100px;
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}

@@ -9,6 +9,7 @@ import SliderHolder from './components/SlideHolder/SlideHolder';
 import InfoHolder from './components/InfoHolder/InfoHolder';
 import { getCollegesByState2, stateNames } from './data/costData';
 import GraphButton from './components/GraphButton/GraphButton';
+import KeyItem from './components/KeyItem/KeyItem';
 
 
 type College = {
@@ -63,6 +64,8 @@ function App() {
   // graph refs
   const pieChartRef = React.useRef<{ updatePercentage: (p: number) => void; updateColors: (c: string[]) => void } | null>(null);
   const barGraphRef = React.useRef<{ updateBarValues: (f: number, c: number[]) => void; updateaBarColors: (c: string[]) => void } | null>(null);
+  const costKeyRectRef = React.useRef<SVGRectElement | null>(null);
+  const savedKeyRectRef = React.useRef<SVGRectElement | null>(null);
 
   // dropdowns refs
   const stateDropdownRef = React.useRef<HTMLSelectElement>(null);
@@ -195,6 +198,8 @@ function App() {
       barGraphRef.current.updateBarValues(data.futureSaved, data.futureCost.yearlyCostByYear);
       barGraphRef.current.updateaBarColors(colors);
     }
+    costKeyRectRef.current?.setAttribute("fill", colors[1]);
+    savedKeyRectRef.current?.setAttribute("fill", colors[0]);
   }
 
   const getCollegeSelections = () => {
@@ -437,6 +442,11 @@ function App() {
         </div>
 
         <div id="graphContainer">
+          <div className="keyContainer">
+
+            <KeyItem label='future savings' ref={savedKeyRectRef} />
+            <KeyItem label='future cost' ref={costKeyRectRef} />
+          </div>
           <div className={`chartContainer ${pieChartActive ? '' : 'chartContainerHiddenLeft'}`}>
             <PieChart ref={pieChartRef} />
           </div>

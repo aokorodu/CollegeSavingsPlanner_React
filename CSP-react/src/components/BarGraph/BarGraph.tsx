@@ -1,7 +1,6 @@
 import Bar from './Bar';
 import styles from './BarGraph.module.css';
 import React, { forwardRef, useImperativeHandle, useRef } from 'react';
-// import type { BarSizeProps } from './Bar';
 
 const years = ['first year', 'sohpmore', 'junior', 'senior'];
 
@@ -127,13 +126,14 @@ const BarGraph = forwardRef((props, ref) => {
                     </clipPath>
                 </defs>
 
-                <g id="key" transform='translate(490 -135)'>
+                {/* <g id="key" transform='translate(490 -135)'>
                     <rect ref={costKeyRectRef} x="0" y="0" width={50} height={50} fill="#ff0000ff" fillOpacity=".8" rx="20" ry="20" />
                     <text x={60} y={30} fill='#fff' stroke="none" fontSize={40} textAnchor="start" dominantBaseline="middle">Yearly Cost</text>
                     <rect ref={savedKeyRectRef} x="300" y="0" width={50} height={50} fill="#00ff00ff" fillOpacity=".8" rx="20" ry="20" />
                     <text x={360} y={30} fill='#fff' stroke="none" fontSize={40} textAnchor="start" dominantBaseline="middle">Yearly Saved</text>
 
-                </g>
+                </g> */}
+
 
                 <g id="background">
                     <rect x="-150" y="-150" width={vbWidth + 300} height={vbHeight + vbMargin * 2} fill="#fff" fillOpacity=".025" rx="20" ry="20" stroke="none" strokeOpacity="1" strokeWidth={5} />
