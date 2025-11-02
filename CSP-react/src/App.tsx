@@ -4,7 +4,7 @@ import PieChart from './components/PieChart/PieChart';
 import BarGraph from './components/BarGraph/BarGraph';
 import React, { useEffect, useState } from 'react';
 import { getDollarString, convertToDollarString } from './utils/Utils';
-import { calculateAmountSaved, calculateFutureCost } from './data/calculator';
+import { calculateFutureValue, calculateFutureCost } from './data/calculator';
 import SliderHolder from './components/SlideHolder/SlideHolder';
 import InfoHolder from './components/InfoHolder/InfoHolder';
 import { getCollegesByState2, stateNames } from './data/costData';
@@ -33,6 +33,7 @@ type calcObject = {
   contribution: number;
   futureSaved: number;
   futureCost: FCost;
+  expenseRatio: number;
 }
 
 function App() {
@@ -47,6 +48,7 @@ function App() {
     contribution: 100,
     futureSaved: 0,
     futureCost: { futureCost: 0, yearlyCostByYear: [0, 0, 0, 0] },
+    expenseRatio: 0.14,
   };
 
   const defaultColors = ["#98A1BC", "#555879"];
@@ -152,7 +154,7 @@ function App() {
 
     const futureCostResult = calculateFutureCost({ yearlyCost: data.currentCost, annualCostIncrease: data.annalCostIncrease, yearsToCollege: data.yearsToCollege, yearsOfCollege });
 
-    const futureSaved = calculateAmountSaved({ rateOfReturn: data.annualRateOfReturn, periods: data.periods, yearsToCollege: data.yearsToCollege, initialBalance: data.initialBalance, contribution: data.contribution });
+    const futureSaved = calculateFutureValue({ annualRateOfReturn: data.annualRateOfReturn, expenseRatio: data.expenseRatio, periodsPerYear: data.periods, years: data.yearsToCollege, initialInvestment: data.initialBalance, periodicContribution: data.contribution });
 
     // assign returned object properties to data.futureCost
     data.futureCost.futureCost = futureCostResult.futureCost;

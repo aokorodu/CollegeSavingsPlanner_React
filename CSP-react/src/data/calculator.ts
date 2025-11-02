@@ -6,26 +6,26 @@ export type amtSavedParams = {
   contribution: number;
 };
 
-export const calculateAmountSaved = ({
-  rateOfReturn,
-  periods,
-  yearsToCollege,
-  initialBalance,
-  contribution,
-}: amtSavedParams) => {
-  const periodicRateOfReturn = rateOfReturn / 100 / periods;
+// export const calculateAmountSaved = ({
+//   rateOfReturn,
+//   periods,
+//   yearsToCollege,
+//   initialBalance,
+//   contribution,
+// }: amtSavedParams) => {
+//   const periodicRateOfReturn = rateOfReturn / 100 / periods;
 
-  const totalMonths = yearsToCollege * periods;
+//   const totalMonths = yearsToCollege * periods;
 
-  let balance = initialBalance;
-  console.log("balance: ", balance);
-  for (let month = 0; month < totalMonths; month++) {
-    balance += contribution;
-    balance += balance * periodicRateOfReturn;
-  }
+//   let balance = initialBalance;
+//   console.log("balance: ", balance);
+//   for (let month = 0; month < totalMonths; month++) {
+//     balance += contribution;
+//     balance += balance * periodicRateOfReturn;
+//   }
 
-  return balance;
-};
+//   return balance;
+// };
 
 export type futureCostParams = {
   yearlyCost: number;

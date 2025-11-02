@@ -33,6 +33,9 @@ const BarGraph = forwardRef((props, ref) => {
     const savedBarRefs = [savedBar1Ref, savedBar2Ref, savedBar3Ref, savedBar4Ref];
     const costBarRefs = [costBar1Ref, costBar2Ref, costBar3Ref, costBar4Ref];
 
+    const savedKeyRectRef = useRef<SVGRectElement | null>(null);
+    const costKeyRectRef = useRef<SVGRectElement | null>(null);
+
 
     let totalCosts = 0;
     let yearlyCosts: number[] = [];
@@ -44,6 +47,7 @@ const BarGraph = forwardRef((props, ref) => {
 
     const vbHeight = 1000;
     const vbWidth = 1600;
+    const vbMargin = 150;
     const barWidth = vbWidth / 8;
 
     const getHorizontalAxis = () => {
@@ -93,6 +97,20 @@ const BarGraph = forwardRef((props, ref) => {
                 barRef.current != null && barRef.current.updateColors(color);
             }
         });
+
+        // update key colors
+        if (savedKeyRectRef.current) {
+            const color = colors[0];
+            if (color !== undefined) {
+                savedKeyRectRef.current.setAttribute("fill", color);
+            }
+        }
+        if (costKeyRectRef.current) {
+            const color = colors[1];
+            if (color !== undefined) {
+                costKeyRectRef.current.setAttribute("fill", color);
+            }
+        }
     };
 
     useImperativeHandle(ref, () => ({
@@ -102,12 +120,24 @@ const BarGraph = forwardRef((props, ref) => {
 
     return (
         <div className={styles.barGraphContainer}>
-            <svg width="100%" height="100%" viewBox={`-100 -100 ${vbWidth + 200} ${vbHeight + 200}`}>
+            <svg width="100%" height="100%" viewBox={`${-vbMargin} ${-vbMargin} ${vbWidth + vbMargin * 2} ${vbHeight + vbMargin * 2}`} preserveAspectRatio="xMidYMid meet" >
                 <defs>
                     <clipPath id="barGraphClipPath">
                         <rect x="0" y="-40" width={vbWidth} height={vbHeight + 40} />
                     </clipPath>
                 </defs>
+
+                <g id="key" transform='translate(490 -135)'>
+                    <rect ref={costKeyRectRef} x="0" y="0" width={50} height={50} fill="#ff0000ff" fillOpacity=".8" rx="20" ry="20" />
+                    <text x={60} y={30} fill='#fff' stroke="none" fontSize={40} textAnchor="start" dominantBaseline="middle">Yearly Cost</text>
+                    <rect ref={savedKeyRectRef} x="300" y="0" width={50} height={50} fill="#00ff00ff" fillOpacity=".8" rx="20" ry="20" />
+                    <text x={360} y={30} fill='#fff' stroke="none" fontSize={40} textAnchor="start" dominantBaseline="middle">Yearly Saved</text>
+
+                </g>
+
+                <g id="background">
+                    <rect x="-150" y="-150" width={vbWidth + 300} height={vbHeight + vbMargin * 2} fill="#fff" fillOpacity=".025" rx="20" ry="20" stroke="none" strokeOpacity="1" strokeWidth={5} />
+                </g>
                 <g clipPath="url(#barGraphClipPath)">
                     <g id="costBars">
                         <Bar
@@ -165,7 +195,7 @@ const BarGraph = forwardRef((props, ref) => {
                 {getHorizontalAxis()}
 
                 <path d={`M 0 ${0} V${vbHeight} H${vbWidth}`} stroke="#fff" strokeOpacity=".5" fill="none" strokeWidth={1} />
-                <rect x="-100" y="-100" width={vbWidth + 200} height={vbHeight + 200} fill="#fff" fillOpacity=".025" rx="20" ry="20" stroke="none" strokeOpacity="1" strokeWidth={5} />
+
             </svg>
         </div>
     );
