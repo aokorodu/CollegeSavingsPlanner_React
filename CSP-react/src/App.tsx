@@ -429,16 +429,17 @@ function App() {
 
 
         <div className="graphButtonHolder">
-          {/* bar graph button */}
-          <GraphButton isActive={!pieChartActive} imageURL="https://zuubadigital-bucket-test.s3.us-west-2.amazonaws.com/images/barGraphIcon.svg" altText="Reset Graphs" onClick={() => {
-            console.log("change graphs clicked");
-            setPieChartActive(false);
-          }} />
           {/* pie chart button */}
           <GraphButton isActive={pieChartActive} imageURL="https://zuubadigital-bucket-test.s3.us-west-2.amazonaws.com/images/pieChartIcon.svg" altText="Change Graph Type" onClick={() => {
             console.log("change graphs clicked");
             setPieChartActive(true);
           }} />
+          {/* bar graph button */}
+          <GraphButton isActive={!pieChartActive} imageURL="https://zuubadigital-bucket-test.s3.us-west-2.amazonaws.com/images/barGraphIcon.svg" altText="Reset Graphs" onClick={() => {
+            console.log("change graphs clicked");
+            setPieChartActive(false);
+          }} />
+
         </div>
 
         <div id="graphContainer">
