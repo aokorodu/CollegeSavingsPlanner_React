@@ -1,6 +1,7 @@
 import Bar from './Bar';
 import styles from './BarGraph.module.css';
-import React, { forwardRef, useImperativeHandle, useRef } from 'react';
+import React, { forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
+import GraphLabel from './GraphLabel';
 
 const years = ['first year', 'sohpmore', 'junior', 'senior'];
 
@@ -34,6 +35,8 @@ const BarGraph = forwardRef((props, ref) => {
 
     const savedKeyRectRef = useRef<SVGRectElement | null>(null);
     const costKeyRectRef = useRef<SVGRectElement | null>(null);
+
+    const graphLabelRefs: Element[] = [];
 
 
     let totalCosts = 0;
@@ -79,6 +82,8 @@ const BarGraph = forwardRef((props, ref) => {
             const value = yearlySaved[index];
             barRef.current.updateSize(percentage, value);
         });
+
+        organizeGraphLabels();
     }
 
     const updateaBarColors = (colors: string[]) => {
@@ -117,6 +122,39 @@ const BarGraph = forwardRef((props, ref) => {
         updateaBarColors
     }));
 
+    const addToRefs = (el: SVGRectElement) => {
+        if (el && !graphLabelRefs.includes(el)) {
+            graphLabelRefs.push(el);
+        }
+    };
+
+
+    const getGraphLabels = () => {
+        const lines = [];
+        const numLines = 20;
+        for (let i = 1; i <= numLines; i++) {
+            const labelValue = 50 * i;
+            lines.push(
+                <GraphLabel ref={addToRefs} key={`GraphLabel_${i}`} label={`${labelValue}k`} />
+            );
+        }
+        return lines;
+    }
+
+    useEffect(() => {
+        organizeGraphLabels();
+    }, []);
+
+    const organizeGraphLabels = () => {
+        graphLabelRefs.forEach((labelRef, index) => {
+            const value = (index + 1) * 50;
+            const percentage = value * 1000 / yearlyMax;
+            const yPos = vbHeight - (percentage * vbHeight);
+            const transformString = `translate(0 ${yPos})`;
+            labelRef.setAttribute("transform", transformString);
+        });
+    }
+
     return (
         <div className={styles.barGraphContainer}>
             <svg width="100%" height="100%" viewBox={`${-vbMargin} ${-vbMargin} ${vbWidth + vbMargin * 2} ${vbHeight + vbMargin * 2}`} preserveAspectRatio="xMidYMid meet" >
@@ -126,17 +164,12 @@ const BarGraph = forwardRef((props, ref) => {
                     </clipPath>
                 </defs>
 
-                {/* <g id="key" transform='translate(490 -135)'>
-                    <rect ref={costKeyRectRef} x="0" y="0" width={50} height={50} fill="#ff0000ff" fillOpacity=".8" rx="20" ry="20" />
-                    <text x={60} y={30} fill='#fff' stroke="none" fontSize={40} textAnchor="start" dominantBaseline="middle">Yearly Cost</text>
-                    <rect ref={savedKeyRectRef} x="300" y="0" width={50} height={50} fill="#00ff00ff" fillOpacity=".8" rx="20" ry="20" />
-                    <text x={360} y={30} fill='#fff' stroke="none" fontSize={40} textAnchor="start" dominantBaseline="middle">Yearly Saved</text>
-
-                </g> */}
-
 
                 <g id="background">
                     <rect x="-150" y="-150" width={vbWidth + 300} height={vbHeight + vbMargin * 2} fill="#fff" fillOpacity=".025" rx="20" ry="20" stroke="none" strokeOpacity="1" strokeWidth={5} />
+                </g>
+                <g id="graphLabels">
+                    {getGraphLabels()}
                 </g>
                 <g clipPath="url(#barGraphClipPath)">
                     <g id="costBars">
