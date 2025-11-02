@@ -12,7 +12,7 @@ const years = ['first year', 'sohpmore', 'junior', 'senior'];
 
 const BarGraph = forwardRef((props, ref) => {
 
-    const defaultMax = 200000;
+    const defaultMax = 150000;
 
     type BarRef = {
         updateSize: (percentage: number, value: number) => void;
@@ -131,7 +131,7 @@ const BarGraph = forwardRef((props, ref) => {
 
     const getGraphLabels = () => {
         const lines = [];
-        const numLines = 20;
+        const numLines = 40;
         for (let i = 1; i <= numLines; i++) {
             const labelValue = 50 * i;
             lines.push(
