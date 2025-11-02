@@ -4,24 +4,21 @@ import styles from './GraphButton.module.css';
 type GraphButtonProps = {
     imageURL: string;
     altText: string;
-    onClick: (active: boolean) => void;
-    isActive?: boolean;
+    onClick: () => void;
+    isActive: boolean;
 };
 
-const GraphButton = ({ imageURL, altText, onClick, isActive = false }: GraphButtonProps) => {
+const GraphButton = ({ imageURL, altText, onClick, isActive }: GraphButtonProps) => {
 
-    const [active, setActive] = useState(isActive);
 
     const handleClick = () => {
-        if (active) return;
-        const newActiveState = !active;
-        setActive(newActiveState);
-        onClick(newActiveState);
+        if (isActive) return;
+        onClick();
     };
     return (
         <>
             <img
-                className={`${styles.icon} ${!active ? styles.iconDeselected : ''}`}
+                className={`${styles.icon} ${!isActive ? styles.iconDeselected : ''}`}
                 src={imageURL}
                 width={50}
                 height={50}

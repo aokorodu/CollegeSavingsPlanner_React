@@ -1,3 +1,8 @@
+:root {
+  --transition-duration: 400ms;
+  --transition-delay: 200ms;
+}
+
 body {
   font-family: Arial, sans-serif;
   color: #ffffff;
@@ -53,4 +58,31 @@ select {
   position: relative;
   width: 800px;
   height: 500px;
+}
+
+.chartContainer {
+  opacity: 1;
+  transition-property: transform, opacity;
+  transform: translateX(0px);
+  transition-duration: var(--transition-duration);
+  transition-timing-function: ease-out;
+  transition-delay: var(--transition-delay);
+}
+
+.chartContainerHiddenLeft {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-20px);
+  transition-property: transform, opacity;
+  transition-duration: var(--transition-duration);
+  transition-timing-function: ease-out;
+}
+
+.chartContainerHiddenRight {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(20px);
+  transition-property: transform, opacity;
+  transition-duration: var(--transition-duration);
+  transition-timing-function: ease-out;
 }

@@ -53,6 +53,7 @@ function App() {
   const yearsOfCollege = 4;
   const initialColleges = getCollegesByState2("Average");
   const [colleges, setColleges] = useState<College[]>(initialColleges);
+  const [pieChartActive, setPieChartActive] = useState(true);
   let selectedState: string = 'Average';
   let selectedCollege: College | null = initialColleges[2] ?? null;
   let data = defaultData;
@@ -233,16 +234,23 @@ function App() {
       <h1>College Savings Planner</h1>
       <div className='contentHolder'>
         <div id="graphContainer">
-          <PieChart ref={pieChartRef} />
-          <BarGraph ref={barGraphRef} />
-
+          <div className={`chartContainer ${pieChartActive ? '' : 'chartContainerHiddenLeft'}`}>
+            <PieChart ref={pieChartRef} />
+          </div>
+          <div className={`chartContainer ${pieChartActive ? 'chartContainerHiddenRight' : ''}`}>
+            <BarGraph ref={barGraphRef} />
+          </div>
         </div>
         <div className="graphButtonHolder">
-          <GraphButton isActive={true} imageURL="https://zuubadigital-bucket-test.s3.us-west-2.amazonaws.com/images/barGraphIcon.svg" altText="Reset Graphs" onClick={() => {
+          {/* bar graph button */}
+          <GraphButton isActive={!pieChartActive} imageURL="https://zuubadigital-bucket-test.s3.us-west-2.amazonaws.com/images/barGraphIcon.svg" altText="Reset Graphs" onClick={() => {
             console.log("change graphs clicked");
+            setPieChartActive(false);
           }} />
-          <GraphButton isActive={false} imageURL="https://zuubadigital-bucket-test.s3.us-west-2.amazonaws.com/images/pieChartIcon.svg" altText="Change Graph Type" onClick={() => {
+          {/* pie chart button */}
+          <GraphButton isActive={pieChartActive} imageURL="https://zuubadigital-bucket-test.s3.us-west-2.amazonaws.com/images/pieChartIcon.svg" altText="Change Graph Type" onClick={() => {
             console.log("change graphs clicked");
+            setPieChartActive(true);
           }} />
         </div>
 
