@@ -77,6 +77,7 @@ function App() {
   const rateOfReturnSliderRef = React.useRef<HTMLInputElement>(null);
   const costIncreaseSliderRef = React.useRef<HTMLInputElement>(null);
   const plannedContributionRef = React.useRef<HTMLInputElement>(null);
+  const expenseRatioSliderRef = React.useRef<HTMLInputElement>(null);
 
   // text refs
   const yearsToCollegeRef = React.useRef<HTMLSpanElement>(null);
@@ -85,6 +86,7 @@ function App() {
   const costIncreaseRef = React.useRef<HTMLSpanElement>(null);
   const contributionRef = React.useRef<HTMLSpanElement>(null);
   const initialContributionRef = React.useRef<HTMLInputElement>(null);
+  const expenseRatioRef = React.useRef<HTMLSpanElement>(null);
 
 
   // refs for future values
@@ -354,6 +356,28 @@ function App() {
               }}
             />
             <span ref={costIncreaseRef}>{data.annalCostIncrease}%</span>
+          </SliderHolder>
+
+          {/* select expense ratio */}
+          <SliderHolder>
+            <label htmlFor="expenseRatioSlider">expense ratio</label>
+            <input
+              ref={expenseRatioSliderRef}
+              type="range"
+              min="0.1"
+              max="1.0"
+              step="0.01"
+              onChange={(e) => {
+                const er = parseFloat(e.target.value);
+                data.expenseRatio = er;
+                if (expenseRatioRef.current) {
+                  expenseRatioRef.current.innerText = `${er}%`;
+                }
+
+                calculateAmounts();
+              }}
+            />
+            <span ref={expenseRatioRef}>{data.expenseRatio}%</span>
           </SliderHolder>
 
           {/* select contribution cadence */}
