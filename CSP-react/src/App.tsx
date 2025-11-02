@@ -44,7 +44,7 @@ function App() {
     annualRateOfReturn: 6,
     annalCostIncrease: 4,
     periods: 12,
-    contribution: 0,
+    contribution: 100,
     futureSaved: 0,
     futureCost: { futureCost: 0, yearlyCostByYear: [0, 0, 0, 0] },
   };

@@ -1,32 +1,35 @@
 import Bar from './Bar';
 import styles from './BarGraph.module.css';
 import React, { forwardRef, useImperativeHandle, useRef } from 'react';
-import type { BarSizeProps } from './Bar';
+// import type { BarSizeProps } from './Bar';
 
 const years = ['first year', 'sohpmore', 'junior', 'senior'];
 
-type BarRef = {
-    updateSize: ({ percentage, value }: BarSizeProps) => void;
-    updateColors: (c: string) => void;
-};
+// type BarRef = {
+//     updateSize: ({ percentage, value }: BarSizeProps) => void;
+//     updateColors: (c: string) => void;
+// };
 
 const BarGraph = forwardRef((props, ref) => {
 
     const defaultMax = 200000;
-    // const totalCosts = yearlyCosts.reduce((a, b) => a + b, 0);
-    // const percentageSaved = amountSaved / totalCosts;
-    // const yearlySaved = yearlyCosts.map(cost => Math.round(cost * percentageSaved));
-    // const maxYearlyCost = Math.max(...yearlyCosts);
-    // const yearlyMax = Math.max(...yearlySaved, maxYearlyCost, defaultMax);
 
-    const costBar1Ref = React.useRef<{ updateSize: (p: number, v: number) => void; updateColors: (c: string) => void } | null>(null);
-    const costBar2Ref = React.useRef<{ updateSize: (p: number, v: number) => void; updateColors: (c: string) => void } | null>(null);
-    const costBar3Ref = React.useRef<{ updateSize: (p: number, v: number) => void; updateColors: (c: string) => void } | null>(null);
-    const costBar4Ref = React.useRef<{ updateSize: (p: number, v: number) => void; updateColors: (c: string) => void } | null>(null);
-    const savedBar1Ref = React.useRef<{ updateSize: (p: number, v: number) => void; updateColors: (c: string) => void } | null>(null);
-    const savedBar2Ref = React.useRef<{ updateSize: (p: number, v: number) => void; updateColors: (c: string) => void } | null>(null);
-    const savedBar3Ref = React.useRef<{ updateSize: (p: number, v: number) => void; updateColors: (c: string) => void } | null>(null);
-    const savedBar4Ref = React.useRef<{ updateSize: (p: number, v: number) => void; updateColors: (c: string) => void } | null>(null);
+    type BarRef = {
+        updateSize: (percentage: number, value: number) => void;
+        updateColors: (color: string) => void;
+    } | null;
+
+    const makeBarRef = () => React.useRef<BarRef>(null);
+
+    const costBar1Ref = makeBarRef();
+    const costBar2Ref = makeBarRef();
+    const costBar3Ref = makeBarRef();
+    const costBar4Ref = makeBarRef();
+
+    const savedBar1Ref = makeBarRef();
+    const savedBar2Ref = makeBarRef();
+    const savedBar3Ref = makeBarRef();
+    const savedBar4Ref = makeBarRef();
     const savedBarRefs = [savedBar1Ref, savedBar2Ref, savedBar3Ref, savedBar4Ref];
     const costBarRefs = [costBar1Ref, costBar2Ref, costBar3Ref, costBar4Ref];
 
