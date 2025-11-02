@@ -8,6 +8,7 @@ import { calculateAmountSaved, calculateFutureCost } from './data/calculator';
 import SliderHolder from './components/SlideHolder/SlideHolder';
 import InfoHolder from './components/InfoHolder/InfoHolder';
 import { getCollegesByState2, stateNames } from './data/costData';
+import GraphButton from './components/GraphButton/GraphButton';
 
 
 type College = {
@@ -234,6 +235,15 @@ function App() {
         <div id="graphContainer">
           <PieChart ref={pieChartRef} />
           <BarGraph ref={barGraphRef} />
+
+        </div>
+        <div className="graphButtonHolder">
+          <GraphButton isActive={true} imageURL="https://zuubadigital-bucket-test.s3.us-west-2.amazonaws.com/images/barGraphIcon.svg" altText="Reset Graphs" onClick={() => {
+            console.log("change graphs clicked");
+          }} />
+          <GraphButton isActive={false} imageURL="https://zuubadigital-bucket-test.s3.us-west-2.amazonaws.com/images/pieChartIcon.svg" altText="Change Graph Type" onClick={() => {
+            console.log("change graphs clicked");
+          }} />
         </div>
 
         <div className="uiHolder">
