@@ -49,7 +49,7 @@ function App() {
     contribution: 100,
     futureSaved: 0,
     futureCost: { futureCost: 0, yearlyCostByYear: [0, 0, 0, 0] },
-    expenseRatio: 0.14,
+    expenseRatio: 0.48,
   };
 
   const defaultColors = ["#98A1BC", "#555879"];
@@ -436,12 +436,12 @@ function App() {
 
 
           <InfoHolder>
-            <label>future amount saved</label>
+            <label>projected future savings *</label>
             <span ref={futureAmountSavedRef}>$0</span>
           </InfoHolder>
 
           <InfoHolder>
-            <label>future cost</label>
+            <label>projected future cost **</label>
             <span ref={futureCostRef}>$0</span>
           </InfoHolder>
           <InfoHolder>
