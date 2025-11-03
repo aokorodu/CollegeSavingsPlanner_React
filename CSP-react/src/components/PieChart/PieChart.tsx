@@ -37,7 +37,7 @@ const PieChart = forwardRef((props, ref) => {
 
     return (
         <div className={styles.pieChartContainer}>
-            <svg id="svg" width="500" height="500" viewBox="0 0 1000 1000">
+            <svg id="svg" width="800" height="500" viewBox="0 0 1000 1000">
                 <defs>
                     <linearGradient
                         id="numberBackgroundGradient"
