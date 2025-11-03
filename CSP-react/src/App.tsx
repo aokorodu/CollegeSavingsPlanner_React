@@ -248,8 +248,9 @@ function App() {
 
         <div className="uiHolder">
           <div className="intro">
-            <h2>How much will you need?</h2>
-            <h3>Saving for your child's education.</h3>
+
+            <h2>Saving for your child's education.</h2>
+            <h3>How much will you need?</h3>
             <p>
               Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
             </p>
@@ -266,7 +267,7 @@ function App() {
                 <option key={String(state)} value={state}>{state}</option>
               ))}
             </select>
-            <select ref={collegeDropdownRef} defaultValue={selectedCollege?.name} onChange={(e) => {
+            <select ref={collegeDropdownRef} className='collegeDropdown' defaultValue={selectedCollege?.name} onChange={(e) => {
 
               selectNewCollege(JSON.parse(e.target.value) as College)
             }}>
