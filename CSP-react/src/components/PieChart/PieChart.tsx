@@ -8,8 +8,8 @@ const PieChart = forwardRef((props, ref) => {
     const bgRef = React.useRef<SVGCircleElement | null>(null);
     const arcRef = React.useRef<SVGCircleElement | null>(null);
     const dividerRef = React.useRef<SVGPathElement | null>(null);
-    const strokeWidth = 250;
-    const radius = 300;
+    const strokeWidth = 200;
+    const radius = 350;
 
     const updatePercentage = (percentage: number) => {
         if (arcRef.current) {
@@ -88,7 +88,7 @@ const PieChart = forwardRef((props, ref) => {
                             fill="none"
                             stroke="#e0e0e0"
                             strokeOpacity="1"
-                            strokeWidth={strokeWidth + 20}
+                            strokeWidth={strokeWidth + 10}
                         ></circle>
 
                         <circle
@@ -114,14 +114,23 @@ const PieChart = forwardRef((props, ref) => {
                             strokeLinecap="inherit"
                             pathLength="100"
                             strokeDasharray="100 100"
-                            strokeDashoffset=" -100 "
+                            strokeDashoffset=" -100"
                         ></circle>
 
                         <g id="dividerPath">
                             <path
+                                id="staticDivider"
+                                className={styles.savedPath}
+                                d={`M${radius - strokeWidth / 2} 0 H${radius + strokeWidth / 2}`}
+                                stroke="#fff"
+                                strokeWidth="5"
+                                strokeLinecap="inherit"
+                                transform="rotate(0)"
+                            ></path>
+                            <path
                                 ref={dividerRef}
                                 className={styles.savedPath}
-                                d="M175 0 H425"
+                                d={`M${radius - strokeWidth / 2} 0 H${radius + strokeWidth / 2}`}
                                 stroke="#fff"
                                 strokeWidth="5"
                                 strokeLinecap="inherit"

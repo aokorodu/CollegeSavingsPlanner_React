@@ -245,8 +245,16 @@ function App() {
     <>
       <h1>College Savings Planner</h1>
       <div className='contentHolder'>
-        <div className="uiHolder">
 
+        <div className="uiHolder">
+          <div className="intro">
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+            </p>
+            <p>
+              Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+            </p>
+          </div>
           {/* select state and college */}
           <InfoHolder>
             <select ref={stateDropdownRef} onChange={(e) => {
