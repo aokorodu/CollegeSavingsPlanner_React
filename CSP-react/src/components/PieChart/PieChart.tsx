@@ -8,25 +8,29 @@ const PieChart = forwardRef((props, ref) => {
     const bgRef = React.useRef<SVGCircleElement | null>(null);
     const arcRef = React.useRef<SVGCircleElement | null>(null);
     const dividerRef = React.useRef<SVGPathElement | null>(null);
+    const percentTextRef = React.useRef<SVGTextElement | null>(null);
     const strokeWidth = 200;
     const radius = 350;
 
     const updatePercentage = (percentage: number) => {
         if (arcRef.current) {
-            const offset = percentage > 100 ? -100 : -percentage;
+            const offset = 100 - percentage < 0 ? 0 : 100 - percentage;
             arcRef.current.setAttribute("stroke-dashoffset", offset.toString());
             const angle = percentage > 100 ? 360 : (percentage / 100) * 360;
             dividerRef.current?.setAttribute("transform", `rotate(${angle})`);
+            if (percentTextRef.current) {
+                percentTextRef.current.textContent = `${Math.round(percentage)}%`;
+            }
         }
     };
 
     const updateColors = (colors: string[]) => {
         console.log("updating colors", colors);
         if (bgRef.current) {
-            bgRef.current.setAttribute("stroke", colors[0]);
+            bgRef.current.setAttribute("stroke", colors[1]);
         }
         if (arcRef.current) {
-            arcRef.current.setAttribute("stroke", colors[1]);
+            arcRef.current.setAttribute("stroke", colors[0]);
         }
     }
 
@@ -77,7 +81,6 @@ const PieChart = forwardRef((props, ref) => {
                         <rect x="-100" y="0" width="1100" height="1000" />
                     </clipPath>
                 </defs>
-
                 <g id="pieChart" className="graph">
                     <g transform="translate(500 500) rotate(-90)">
                         <circle
@@ -136,9 +139,13 @@ const PieChart = forwardRef((props, ref) => {
                                 strokeLinecap="inherit"
                                 transform="rotate(0)"
                             ></path>
+
                         </g>
                     </g>
                 </g>
+                <text ref={percentTextRef} x={500} y={500} fill='#fff' stroke="none" fontSize={120} fontWeight="bold" textAnchor="middle" dominantBaseline="middle">%</text>
+                <text x={500} y={570} fill='#fff' stroke="none" fontSize={30} textAnchor="middle" dominantBaseline="middle">projected future Savings</text>
+
 
             </svg>
         </div>
