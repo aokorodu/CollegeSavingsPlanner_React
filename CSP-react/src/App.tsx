@@ -6,10 +6,13 @@ import React, { useEffect, useState } from 'react';
 import { getDollarString, convertToDollarString } from './utils/Utils';
 import { calculateFutureValue, calculateFutureCost } from './data/calculator';
 import SliderHolder from './components/SlideHolder/SlideHolder';
-import InfoHolder from './components/InfoHolder/InfoHolder';
+import InfoHolder from './components/uicomponents/InfoHolder/InfoHolder';
 import { getCollegesByState2, stateNames } from './data/costData';
 import GraphButton from './components/GraphButton/GraphButton';
 import KeyItem from './components/KeyItem/KeyItem';
+import ContentHolder from './components/uicomponents/ContentHolder/ContentHolder';
+import Header from './components/uicomponents/Header/Header';
+import WhatIs from './components/uicomponents/WhatIsSection/WhatIs';
 
 
 type College = {
@@ -52,7 +55,7 @@ function App() {
     expenseRatio: 0.48,
   };
 
-  const defaultColors = ["#98A1BC", "#555879"];
+  const defaultColors = ["#98A1BC", "#4ACCFF"];
   const yearsOfCollege = 4;
   const initialColleges = getCollegesByState2("Average");
   const [colleges, setColleges] = useState<College[]>(initialColleges);
@@ -243,258 +246,254 @@ function App() {
 
   return (
     <>
-      <h1>College Savings Planner</h1>
-      <div className='contentHolder'>
+      <ContentHolder>
 
-        <div className="uiHolder">
-          <div className="intro">
+        <div>
+          <Header />
+          <WhatIs />
 
-            <h2>Saving for your child's education.</h2>
-            <h3>How much will you need?</h3>
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-            </p>
-            <p>
-              Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-            </p>
-          </div>
-          {/* select state and college */}
-          <InfoHolder>
-            <select ref={stateDropdownRef} onChange={(e) => {
-              selectNewState(e.target.value as string);
-            }}>
-              {stateNames.map((state) => (
-                <option key={String(state)} value={state}>{state}</option>
-              ))}
-            </select>
-            <select ref={collegeDropdownRef} className='collegeDropdown' defaultValue={selectedCollege?.name} onChange={(e) => {
+          <div id="graphContainer">
 
-              selectNewCollege(JSON.parse(e.target.value) as College)
-            }}>
-              <option value="placeholder">
-                Select an option...
-              </option>
-              {getCollegeSelections()}
-            </select>
-          </InfoHolder>
-
-          {/* select years until college */}
-          <SliderHolder>
-            <label htmlFor="yearsSlider">years until college</label>
-            <input
-              ref={yearsToCollegeSliderRef}
-              type="range"
-              min="1"
-              max="30"
-              step=".1"
-              onChange={(e) => {
-                const yrs = parseInt(e.target.value);
-                data.yearsToCollege = yrs;
-                if (yearsToCollegeRef.current) {
-                  yearsToCollegeRef.current.innerText = yrs.toString();
-                }
-
-                calculateAmounts();
-              }}
-            />
-            <span ref={yearsToCollegeRef}>17</span>
-          </SliderHolder>
-
-          {/* select annual const */}
-          <SliderHolder>
-            <label htmlFor="annualCollegeCostSlider">annual cost</label>
-            <input
-              ref={annualCostSliderRef}
-              type="range"
-              min="0"
-              max="100000"
-              step="100"
-              onChange={(e) => {
-                const cost = parseInt(e.target.value);
-                selectedCollege = {
-                  name: "Custom College",
-                  cost: cost,
-                  colors: defaultColors,
-                };
-                data.selectedCollege = selectedCollege;
-                data.currentCost = cost;
-                annualCostRef.current!.innerText = getDollarString(cost);
-                calculateAmounts();
-              }}
-            />
-            <span ref={annualCostRef}>$0</span>
-          </SliderHolder>
-
-          {/* select rate of return */}
-          <SliderHolder>
-            <label htmlFor="ROfRSlider">rate of return</label>
-            <input
-              ref={rateOfReturnSliderRef}
-              type="range"
-              min="0"
-              max="10"
-              step=".1"
-              onChange={(e) => {
-                const ror = parseFloat(e.target.value);
-                data.annualRateOfReturn = ror;
-                if (rateOfReturnRef.current) {
-                  rateOfReturnRef.current.innerText = `${ror}%`;
-                }
-
-                calculateAmounts();
-              }}
-            />
-            <span ref={rateOfReturnRef}>0%</span>
-          </SliderHolder>
-
-          {/* select yearly cost increase */}
-          <SliderHolder>
-            <label htmlFor="costIncreaseSlider">cost increase</label>
-            <input
-              ref={costIncreaseSliderRef}
-              type="range"
-              min="0"
-              max="10"
-              step=".1"
-              onChange={(e) => {
-                const ci = parseFloat(e.target.value);
-                data.annalCostIncrease = ci;
-                if (costIncreaseRef.current) {
-                  costIncreaseRef.current.innerText = `${ci}%`;
-                }
-
-                calculateAmounts();
-              }}
-            />
-            <span ref={costIncreaseRef}>{data.annalCostIncrease}%</span>
-          </SliderHolder>
-
-          {/* select expense ratio */}
-          <SliderHolder>
-            <label htmlFor="expenseRatioSlider">expense ratio</label>
-            <input
-              ref={expenseRatioSliderRef}
-              type="range"
-              min="0.1"
-              max="1.0"
-              step="0.01"
-              onChange={(e) => {
-                const er = parseFloat(e.target.value);
-                data.expenseRatio = er;
-                if (expenseRatioRef.current) {
-                  expenseRatioRef.current.innerText = `${er}%`;
-                }
-
-                calculateAmounts();
-              }}
-            />
-            <span ref={expenseRatioRef}>{data.expenseRatio}%</span>
-          </SliderHolder>
-
-          {/* select contribution cadence */}
-          <SliderHolder>
-            <div>
-              <select id="periodSelect" onChange={(e) => {
-                data.periods = parseInt(e.target.value);
-                calculateAmounts();
-              }}>
-                <option value="56">weekly contribution</option>
-                <option value="26">bi-weekly contribution</option>
-                <option value="24">bi-monthly contribution</option>
-                <option value="12" selected>monthly contribution</option>
-                <option value="4">quarterly contribution</option>
-                <option value="1">yearly contribution</option>
-              </select>
+            <div className={`chartContainer ${pieChartActive ? '' : 'chartContainerHiddenLeft'}`}>
+              <PieChart ref={pieChartRef} />
             </div>
+            <div className={`chartContainer ${pieChartActive ? 'chartContainerHiddenRight' : ''}`}>
+              <BarGraph ref={barGraphRef} />
+            </div>
+            <div className="keyContainer">
 
-            <input
-              type="range"
-              ref={plannedContributionRef}
-              min="0"
-              max="3000"
-              step="25"
-              onChange={(e) => {
-                const contribution = parseInt(e.target.value);
-                contributionRef.current!.innerText = getDollarString(contribution);
-                data.contribution = contribution;
+              <KeyItem label='future savings' ref={savedKeyRectRef} />
+              <KeyItem label='future cost' ref={costKeyRectRef} />
+            </div>
+            <div className="graphButtonHolder">
+              {/* pie chart button */}
+              <GraphButton isActive={pieChartActive} imageURL="https://zuubadigital-bucket-test.s3.us-west-2.amazonaws.com/images/pieChartIcon.svg" altText="Change Graph Type" onClick={() => {
+                console.log("change graphs clicked");
+                setPieChartActive(true);
+              }} />
+              {/* bar graph button */}
+              <GraphButton isActive={!pieChartActive} imageURL="https://zuubadigital-bucket-test.s3.us-west-2.amazonaws.com/images/barGraphIcon.svg" altText="Reset Graphs" onClick={() => {
+                console.log("change graphs clicked");
+                setPieChartActive(false);
+              }} />
+            </div>
+          </div>
+
+          <div id="controlsContainer">
+            {/* select state and college */}
+            <InfoHolder>
+              <select ref={stateDropdownRef} onChange={(e) => {
+                selectNewState(e.target.value as string);
+              }}>
+                {stateNames.map((state) => (
+                  <option key={String(state)} value={state}>{state}</option>
+                ))}
+              </select>
+              <select ref={collegeDropdownRef} className='collegeDropdown' defaultValue={selectedCollege?.name} onChange={(e) => {
+
+                selectNewCollege(JSON.parse(e.target.value) as College)
+              }}>
+                <option value="placeholder">
+                  Select an option...
+                </option>
+                {getCollegeSelections()}
+              </select>
+            </InfoHolder>
+
+            {/* select years until college */}
+            <SliderHolder>
+              <label htmlFor="yearsSlider">years until college</label>
+              <input
+                ref={yearsToCollegeSliderRef}
+                type="range"
+                min="1"
+                max="30"
+                step=".1"
+                onChange={(e) => {
+                  const yrs = parseInt(e.target.value);
+                  data.yearsToCollege = yrs;
+                  if (yearsToCollegeRef.current) {
+                    yearsToCollegeRef.current.innerText = yrs.toString();
+                  }
+
+                  calculateAmounts();
+                }}
+              />
+              <span ref={yearsToCollegeRef}>17</span>
+            </SliderHolder>
+
+            {/* select annual const */}
+            <SliderHolder>
+              <label htmlFor="annualCollegeCostSlider">annual cost</label>
+              <input
+                ref={annualCostSliderRef}
+                type="range"
+                min="0"
+                max="100000"
+                step="100"
+                onChange={(e) => {
+                  const cost = parseInt(e.target.value);
+                  selectedCollege = {
+                    name: "Custom College",
+                    cost: cost,
+                    colors: defaultColors,
+                  };
+                  data.selectedCollege = selectedCollege;
+                  data.currentCost = cost;
+                  annualCostRef.current!.innerText = getDollarString(cost);
+                  calculateAmounts();
+                }}
+              />
+              <span ref={annualCostRef}>$0</span>
+            </SliderHolder>
+
+            {/* select rate of return */}
+            <SliderHolder>
+              <label htmlFor="ROfRSlider">rate of return</label>
+              <input
+                ref={rateOfReturnSliderRef}
+                type="range"
+                min="0"
+                max="10"
+                step=".1"
+                onChange={(e) => {
+                  const ror = parseFloat(e.target.value);
+                  data.annualRateOfReturn = ror;
+                  if (rateOfReturnRef.current) {
+                    rateOfReturnRef.current.innerText = `${ror}%`;
+                  }
+
+                  calculateAmounts();
+                }}
+              />
+              <span ref={rateOfReturnRef}>0%</span>
+            </SliderHolder>
+
+            {/* select yearly cost increase */}
+            <SliderHolder>
+              <label htmlFor="costIncreaseSlider">cost increase</label>
+              <input
+                ref={costIncreaseSliderRef}
+                type="range"
+                min="0"
+                max="10"
+                step=".1"
+                onChange={(e) => {
+                  const ci = parseFloat(e.target.value);
+                  data.annalCostIncrease = ci;
+                  if (costIncreaseRef.current) {
+                    costIncreaseRef.current.innerText = `${ci}%`;
+                  }
+
+                  calculateAmounts();
+                }}
+              />
+              <span ref={costIncreaseRef}>{data.annalCostIncrease}%</span>
+            </SliderHolder>
+
+            {/* select expense ratio */}
+            <SliderHolder>
+              <label htmlFor="expenseRatioSlider">expense ratio</label>
+              <input
+                ref={expenseRatioSliderRef}
+                type="range"
+                min="0.1"
+                max="1.0"
+                step="0.01"
+                onChange={(e) => {
+                  const er = parseFloat(e.target.value);
+                  data.expenseRatio = er;
+                  if (expenseRatioRef.current) {
+                    expenseRatioRef.current.innerText = `${er}%`;
+                  }
+
+                  calculateAmounts();
+                }}
+              />
+              <span ref={expenseRatioRef}>{data.expenseRatio}%</span>
+            </SliderHolder>
+
+            {/* select contribution cadence */}
+            <SliderHolder>
+              <div>
+                <select id="periodSelect" onChange={(e) => {
+                  data.periods = parseInt(e.target.value);
+                  calculateAmounts();
+                }}>
+                  <option value="56">weekly contribution</option>
+                  <option value="26">bi-weekly contribution</option>
+                  <option value="24">bi-monthly contribution</option>
+                  <option value="12" selected>monthly contribution</option>
+                  <option value="4">quarterly contribution</option>
+                  <option value="1">yearly contribution</option>
+                </select>
+              </div>
+
+              <input
+                type="range"
+                ref={plannedContributionRef}
+                min="0"
+                max="3000"
+                step="25"
+                onChange={(e) => {
+                  const contribution = parseInt(e.target.value);
+                  contributionRef.current!.innerText = getDollarString(contribution);
+                  data.contribution = contribution;
+                  calculateAmounts();
+                }}
+              />
+              <span ref={contributionRef}>
+                000
+              </span>
+            </SliderHolder>
+
+            {/* input current amount saved */}
+            <SliderHolder>
+              <label htmlFor="startingAmountInput">current amount saved</label>
+              <input type="text" ref={initialContributionRef} onChange={(e) => {
+
+
+                let value = e.target.value.replace(/[^0-9.]/g, "");
+                if (value === "") {
+                  initialContributionRef.current!.value = "";
+                  return;
+                }
+                let num = parseFloat(value);
+
+                if (isNaN(num)) num = 0;
+                data.initialBalance = num;
+                initialContributionRef.current!.value = convertToDollarString(num);
                 calculateAmounts();
-              }}
-            />
-            <span ref={contributionRef}>
-              000
-            </span>
-          </SliderHolder>
+              }} />
+            </SliderHolder>
 
-          {/* input current amount saved */}
-          <SliderHolder>
-            <label htmlFor="startingAmountInput">current amount saved</label>
-            <input type="text" ref={initialContributionRef} onChange={(e) => {
+            <InfoHolder>
+              <label>projected future savings *</label>
+              <span ref={futureAmountSavedRef}>$0</span>
+            </InfoHolder>
 
+            <InfoHolder>
+              <label>projected future cost **</label>
+              <span ref={futureCostRef}>$0</span>
+            </InfoHolder>
 
-              let value = e.target.value.replace(/[^0-9.]/g, "");
-              if (value === "") {
-                initialContributionRef.current!.value = "";
-                return;
-              }
-              let num = parseFloat(value);
-
-              if (isNaN(num)) num = 0;
-              data.initialBalance = num;
-              initialContributionRef.current!.value = convertToDollarString(num);
-              calculateAmounts();
-            }} />
-          </SliderHolder>
-
-
-          <InfoHolder>
-            <label>projected future savings *</label>
-            <span ref={futureAmountSavedRef}>$0</span>
-          </InfoHolder>
-
-          <InfoHolder>
-            <label>projected future cost **</label>
-            <span ref={futureCostRef}>$0</span>
-          </InfoHolder>
-          <InfoHolder>
-            <label>percent saved</label>
-            <span ref={percentSavedRef}>0%</span>
-          </InfoHolder>
+            <InfoHolder>
+              <label>percent saved</label>
+              <span ref={percentSavedRef}>0%</span>
+            </InfoHolder>
+          </div>
 
         </div>
 
 
 
 
-        <div id="graphContainer">
-
-          <div className={`chartContainer ${pieChartActive ? '' : 'chartContainerHiddenLeft'}`}>
-            <PieChart ref={pieChartRef} />
-          </div>
-          <div className={`chartContainer ${pieChartActive ? 'chartContainerHiddenRight' : ''}`}>
-            <BarGraph ref={barGraphRef} />
-          </div>
-          <div className="keyContainer">
-
-            <KeyItem label='future savings' ref={savedKeyRectRef} />
-            <KeyItem label='future cost' ref={costKeyRectRef} />
-          </div>
-          <div className="graphButtonHolder">
-            {/* pie chart button */}
-            <GraphButton isActive={pieChartActive} imageURL="https://zuubadigital-bucket-test.s3.us-west-2.amazonaws.com/images/pieChartIcon.svg" altText="Change Graph Type" onClick={() => {
-              console.log("change graphs clicked");
-              setPieChartActive(true);
-            }} />
-            {/* bar graph button */}
-            <GraphButton isActive={!pieChartActive} imageURL="https://zuubadigital-bucket-test.s3.us-west-2.amazonaws.com/images/barGraphIcon.svg" altText="Reset Graphs" onClick={() => {
-              console.log("change graphs clicked");
-              setPieChartActive(false);
-            }} />
-          </div>
-        </div>
 
 
 
-      </div>
+
+
+      </ContentHolder>
     </>
   )
 }

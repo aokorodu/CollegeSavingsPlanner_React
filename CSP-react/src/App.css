@@ -42,15 +42,6 @@ h3 {
   font-weight: bold;
   color: #cccccc;
 }
-.contentHolder {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: flex-start;
-  gap: 1rem;
-  margin-top: 2rem;
-  height: 100%;
-}
 
 .uiHolder {
   display: flex;
@@ -84,7 +75,7 @@ select {
 #graphContainer {
   position: relative;
   width: 800px;
-  height: 500px;
+  height: fit-content;
 }
 
 .chartContainer {
