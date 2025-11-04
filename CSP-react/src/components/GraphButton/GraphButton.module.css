@@ -1,0 +1,20 @@
+.icon {
+  width: 40px;
+  height: 40px;
+  background-size: cover;
+  background-position: center;
+  cursor: pointer;
+  filter: none;
+  transition-property: filter, transform;
+  transition-duration: var(--transitionDuration);
+  transform: scale(1.2);
+}
+
+.iconDeselected {
+  filter: grayscale(100%);
+  transform: scale(1);
+}
+
+.icon:hover {
+  transform: scale(1.3);
+}

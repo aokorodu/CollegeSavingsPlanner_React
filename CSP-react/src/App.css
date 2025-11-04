@@ -1,5 +1,20 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+
+:root {
+  line-height: 1.5;
+  font-weight: 400;
+
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #121212;
+
+  --transition-duration: 400ms;
+  --transition-delay: 200ms;
+  --transition-distance: 20px;
+}
+
 body {
-  font-family: Arial, sans-serif;
+  font-family: "Inter", sans-serif;
   color: #ffffff;
   margin: 0;
   padding: 0;
@@ -9,11 +24,29 @@ body {
   justify-content: center;
 }
 
+h1 {
+  margin-top: 2rem;
+  margin-left: 1rem;
+  font-size: 28px;
+}
+h2 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: bold;
+  color: #ffffff;
+}
+
+h3 {
+  margin-top: 0;
+  font-size: 16px;
+  font-weight: bold;
+  color: #cccccc;
+}
 .contentHolder {
   display: flex;
   flex-direction: row;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   gap: 1rem;
   margin-top: 2rem;
   height: 100%;
@@ -25,11 +58,19 @@ body {
   justify-content: center;
   align-items: center;
   gap: 0.5rem;
-  margin: 1rem;
   width: 600px;
   border-radius: 8px;
-  padding: 1rem;
   background-color: rgba(255, 255, 255, 0.025);
+  padding: 1rem;
+}
+
+.graphButtonHolder {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin: 1rem;
 }
 
 input {
@@ -44,4 +85,47 @@ select {
   position: relative;
   width: 800px;
   height: 500px;
+}
+
+.chartContainer {
+  opacity: 1;
+  transition-property: transform, opacity;
+  transform: translateX(0px);
+  transition-duration: var(--transition-duration);
+  transition-timing-function: ease-out;
+  transition-delay: var(--transition-delay);
+}
+
+.chartContainerHiddenLeft {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-10px);
+  transition-property: transform, opacity;
+  transition-duration: var(--transition-duration);
+  transition-timing-function: ease-out;
+}
+
+.chartContainerHiddenRight {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(10px);
+  transition-property: transform, opacity;
+  transition-duration: var(--transition-duration);
+  transition-timing-function: ease-out;
+}
+
+.keyContainer {
+  position: relative;
+  width: 800px;
+  height: 50px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.collegeDropdown {
+  width: 100%;
+  max-width: 300px;
 }
