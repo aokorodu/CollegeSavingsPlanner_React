@@ -1,8 +1,14 @@
 import styles from './Header.module.css';
+import BookIcon from "../../../assets/book.svg";
+
 const Header = () => {
     return (
         <header className={styles.header}>
-            <h1 className={styles.title}>529 College Savings Planner</h1>
+            <div className={styles.titleHolder}>
+                <h1 className={styles.title}>529 College Savings Planner</h1>
+                <img src={BookIcon} alt="Book icon" className={styles.icon} width={40} height={40} />
+            </div>
+
             <p className={styles.subtitle}>Figure out how much you need to save for college.</p>
         </header>
     );

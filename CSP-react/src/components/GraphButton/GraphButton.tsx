@@ -20,8 +20,6 @@ const GraphButton = ({ imageURL, altText, onClick, isActive }: GraphButtonProps)
             <img
                 className={`${styles.icon} ${!isActive ? styles.iconDeselected : ''}`}
                 src={imageURL}
-                width={50}
-                height={50}
                 alt={altText}
                 onClick={handleClick}
             /></>

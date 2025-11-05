@@ -1,6 +1,6 @@
 import styles from './PieChart.module.css';
 import React, { forwardRef, useImperativeHandle } from 'react';
-
+import GraduationCap from '../../assets/graduationCap';
 
 const PieChart = forwardRef((props, ref) => {
 
@@ -143,8 +143,11 @@ const PieChart = forwardRef((props, ref) => {
                         </g>
                     </g>
                 </g>
-                <text ref={percentTextRef} x={500} y={500} fill='#fff' stroke="none" fontSize={120} fontWeight="bold" textAnchor="middle" dominantBaseline="middle">%</text>
-                <text x={500} y={570} fill='#fff' stroke="none" fontSize={30} textAnchor="middle" dominantBaseline="middle">projected future Savings</text>
+                <g transform="translate(370 290)">
+                    <GraduationCap />
+                </g>
+                <text ref={percentTextRef} x={500} y={550} fill='#fff' stroke="none" fontSize={120} fontWeight="bold" textAnchor="middle" dominantBaseline="middle">%</text>
+                <text x={500} y={620} fill='#fff' stroke="none" fontSize={30} textAnchor="middle" dominantBaseline="middle">projected future Savings</text>
 
 
             </svg>

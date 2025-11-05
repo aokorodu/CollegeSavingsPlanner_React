@@ -121,3 +121,22 @@ select {
   width: 100%;
   max-width: 300px;
 }
+
+.resultsContainer {
+  margin-top: 2rem;
+  width: 100%;
+}
+
+.disclaimerContainer {
+  margin-top: 2rem;
+  width: 80%;
+  max-width: 800px;
+  font-size: 10px;
+  font-style: italic;
+  color: #eaeaea;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  border-top: 1px solid #333333;
+  padding-top: 1rem;
+}

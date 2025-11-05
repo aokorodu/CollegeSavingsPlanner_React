@@ -9,3 +9,10 @@ p {
 header {
   margin-bottom: 2rem;
 }
+
+.titleHolder {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+}
