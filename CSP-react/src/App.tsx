@@ -57,10 +57,10 @@ function App() {
 
   const defaultColors = ["#98A1BC", "#4ACCFF"];
   const yearsOfCollege = 4;
-  const initialColleges = getCollegesByState2("Average");
+  const initialColleges = getCollegesByState2("The Average State");
   const [colleges, setColleges] = useState<College[]>(initialColleges);
   const [pieChartActive, setPieChartActive] = useState(true);
-  let selectedState: string = 'Average';
+  let selectedState: string = 'The Average State';
   let selectedCollege: College | null = initialColleges[2] ?? null;
   let data = defaultData;
 

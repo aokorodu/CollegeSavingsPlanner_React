@@ -5,7 +5,7 @@ export type College = {
 };
 
 export const collegeData = {
-  Average: [
+  The_Average_State: [
     {
       name: "Average in-state Public College",
       cost: 24920,
@@ -6362,7 +6362,7 @@ export const getCollegesByState2 = (stateName: string): College[] => {
 };
 
 export const stateNames: string[] = [
-  "Average",
+  "The Average State",
   "Alabama",
   "Alaska",
   "Arizona",
