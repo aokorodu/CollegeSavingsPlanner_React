@@ -22,6 +22,7 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  box-sizing: border-box;
 }
 
 h1 {
@@ -74,7 +75,7 @@ select {
 
 #graphContainer {
   position: relative;
-  width: 800px;
+  width: fit-content;
   height: fit-content;
 }
 
@@ -107,7 +108,7 @@ select {
 
 .keyContainer {
   position: relative;
-  width: 800px;
+  width: fit-content;
   height: 50px;
   display: flex;
   flex-direction: row;

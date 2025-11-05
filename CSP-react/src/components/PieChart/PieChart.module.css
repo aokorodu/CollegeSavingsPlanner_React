@@ -10,7 +10,7 @@
 
 .pieChartContainer {
   position: absolute;
-  width: 500px;
+  width: 100%;
   height: 500px;
   /* display: none; */
 }
