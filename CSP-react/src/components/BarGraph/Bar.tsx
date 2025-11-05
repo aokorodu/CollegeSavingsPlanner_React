@@ -1,7 +1,6 @@
 import styles from './Bar.module.css';
 import React, { forwardRef, useImperativeHandle } from 'react';
 
-
 type BarProps = {
     x: number;
     width: number;
@@ -11,8 +10,6 @@ export type BarSizeProps = {
     percentage: number;
     value: number;
 };
-
-
 
 const Bar = forwardRef(({ x, width }: BarProps, ref) => {
     const xpos = x;
@@ -46,12 +43,11 @@ const Bar = forwardRef(({ x, width }: BarProps, ref) => {
     }));
 
     return (
-        <>
-            <g ref={barRef} className={styles.barHolder} transform={`translate(${x} ${barY})`}>
-                <rect ref={rectRef} className={styles.barRect} x={barSpacing / 2} y="0" width={barWidth - barSpacing} height={barHeight + 20} stroke="#eaeaea" strokeWidth={5} strokeOpacity={.2} fill="red" />
-                <text ref={textRef} x={barWidth / 2} y={-40} fill='#fff' stroke="none" fontSize={34} textAnchor="middle" dominantBaseline="hanging">$123.45</text>
-            </g>
-        </>);
+        <g ref={barRef} className={styles.barHolder} transform={`translate(${x} ${barY})`}>
+            <rect ref={rectRef} className={styles.barRect} x={barSpacing / 2} y="0" width={barWidth - barSpacing} height={barHeight + 20} stroke="#eaeaea" strokeWidth={5} strokeOpacity={.2} fill="red" />
+            <text ref={textRef} x={barWidth / 2} y={-40} fill='#fff' stroke="none" fontSize={34} textAnchor="middle" dominantBaseline="hanging">$123.45</text>
+        </g>
+    );
 })
 
 export default Bar;
