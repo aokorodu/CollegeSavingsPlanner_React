@@ -1,5 +1,4 @@
 import styles from './Header.module.css';
-import BookIcon from "../../../assets/book.svg";
 import GraduationCapIcon from "../../../assets/graduationCap.svg";
 
 const Header = () => {
