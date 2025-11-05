@@ -254,17 +254,17 @@ function App() {
 
           <div id="graphContainer">
 
+            <div className="keyContainer">
+              <KeyItem label='future savings' ref={savedKeyRectRef} />
+              <KeyItem label='future cost' ref={costKeyRectRef} />
+            </div>
             <div className={`chartContainer ${pieChartActive ? '' : 'chartContainerHiddenLeft'}`}>
               <PieChart ref={pieChartRef} />
             </div>
             <div className={`chartContainer ${pieChartActive ? 'chartContainerHiddenRight' : ''}`}>
               <BarGraph ref={barGraphRef} />
             </div>
-            <div className="keyContainer">
 
-              <KeyItem label='future savings' ref={savedKeyRectRef} />
-              <KeyItem label='future cost' ref={costKeyRectRef} />
-            </div>
             <div className="graphButtonHolder">
               {/* pie chart button */}
               <GraphButton isActive={pieChartActive} imageURL="https://zuubadigital-bucket-test.s3.us-west-2.amazonaws.com/images/pieChartIcon.svg" altText="Change Graph Type" onClick={() => {
