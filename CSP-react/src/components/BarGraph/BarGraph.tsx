@@ -3,7 +3,7 @@ import styles from './BarGraph.module.css';
 import React, { forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
 import GraphLabel from './GraphLabel';
 
-const years = ['first year', 'sohpmore', 'junior', 'senior'];
+const years = ['freshman', 'sohpmore', 'junior', 'senior'];
 
 // type BarRef = {
 //     updateSize: ({ percentage, value }: BarSizeProps) => void;
@@ -50,7 +50,8 @@ const BarGraph = forwardRef((props, ref) => {
     const vbHeight = 1000;
     const vbWidth = 1600;
     const vbMargin = 150;
-    const barWidth = vbWidth / 8;
+    const yearGap = 40;
+    const barWidth = vbWidth / 8 - yearGap;
 
     const getHorizontalAxis = () => {
         return years.map((year, index) => {
@@ -176,25 +177,25 @@ const BarGraph = forwardRef((props, ref) => {
                         <Bar
                             ref={costBar1Ref}
                             key={`cbar_0`}
-                            x={0 * vbWidth / 4}
+                            x={0 * vbWidth / 4 + yearGap / 2}
                             width={barWidth}
                         />
                         <Bar
                             ref={costBar2Ref}
                             key={`cbar_1`}
-                            x={1 * vbWidth / 4}
+                            x={1 * vbWidth / 4 + yearGap / 2}
                             width={barWidth}
                         />
                         <Bar
                             ref={costBar3Ref}
                             key={`cbar_2`}
-                            x={2 * vbWidth / 4}
+                            x={2 * vbWidth / 4 + yearGap / 2}
                             width={barWidth}
                         />
                         <Bar
                             ref={costBar4Ref}
                             key={`cbar_3`}
-                            x={3 * vbWidth / 4}
+                            x={3 * vbWidth / 4 + yearGap / 2}
                             width={barWidth}
                         />
                     </g>
@@ -202,25 +203,25 @@ const BarGraph = forwardRef((props, ref) => {
                         <Bar
                             ref={savedBar1Ref}
                             key={`sbar_${0}`}
-                            x={0 * vbWidth / 4 + 200}
+                            x={0 * vbWidth / 4 + 200 - yearGap / 2}
                             width={barWidth}
                         />
                         <Bar
                             ref={savedBar2Ref}
                             key={`sbar_${1}`}
-                            x={1 * vbWidth / 4 + 200}
+                            x={1 * vbWidth / 4 + 200 - yearGap / 2}
                             width={barWidth}
                         />
                         <Bar
                             ref={savedBar3Ref}
                             key={`sbar_${2}`}
-                            x={2 * vbWidth / 4 + 200}
+                            x={2 * vbWidth / 4 + 200 - yearGap / 2}
                             width={barWidth}
                         />
                         <Bar
                             ref={savedBar4Ref}
                             key={`sbar_${3}`}
-                            x={3 * vbWidth / 4 + 200}
+                            x={3 * vbWidth / 4 + 200 - yearGap / 2}
                             width={barWidth}
                         />
                     </g>
