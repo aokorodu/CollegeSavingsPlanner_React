@@ -13,6 +13,8 @@ import KeyItem from './components/KeyItem/KeyItem';
 import ContentHolder from './components/uicomponents/ContentHolder/ContentHolder';
 import Header from './components/uicomponents/Header/Header';
 import WhatIs from './components/uicomponents/WhatIsSection/WhatIs';
+// material ui
+import { Slider } from '@mui/material';
 
 
 type College = {
