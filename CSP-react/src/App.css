@@ -5,8 +5,8 @@
   line-height: 1.5;
   font-weight: 400;
 
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #121212;
+  color: #212121;
+  background-color: #eaeaea;
 
   --transition-duration: 400ms;
   --transition-delay: 200ms;
@@ -15,7 +15,7 @@
 
 body {
   font-family: "Inter", sans-serif;
-  color: #ffffff;
+  color: #212121;
   margin: 0;
   padding: 0;
   display: flex;
@@ -34,7 +34,6 @@ h2 {
   margin: 0;
   font-size: 24px;
   font-weight: bold;
-  color: #ffffff;
 }
 
 h3 {
@@ -52,7 +51,6 @@ h3 {
   gap: 0.5rem;
   width: 600px;
   border-radius: 8px;
-  background-color: rgba(255, 255, 255, 0.025);
   padding: 1rem;
 }
 

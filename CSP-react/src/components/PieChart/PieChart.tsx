@@ -146,8 +146,8 @@ const PieChart = forwardRef((props, ref) => {
                 <g transform="translate(370 290)">
                     <GraduationCap />
                 </g>
-                <text ref={percentTextRef} x={500} y={550} fill='#fff' stroke="none" fontSize={120} fontWeight="bold" textAnchor="middle" dominantBaseline="middle">%</text>
-                <text x={500} y={620} fill='#fff' stroke="none" fontSize={30} textAnchor="middle" dominantBaseline="middle">projected future Savings</text>
+                <text ref={percentTextRef} x={500} y={550} fill='#000000' stroke="none" fontSize={120} fontWeight="bold" textAnchor="middle" dominantBaseline="middle">%</text>
+                <text x={500} y={620} fill='#000000' stroke="none" fontSize={30} textAnchor="middle" dominantBaseline="middle">projected future Savings</text>
 
 
             </svg>

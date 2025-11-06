@@ -14,7 +14,7 @@ import ContentHolder from './components/uicomponents/ContentHolder/ContentHolder
 import Header from './components/uicomponents/Header/Header';
 import WhatIs from './components/uicomponents/WhatIsSection/WhatIs';
 // material ui
-
+import { Select, TextField } from '@mui/material';
 
 
 type College = {
@@ -284,22 +284,34 @@ function App() {
           <div id="controlsContainer">
             {/* select state and college */}
             <InfoHolder>
-              <select ref={stateDropdownRef} onChange={(e) => {
-                selectNewState(e.target.value as string);
-              }}>
+              <Select
+                native
+                inputRef={stateDropdownRef}
+                defaultValue={selectedState}
+                onChange={(e) => {
+                  selectNewState(e.target.value as string);
+                }}
+              >
                 {stateNames.map((state) => (
-                  <option key={String(state)} value={state}>{state}</option>
+                  <option key={String(state)} value={state}>
+                    {state}
+                  </option>
                 ))}
-              </select>
-              <select ref={collegeDropdownRef} className='collegeDropdown' defaultValue={selectedCollege?.name} onChange={(e) => {
-
-                selectNewCollege(JSON.parse(e.target.value) as College)
-              }}>
-                <option value="placeholder">
-                  Select an option...
-                </option>
+              </Select>
+              <Select
+                native
+                inputRef={collegeDropdownRef}
+                className="collegeDropdown"
+                defaultValue={selectedCollege ? JSON.stringify(selectedCollege) : "placeholder"}
+                onChange={(e) => {
+                  const val = e.target.value as string;
+                  if (val === "placeholder") return;
+                  selectNewCollege(JSON.parse(val) as College);
+                }}
+              >
+                <option value="placeholder">Select an option...</option>
                 {getCollegeSelections()}
-              </select>
+              </Select>
             </InfoHolder>
 
             {/* select years until college */}
@@ -418,17 +430,22 @@ function App() {
             {/* select contribution cadence */}
             <SliderHolder>
               <div>
-                <select id="periodSelect" onChange={(e) => {
-                  data.current.periods = parseInt(e.target.value);
-                  calculateAmounts();
-                }}>
+                <Select
+                  variant="standard"
+                  native
+                  defaultValue={"12"}
+                  onChange={(e) => {
+                    data.current.periods = parseInt(e.target.value as string);
+                    calculateAmounts();
+                  }}
+                >
                   <option value="56">weekly contribution</option>
                   <option value="26">bi-weekly contribution</option>
                   <option value="24">bi-monthly contribution</option>
-                  <option value="12" selected>monthly contribution</option>
+                  <option value="12">monthly contribution</option>
                   <option value="4">quarterly contribution</option>
                   <option value="1">yearly contribution</option>
-                </select>
+                </Select>
               </div>
 
               <input
@@ -452,21 +469,25 @@ function App() {
             {/* input current amount saved */}
             <SliderHolder>
               <label htmlFor="startingAmountInput">current amount saved</label>
-              <input type="text" ref={initialContributionRef} onChange={(e) => {
+              <TextField
+                id="startingAmountInput"
+                inputRef={initialContributionRef}
 
-
-                let value = e.target.value.replace(/[^0-9.]/g, "");
-                if (value === "") {
-                  initialContributionRef.current!.value = "";
-                  return;
-                }
-                let num = parseFloat(value);
-
-                if (isNaN(num)) num = 0;
-                data.current.initialBalance = num;
-                initialContributionRef.current!.value = convertToDollarString(num);
-                calculateAmounts();
-              }} />
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  let value = e.target.value.replace(/[^0-9.]/g, "");
+                  if (value === "") {
+                    if (initialContributionRef.current) initialContributionRef.current.value = "";
+                    data.current.initialBalance = 0;
+                    calculateAmounts();
+                    return;
+                  }
+                  let num = parseFloat(value);
+                  if (isNaN(num)) num = 0;
+                  data.current.initialBalance = num;
+                  if (initialContributionRef.current) initialContributionRef.current.value = convertToDollarString(num);
+                  calculateAmounts();
+                }}
+              />
             </SliderHolder>
           </div>
 
