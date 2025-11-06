@@ -43,6 +43,11 @@ h3 {
   color: #cccccc;
 }
 
+text {
+  font-family: "Roboto", sans-serif;
+  fill: #212121;
+}
+
 .uiHolder {
   display: flex;
   flex-direction: column;
