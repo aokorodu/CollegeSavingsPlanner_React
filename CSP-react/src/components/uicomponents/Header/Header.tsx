@@ -5,7 +5,7 @@ const Header = () => {
     return (
         <header className={styles.header}>
             <div className={styles.titleHolder}>
-                <h1 className={styles.title}>529 College Savings Planner</h1>
+                <h1 className={styles.title}>529 College Savings Calculator</h1>
                 <img src={GraduationCapIcon} alt="graduation cap" className={styles.icon} width={50} height={50} />
             </div>
 
