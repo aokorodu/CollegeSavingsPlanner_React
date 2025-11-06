@@ -97,6 +97,7 @@ function App() {
   // refs for future values
   const futureAmountSavedRef = React.useRef<HTMLSpanElement>(null);
   const futureCostRef = React.useRef<HTMLSpanElement>(null);
+  const futureAmountNeededRef = React.useRef<HTMLSpanElement>(null);
   const percentSavedRef = React.useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
@@ -153,6 +154,10 @@ function App() {
     if (futureAmountSavedRef.current) {
       futureAmountSavedRef.current.innerText = getDollarString(0);
     }
+
+    if (futureAmountNeededRef.current) {
+      futureAmountNeededRef.current.innerText = getDollarString(data.current.futureCost.futureCost - data.current.futureSaved);
+    }
     if (percentSavedRef.current) {
       percentSavedRef.current.innerText = "0%";
     }
@@ -181,6 +186,10 @@ function App() {
     }
     if (futureCostRef.current) {
       futureCostRef.current.innerText = getDollarString(data.current.futureCost.futureCost);
+    }
+    if (futureAmountNeededRef.current) {
+      const amountNeeded = data.current.futureCost.futureCost - data.current.futureSaved;
+      futureAmountNeededRef.current.innerText = getDollarString(amountNeeded < 0 ? 0 : amountNeeded);
     }
     if (percentSavedRef.current) {
       let percentage = data.current.futureSaved / data.current.futureCost.futureCost * 100;
@@ -249,7 +258,6 @@ function App() {
   return (
     <>
       <ContentHolder>
-
         <div>
           <Header />
           <WhatIs />
@@ -498,28 +506,7 @@ function App() {
             </SliderHolder>
           </div>
 
-          <div id="resultsContainer" className='resultsContainer'>
-            <h2>SUMMARY:</h2>
-            <InfoHolder>
-              <label>projected future savings *</label>
-              <span ref={futureAmountSavedRef}>$0</span>
-            </InfoHolder>
 
-            <InfoHolder>
-              <label>projected future cost **</label>
-              <span ref={futureCostRef}>$0</span>
-            </InfoHolder>
-
-            <InfoHolder>
-              <label>percent saved</label>
-              <span ref={percentSavedRef}>0%</span>
-            </InfoHolder>
-          </div>
-
-          <div className="disclaimerContainer">
-            <p>* projected future savings is an estimate of the total amount you will have saved by the time college starts, based on the information provided. This amount does not guarantee future results.</p>
-            <p>** projected future cost is an estimate of the total annual cost of attendance for the first year of college, based on the information provided. This amount does not guarantee future results.</p>
-          </div>
 
         </div>
 
@@ -532,6 +519,33 @@ function App() {
 
 
       </ContentHolder>
+      <div id="resultsContainer" className='resultsContainer'>
+        <h2>SUMMARY:</h2>
+        <InfoHolder>
+          <label>projected future savings *</label>
+          <span ref={futureAmountSavedRef}>$0</span>
+        </InfoHolder>
+
+        <InfoHolder>
+          <label>projected future cost **</label>
+          <span ref={futureCostRef}>$0</span>
+        </InfoHolder>
+
+        <InfoHolder>
+          <label>amount for which you'll need funding</label>
+          <span ref={futureAmountNeededRef}>$0</span>
+        </InfoHolder>
+
+        <InfoHolder>
+          <label>percent saved</label>
+          <span ref={percentSavedRef}>0%</span>
+        </InfoHolder>
+      </div>
+
+      <div className="disclaimerContainer">
+        <p>* projected future savings is an estimate of the total amount you will have saved by the time college starts, based on the information provided. This amount does not guarantee future results.</p>
+        <p>** projected future cost is an estimate of the total annual cost of attendance for the first year of college, based on the information provided. This amount does not guarantee future results.</p>
+      </div>
     </>
   )
 }
