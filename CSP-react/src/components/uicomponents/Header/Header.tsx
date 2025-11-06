@@ -9,7 +9,7 @@ const Header = () => {
                 <img src={GraduationCapIcon} alt="graduation cap" className={styles.icon} width={50} height={50} />
             </div>
 
-            <p className={styles.subtitle}>Figure out how much you need to save for college.</p>
+            <p className={styles.subtitle}>Calculate how much to set aside for your child's education.</p>
         </header>
     );
 };
