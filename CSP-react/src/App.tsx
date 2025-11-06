@@ -14,7 +14,7 @@ import ContentHolder from './components/uicomponents/ContentHolder/ContentHolder
 import Header from './components/uicomponents/Header/Header';
 import WhatIs from './components/uicomponents/WhatIsSection/WhatIs';
 // material ui
-import { Select, TextField } from '@mui/material';
+import { Select, TextField, FormControl, FormHelperText } from '@mui/material';
 
 
 type College = {
@@ -284,34 +284,41 @@ function App() {
           <div id="controlsContainer">
             {/* select state and college */}
             <InfoHolder>
-              <Select
-                native
-                inputRef={stateDropdownRef}
-                defaultValue={selectedState}
-                onChange={(e) => {
-                  selectNewState(e.target.value as string);
-                }}
-              >
-                {stateNames.map((state) => (
-                  <option key={String(state)} value={state}>
-                    {state}
-                  </option>
-                ))}
-              </Select>
-              <Select
-                native
-                inputRef={collegeDropdownRef}
-                className="collegeDropdown"
-                defaultValue={selectedCollege ? JSON.stringify(selectedCollege) : "placeholder"}
-                onChange={(e) => {
-                  const val = e.target.value as string;
-                  if (val === "placeholder") return;
-                  selectNewCollege(JSON.parse(val) as College);
-                }}
-              >
-                <option value="placeholder">Select an option...</option>
-                {getCollegeSelections()}
-              </Select>
+              <FormControl>
+                <FormHelperText>select state</FormHelperText>
+                <Select
+                  native
+                  inputRef={stateDropdownRef}
+                  defaultValue={selectedState}
+                  onChange={(e) => {
+                    selectNewState(e.target.value as string);
+                  }}
+                >
+                  {stateNames.map((state) => (
+                    <option key={String(state)} value={state}>
+                      {state}
+                    </option>
+                  ))}
+                </Select>
+
+              </FormControl>
+              <FormControl>
+                <FormHelperText>select college</FormHelperText>
+                <Select
+                  native
+                  inputRef={collegeDropdownRef}
+                  className="collegeDropdown"
+                  defaultValue={selectedCollege ? JSON.stringify(selectedCollege) : "placeholder"}
+                  onChange={(e) => {
+                    const val = e.target.value as string;
+                    if (val === "placeholder") return;
+                    selectNewCollege(JSON.parse(val) as College);
+                  }}
+                >
+                  <option value="placeholder">Select an option...</option>
+                  {getCollegeSelections()}
+                </Select>
+              </FormControl>
             </InfoHolder>
 
             {/* select years until college */}
