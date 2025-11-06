@@ -136,7 +136,6 @@ select {
   max-width: 800px;
   font-size: 10px;
   font-style: italic;
-  color: #eaeaea;
   display: flex;
   flex-direction: column;
   gap: 1rem;
