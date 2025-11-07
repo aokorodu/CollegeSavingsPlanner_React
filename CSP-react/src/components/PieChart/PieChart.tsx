@@ -4,6 +4,7 @@ import GraduationCap from '../../assets/graduationCap';
 
 const PieChart = forwardRef((props, ref) => {
 
+    const dividerColor = "#212121";
     const outlineRef = React.useRef<SVGCircleElement | null>(null);
     const bgRef = React.useRef<SVGCircleElement | null>(null);
     const arcRef = React.useRef<SVGCircleElement | null>(null);
@@ -89,9 +90,9 @@ const PieChart = forwardRef((props, ref) => {
                             cy="0"
                             r={radius}
                             fill="none"
-                            stroke="#e0e0e0"
+                            stroke={dividerColor}
                             strokeOpacity="1"
-                            strokeWidth={strokeWidth + 10}
+                            strokeWidth={strokeWidth + 4}
                         ></circle>
 
                         <circle
@@ -125,8 +126,8 @@ const PieChart = forwardRef((props, ref) => {
                                 id="staticDivider"
                                 className={styles.savedPath}
                                 d={`M${radius - strokeWidth / 2} 0 H${radius + strokeWidth / 2}`}
-                                stroke="#fff"
-                                strokeWidth="5"
+                                stroke={dividerColor}
+                                strokeWidth="2"
                                 strokeLinecap="inherit"
                                 transform="rotate(0)"
                             ></path>
@@ -134,8 +135,8 @@ const PieChart = forwardRef((props, ref) => {
                                 ref={dividerRef}
                                 className={styles.savedPath}
                                 d={`M${radius - strokeWidth / 2} 0 H${radius + strokeWidth / 2}`}
-                                stroke="#fff"
-                                strokeWidth="5"
+                                stroke={dividerColor}
+                                strokeWidth="2"
                                 strokeLinecap="inherit"
                                 transform="rotate(0)"
                             ></path>
@@ -146,8 +147,8 @@ const PieChart = forwardRef((props, ref) => {
                 <g transform="translate(370 290)">
                     <GraduationCap />
                 </g>
-                <text ref={percentTextRef} x={500} y={550} fill='#fff' stroke="none" fontSize={120} fontWeight="bold" textAnchor="middle" dominantBaseline="middle">%</text>
-                <text x={500} y={620} fill='#fff' stroke="none" fontSize={30} textAnchor="middle" dominantBaseline="middle">projected future Savings</text>
+                <text ref={percentTextRef} x={500} y={550} fill='#000000' stroke="none" fontSize={120} fontWeight="bold" textAnchor="middle" dominantBaseline="middle">%</text>
+                <text x={500} y={620} fill='#000000' stroke="none" fontSize={30} textAnchor="middle" dominantBaseline="middle">projected future Savings</text>
 
 
             </svg>

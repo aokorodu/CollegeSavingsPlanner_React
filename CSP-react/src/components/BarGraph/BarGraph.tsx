@@ -167,7 +167,7 @@ const BarGraph = forwardRef((props, ref) => {
 
 
                 <g id="background">
-                    <rect x="-150" y="-150" width={vbWidth + 300} height={vbHeight + vbMargin * 2} fill="#fff" fillOpacity=".075" rx="20" ry="20" stroke="none" strokeOpacity="1" strokeWidth={5} />
+                    <rect x="-150" y="-150" width={vbWidth + 300} height={vbHeight + vbMargin * 2} fill="#212121" fillOpacity=".025" rx="20" ry="20" stroke="none" strokeOpacity="1" strokeWidth={5} />
                 </g>
                 <g id="graphLabels">
                     {getGraphLabels()}
@@ -228,7 +228,7 @@ const BarGraph = forwardRef((props, ref) => {
                 </g>
                 {getHorizontalAxis()}
 
-                <path d={`M 0 ${0} V${vbHeight} H${vbWidth}`} stroke="#fff" strokeOpacity=".5" fill="none" strokeWidth={1} />
+                <path d={`M 0 ${0} V${vbHeight} H${vbWidth}`} stroke="#212121" strokeOpacity=".5" fill="none" strokeWidth={1} />
 
             </svg>
         </div>

@@ -2,7 +2,7 @@
 import './App.css'
 import PieChart from './components/PieChart/PieChart';
 import BarGraph from './components/BarGraph/BarGraph';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { getDollarString, convertToDollarString } from './utils/Utils';
 import { calculateFutureValue, calculateFutureCost } from './data/calculator';
 import SliderHolder from './components/SlideHolder/SlideHolder';
@@ -13,6 +13,12 @@ import KeyItem from './components/KeyItem/KeyItem';
 import ContentHolder from './components/uicomponents/ContentHolder/ContentHolder';
 import Header from './components/uicomponents/Header/Header';
 import WhatIs from './components/uicomponents/WhatIsSection/WhatIs';
+import Modal from './components/Modals/Modal';
+import Disclaimer from './components/GraphButton/Disclaimer/Disclaimer';
+
+// material ui
+import { Select, TextField, FormControl, FormHelperText } from '@mui/material';
+
 
 
 type College = {
@@ -55,14 +61,14 @@ function App() {
     expenseRatio: 0.48,
   };
 
-  const defaultColors = ["#98A1BC", "#4ACCFF"];
+  const defaultColors = ["#4ACCFF", "#eaeaea"];
   const yearsOfCollege = 4;
   const initialColleges = getCollegesByState2("The Average State");
   const [colleges, setColleges] = useState<College[]>(initialColleges);
   const [pieChartActive, setPieChartActive] = useState(true);
   let selectedState: string = 'The Average State';
   let selectedCollege: College | null = initialColleges[2] ?? null;
-  let data = defaultData;
+  let data = useRef<calcObject>(defaultData);
 
   // graph refs
   const pieChartRef = React.useRef<{ updatePercentage: (p: number) => void; updateColors: (c: string[]) => void } | null>(null);
@@ -95,7 +101,15 @@ function App() {
   // refs for future values
   const futureAmountSavedRef = React.useRef<HTMLSpanElement>(null);
   const futureCostRef = React.useRef<HTMLSpanElement>(null);
+  const futureAmountNeededRef = React.useRef<HTMLSpanElement>(null);
   const percentSavedRef = React.useRef<HTMLSpanElement>(null);
+
+  // modal props
+  type ModalState = {
+    type: "none" | "expense_ratio" | "cost_increase" | "ror";
+  }
+
+  const [showModal, setShowModal] = useState<ModalState>({ type: "none" });
 
   useEffect(() => {
     init();
@@ -103,7 +117,7 @@ function App() {
   }, []);
 
   const init = () => {
-    data.currentCost = selectedCollege ? selectedCollege.cost : 0;
+    data.current.currentCost = selectedCollege ? selectedCollege.cost : 0;
     // select menus
 
     if (collegeDropdownRef.current && selectedCollege) {
@@ -111,45 +125,49 @@ function App() {
     }
     // initialize sliders
     if (yearsToCollegeSliderRef.current) {
-      yearsToCollegeSliderRef.current.value = data.yearsToCollege.toString();
+      yearsToCollegeSliderRef.current.value = data.current.yearsToCollege.toString();
     }
     if (annualCostSliderRef.current) {
-      annualCostSliderRef.current.value = data.currentCost?.toString() || "0";
+      annualCostSliderRef.current.value = data.current.currentCost?.toString() || "0";
     }
     if (rateOfReturnSliderRef.current) {
-      rateOfReturnSliderRef.current.value = data.annualRateOfReturn.toString();
+      rateOfReturnSliderRef.current.value = data.current.annualRateOfReturn.toString();
     }
 
     if (costIncreaseSliderRef.current) {
-      costIncreaseSliderRef.current.value = data.annalCostIncrease.toString();
+      costIncreaseSliderRef.current.value = data.current.annalCostIncrease.toString();
     }
     if (plannedContributionRef.current) {
-      plannedContributionRef.current.value = data.contribution.toString();
+      plannedContributionRef.current.value = data.current.contribution.toString();
     }
     // initialize text refs
     if (yearsToCollegeRef.current) {
-      yearsToCollegeRef.current.innerText = data.yearsToCollege.toString();
+      yearsToCollegeRef.current.innerText = data.current.yearsToCollege.toString();
     }
     if (annualCostRef.current) {
-      annualCostRef.current.innerText = getDollarString(data.currentCost || 0);
+      annualCostRef.current.innerText = getDollarString(data.current.currentCost || 0);
     }
     if (rateOfReturnRef.current) {
-      rateOfReturnRef.current.innerText = `${data.annualRateOfReturn}%`;
+      rateOfReturnRef.current.innerText = `${data.current.annualRateOfReturn}%`;
     }
     if (costIncreaseRef.current) {
-      costIncreaseRef.current.innerText = `${data.annalCostIncrease}%`;
+      costIncreaseRef.current.innerText = `${data.current.annalCostIncrease}%`;
     }
     if (contributionRef.current) {
-      contributionRef.current.innerText = getDollarString(data.contribution);
+      contributionRef.current.innerText = getDollarString(data.current.contribution);
     }
     if (initialContributionRef.current) {
-      initialContributionRef.current.value = convertToDollarString(data.initialBalance);
+      initialContributionRef.current.value = convertToDollarString(data.current.initialBalance);
     }
     if (futureCostRef.current) {
-      futureCostRef.current.innerText = getDollarString(data.futureCost.futureCost);
+      futureCostRef.current.innerText = getDollarString(data.current.futureCost.futureCost);
     }
     if (futureAmountSavedRef.current) {
       futureAmountSavedRef.current.innerText = getDollarString(0);
+    }
+
+    if (futureAmountNeededRef.current) {
+      futureAmountNeededRef.current.innerText = getDollarString(data.current.futureCost.futureCost - data.current.futureSaved);
     }
     if (percentSavedRef.current) {
       percentSavedRef.current.innerText = "0%";
@@ -157,17 +175,17 @@ function App() {
   }
   // college selected or cost changed
   const calculateAmounts = () => {
-    data.contribution = parseInt(plannedContributionRef.current?.value || "0"); // retain contribution value
-    data.currentCost = parseInt(annualCostSliderRef.current?.value || "0"); // selectedCollege ? selectedCollege.cost : 0;
+    //data.current.contribution = parseInt(plannedContributionRef.current?.value || "0"); // retain contribution value
+    //data.current.currentCost = parseInt(annualCostSliderRef.current?.value || "0"); // selectedCollege ? selectedCollege.cost : 0;
 
-    const futureCostResult = calculateFutureCost({ yearlyCost: data.currentCost, annualCostIncrease: data.annalCostIncrease, yearsToCollege: data.yearsToCollege, yearsOfCollege });
+    const futureCostResult = calculateFutureCost({ yearlyCost: data.current.currentCost || 0, annualCostIncrease: data.current.annalCostIncrease, yearsToCollege: data.current.yearsToCollege, yearsOfCollege });
 
-    const futureSaved = calculateFutureValue({ annualRateOfReturn: data.annualRateOfReturn, expenseRatio: data.expenseRatio, periodsPerYear: data.periods, years: data.yearsToCollege, initialInvestment: data.initialBalance, periodicContribution: data.contribution });
+    const futureSaved = calculateFutureValue({ annualRateOfReturn: data.current.annualRateOfReturn, expenseRatio: data.current.expenseRatio, periodsPerYear: data.current.periods, years: data.current.yearsToCollege, initialInvestment: data.current.initialBalance, periodicContribution: data.current.contribution });
 
-    // assign returned object properties to data.futureCost
-    data.futureCost.futureCost = futureCostResult.futureCost;
-    data.futureCost.yearlyCostByYear = futureCostResult.yearlyCostByYear;
-    data.futureSaved = futureSaved;
+    // assign returned object properties to data.current.futureCost
+    data.current.futureCost.futureCost = futureCostResult.futureCost;
+    data.current.futureCost.yearlyCostByYear = futureCostResult.yearlyCostByYear;
+    data.current.futureSaved = futureSaved;
 
     updateContent();
     updateGraphs();
@@ -175,13 +193,17 @@ function App() {
 
   const updateContent = () => {
     if (futureAmountSavedRef.current) {
-      futureAmountSavedRef.current.innerText = getDollarString(data.futureSaved);
+      futureAmountSavedRef.current.innerText = getDollarString(data.current.futureSaved);
     }
     if (futureCostRef.current) {
-      futureCostRef.current.innerText = getDollarString(data.futureCost.futureCost);
+      futureCostRef.current.innerText = getDollarString(data.current.futureCost.futureCost);
+    }
+    if (futureAmountNeededRef.current) {
+      const amountNeeded = data.current.futureCost.futureCost - data.current.futureSaved;
+      futureAmountNeededRef.current.innerText = getDollarString(amountNeeded < 0 ? 0 : amountNeeded);
     }
     if (percentSavedRef.current) {
-      let percentage = data.futureSaved / data.futureCost.futureCost * 100;
+      let percentage = data.current.futureSaved / data.current.futureCost.futureCost * 100;
       if (isNaN(percentage)) percentage = 0;
       percentSavedRef.current.innerText = `${percentage.toFixed(2)}%`;
     }
@@ -189,7 +211,7 @@ function App() {
   }
 
   const updateGraphs = () => {
-    const percentage = data.futureSaved / data.futureCost.futureCost * 100;
+    const percentage = data.current.futureSaved / data.current.futureCost.futureCost * 100;
     let colors = collegeDropdownRef.current?.value ? JSON.parse(collegeDropdownRef.current.value).colors : defaultColors;
     if (colors.length === 0) {
       colors = defaultColors;
@@ -200,7 +222,7 @@ function App() {
     }
 
     if (barGraphRef.current) {
-      barGraphRef.current.updateBarValues(data.futureSaved, data.futureCost.yearlyCostByYear);
+      barGraphRef.current.updateBarValues(data.current.futureSaved, data.current.futureCost.yearlyCostByYear);
       barGraphRef.current.updateaBarColors(colors);
     }
     costKeyRectRef.current?.setAttribute("fill", colors[1]);
@@ -231,8 +253,8 @@ function App() {
 
   const selectNewCollege = (newCollege: College) => {
     selectedCollege = newCollege;
-    data.selectedCollege = newCollege;
-    data.currentCost = newCollege.cost;
+    data.current.selectedCollege = newCollege;
+    data.current.currentCost = newCollege.cost;
     if (annualCostRef.current) {
       annualCostRef.current.innerText = getDollarString(newCollege.cost);
     }
@@ -247,7 +269,6 @@ function App() {
   return (
     <>
       <ContentHolder>
-
         <div>
           <Header />
           <WhatIs />
@@ -255,8 +276,8 @@ function App() {
           <div id="graphContainer">
 
             <div className="keyContainer">
-              <KeyItem label='future savings' ref={savedKeyRectRef} />
               <KeyItem label='future cost' ref={costKeyRectRef} />
+              <KeyItem label='future savings' ref={savedKeyRectRef} />
             </div>
             <div className={`chartContainer ${pieChartActive ? '' : 'chartContainerHiddenLeft'}`}>
               <PieChart ref={pieChartRef} />
@@ -282,22 +303,41 @@ function App() {
           <div id="controlsContainer">
             {/* select state and college */}
             <InfoHolder>
-              <select ref={stateDropdownRef} onChange={(e) => {
-                selectNewState(e.target.value as string);
-              }}>
-                {stateNames.map((state) => (
-                  <option key={String(state)} value={state}>{state}</option>
-                ))}
-              </select>
-              <select ref={collegeDropdownRef} className='collegeDropdown' defaultValue={selectedCollege?.name} onChange={(e) => {
+              <FormControl>
+                <FormHelperText>select state</FormHelperText>
+                <Select
+                  native
+                  inputRef={stateDropdownRef}
+                  defaultValue={selectedState}
+                  onChange={(e) => {
+                    selectNewState(e.target.value as string);
+                  }}
+                >
+                  {stateNames.map((state) => (
+                    <option key={String(state)} value={state}>
+                      {state}
+                    </option>
+                  ))}
+                </Select>
 
-                selectNewCollege(JSON.parse(e.target.value) as College)
-              }}>
-                <option value="placeholder">
-                  Select an option...
-                </option>
-                {getCollegeSelections()}
-              </select>
+              </FormControl>
+              <FormControl>
+                <FormHelperText>select college</FormHelperText>
+                <Select
+                  native
+                  inputRef={collegeDropdownRef}
+                  className="collegeDropdown"
+                  defaultValue={selectedCollege ? JSON.stringify(selectedCollege) : "placeholder"}
+                  onChange={(e) => {
+                    const val = e.target.value as string;
+                    if (val === "placeholder") return;
+                    selectNewCollege(JSON.parse(val) as College);
+                  }}
+                >
+                  <option value="placeholder">Select an option...</option>
+                  {getCollegeSelections()}
+                </Select>
+              </FormControl>
             </InfoHolder>
 
             {/* select years until college */}
@@ -311,7 +351,7 @@ function App() {
                 step=".1"
                 onChange={(e) => {
                   const yrs = parseInt(e.target.value);
-                  data.yearsToCollege = yrs;
+                  data.current.yearsToCollege = yrs;
                   if (yearsToCollegeRef.current) {
                     yearsToCollegeRef.current.innerText = yrs.toString();
                   }
@@ -338,8 +378,8 @@ function App() {
                     cost: cost,
                     colors: defaultColors,
                   };
-                  data.selectedCollege = selectedCollege;
-                  data.currentCost = cost;
+                  data.current.selectedCollege = selectedCollege;
+                  data.current.currentCost = cost;
                   annualCostRef.current!.innerText = getDollarString(cost);
                   calculateAmounts();
                 }}
@@ -349,7 +389,7 @@ function App() {
 
             {/* select rate of return */}
             <SliderHolder>
-              <label htmlFor="ROfRSlider">rate of return</label>
+              <label className='helpLabel' htmlFor="ROfRSlider" onClick={() => { setShowModal({ type: "ror" }) }}>rate of return</label>
               <input
                 ref={rateOfReturnSliderRef}
                 type="range"
@@ -358,7 +398,7 @@ function App() {
                 step=".1"
                 onChange={(e) => {
                   const ror = parseFloat(e.target.value);
-                  data.annualRateOfReturn = ror;
+                  data.current.annualRateOfReturn = ror;
                   if (rateOfReturnRef.current) {
                     rateOfReturnRef.current.innerText = `${ror}%`;
                   }
@@ -371,7 +411,7 @@ function App() {
 
             {/* select yearly cost increase */}
             <SliderHolder>
-              <label htmlFor="costIncreaseSlider">cost increase</label>
+              <label className='helpLabel' htmlFor="costIncreaseSlider" onClick={() => { setShowModal({ type: "cost_increase" }) }}>cost increase</label>
               <input
                 ref={costIncreaseSliderRef}
                 type="range"
@@ -380,7 +420,7 @@ function App() {
                 step=".1"
                 onChange={(e) => {
                   const ci = parseFloat(e.target.value);
-                  data.annalCostIncrease = ci;
+                  data.current.annalCostIncrease = ci;
                   if (costIncreaseRef.current) {
                     costIncreaseRef.current.innerText = `${ci}%`;
                   }
@@ -388,12 +428,12 @@ function App() {
                   calculateAmounts();
                 }}
               />
-              <span ref={costIncreaseRef}>{data.annalCostIncrease}%</span>
+              <span ref={costIncreaseRef}>{data.current.annalCostIncrease}%</span>
             </SliderHolder>
 
             {/* select expense ratio */}
             <SliderHolder>
-              <label htmlFor="expenseRatioSlider">expense ratio</label>
+              <label className='helpLabel' htmlFor="expenseRatioSlider" onClick={() => { setShowModal({ type: "expense_ratio" }) }}>expense ratio</label>
               <input
                 ref={expenseRatioSliderRef}
                 type="range"
@@ -402,7 +442,7 @@ function App() {
                 step="0.01"
                 onChange={(e) => {
                   const er = parseFloat(e.target.value);
-                  data.expenseRatio = er;
+                  data.current.expenseRatio = er;
                   if (expenseRatioRef.current) {
                     expenseRatioRef.current.innerText = `${er}%`;
                   }
@@ -410,23 +450,28 @@ function App() {
                   calculateAmounts();
                 }}
               />
-              <span ref={expenseRatioRef}>{data.expenseRatio}%</span>
+              <span ref={expenseRatioRef}>{data.current.expenseRatio}%</span>
             </SliderHolder>
 
             {/* select contribution cadence */}
             <SliderHolder>
               <div>
-                <select id="periodSelect" onChange={(e) => {
-                  data.periods = parseInt(e.target.value);
-                  calculateAmounts();
-                }}>
+                <Select
+                  variant="standard"
+                  native
+                  defaultValue={"12"}
+                  onChange={(e) => {
+                    data.current.periods = parseInt(e.target.value as string);
+                    calculateAmounts();
+                  }}
+                >
                   <option value="56">weekly contribution</option>
                   <option value="26">bi-weekly contribution</option>
                   <option value="24">bi-monthly contribution</option>
-                  <option value="12" selected>monthly contribution</option>
+                  <option value="12">monthly contribution</option>
                   <option value="4">quarterly contribution</option>
                   <option value="1">yearly contribution</option>
-                </select>
+                </Select>
               </div>
 
               <input
@@ -438,7 +483,7 @@ function App() {
                 onChange={(e) => {
                   const contribution = parseInt(e.target.value);
                   contributionRef.current!.innerText = getDollarString(contribution);
-                  data.contribution = contribution;
+                  data.current.contribution = contribution;
                   calculateAmounts();
                 }}
               />
@@ -450,46 +495,29 @@ function App() {
             {/* input current amount saved */}
             <SliderHolder>
               <label htmlFor="startingAmountInput">current amount saved</label>
-              <input type="text" ref={initialContributionRef} onChange={(e) => {
+              <TextField
+                id="startingAmountInput"
+                inputRef={initialContributionRef}
 
-
-                let value = e.target.value.replace(/[^0-9.]/g, "");
-                if (value === "") {
-                  initialContributionRef.current!.value = "";
-                  return;
-                }
-                let num = parseFloat(value);
-
-                if (isNaN(num)) num = 0;
-                data.initialBalance = num;
-                initialContributionRef.current!.value = convertToDollarString(num);
-                calculateAmounts();
-              }} />
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  let value = e.target.value.replace(/[^0-9.]/g, "");
+                  if (value === "") {
+                    if (initialContributionRef.current) initialContributionRef.current.value = "";
+                    data.current.initialBalance = 0;
+                    calculateAmounts();
+                    return;
+                  }
+                  let num = parseFloat(value);
+                  if (isNaN(num)) num = 0;
+                  data.current.initialBalance = num;
+                  if (initialContributionRef.current) initialContributionRef.current.value = convertToDollarString(num);
+                  calculateAmounts();
+                }}
+              />
             </SliderHolder>
           </div>
 
-          <div id="resultsContainer" className='resultsContainer'>
-            <h2>SUMMARY:</h2>
-            <InfoHolder>
-              <label>projected future savings *</label>
-              <span ref={futureAmountSavedRef}>$0</span>
-            </InfoHolder>
 
-            <InfoHolder>
-              <label>projected future cost **</label>
-              <span ref={futureCostRef}>$0</span>
-            </InfoHolder>
-
-            <InfoHolder>
-              <label>percent saved</label>
-              <span ref={percentSavedRef}>0%</span>
-            </InfoHolder>
-          </div>
-
-          <div className="disclaimerContainer">
-            <p>* projected future savings is an estimate of the total amount you will have saved by the time college starts, based on the information provided. This amount does not guarantee future results.</p>
-            <p>** projected future cost is an estimate of the total annual cost of attendance for the first year of college, based on the information provided. This amount does not guarantee future results.</p>
-          </div>
 
         </div>
 
@@ -502,6 +530,33 @@ function App() {
 
 
       </ContentHolder>
+      <div id="resultsContainer" className='resultsContainer'>
+        <h2>SUMMARY:</h2>
+        <InfoHolder>
+          <label>projected future savings *</label>
+          <span ref={futureAmountSavedRef}>$0</span>
+        </InfoHolder>
+
+        <InfoHolder>
+          <label>projected future cost **</label>
+          <span ref={futureCostRef}>$0</span>
+        </InfoHolder>
+
+        <InfoHolder>
+          <label>amount for which you'll need funding</label>
+          <span ref={futureAmountNeededRef}>$0</span>
+        </InfoHolder>
+
+        <InfoHolder>
+          <label>percent saved</label>
+          <span ref={percentSavedRef}>0%</span>
+        </InfoHolder>
+      </div>
+
+      <Disclaimer />
+      {showModal.type !== "none" &&
+        <Modal type={showModal.type} onClose={() => setShowModal({ type: "none" })}>
+        </Modal>}
     </>
   )
 }
