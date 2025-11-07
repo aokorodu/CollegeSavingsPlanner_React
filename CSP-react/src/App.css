@@ -149,3 +149,19 @@ select {
 
   padding-top: 1rem;
 }
+
+.helpLabel {
+  cursor: pointer;
+}
+.helpLabel::after {
+  position: relative;
+  content: "";
+  background-image: url("./assets/helpIconsvg.svg");
+  background-size: contain;
+  background-repeat: no-repeat;
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  margin-left: 0.25rem;
+  vertical-align: middle;
+}

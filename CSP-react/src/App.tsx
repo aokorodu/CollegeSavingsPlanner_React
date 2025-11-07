@@ -13,6 +13,8 @@ import KeyItem from './components/KeyItem/KeyItem';
 import ContentHolder from './components/uicomponents/ContentHolder/ContentHolder';
 import Header from './components/uicomponents/Header/Header';
 import WhatIs from './components/uicomponents/WhatIsSection/WhatIs';
+import Modal from './components/Modals/Modal';
+
 // material ui
 import { Select, TextField, FormControl, FormHelperText } from '@mui/material';
 
@@ -99,6 +101,13 @@ function App() {
   const futureCostRef = React.useRef<HTMLSpanElement>(null);
   const futureAmountNeededRef = React.useRef<HTMLSpanElement>(null);
   const percentSavedRef = React.useRef<HTMLSpanElement>(null);
+
+  // modal props
+  type ModalState = {
+    type: "none" | "expense_ratio" | "cost_increase" | "ror";
+  }
+
+  const [showModal, setShowModal] = useState<ModalState>({ type: "ror" });
 
   useEffect(() => {
     init();
@@ -378,7 +387,7 @@ function App() {
 
             {/* select rate of return */}
             <SliderHolder>
-              <label htmlFor="ROfRSlider">rate of return</label>
+              <label className='helpLabel' htmlFor="ROfRSlider" onClick={() => { setShowModal({ type: "ror" }) }}>rate of return</label>
               <input
                 ref={rateOfReturnSliderRef}
                 type="range"
@@ -400,7 +409,7 @@ function App() {
 
             {/* select yearly cost increase */}
             <SliderHolder>
-              <label htmlFor="costIncreaseSlider">cost increase</label>
+              <label className='helpLabel' htmlFor="costIncreaseSlider" onClick={() => { setShowModal({ type: "cost_increase" }) }}>cost increase</label>
               <input
                 ref={costIncreaseSliderRef}
                 type="range"
@@ -422,7 +431,7 @@ function App() {
 
             {/* select expense ratio */}
             <SliderHolder>
-              <label htmlFor="expenseRatioSlider">expense ratio</label>
+              <label className='helpLabel' htmlFor="expenseRatioSlider" onClick={() => { setShowModal({ type: "expense_ratio" }) }}>expense ratio</label>
               <input
                 ref={expenseRatioSliderRef}
                 type="range"
@@ -546,6 +555,9 @@ function App() {
         <p>* projected future savings is an estimate of the total amount you will have saved by the time college starts, based on the information provided. This amount does not guarantee future results.</p>
         <p>** projected future cost is an estimate of the total annual cost of attendance for the first year of college, based on the information provided. This amount does not guarantee future results.</p>
       </div>
+      {showModal.type !== "none" &&
+        <Modal type={showModal.type} onClose={() => setShowModal({ type: "none" })}>
+        </Modal>}
     </>
   )
 }
