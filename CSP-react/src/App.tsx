@@ -364,7 +364,7 @@ function App() {
 
             {/* select annual const */}
             <SliderHolder>
-              <label htmlFor="annualCollegeCostSlider">annual cost</label>
+              <label htmlFor="annualCollegeCostSlider">current cost</label>
               <input
                 ref={annualCostSliderRef}
                 type="range"
