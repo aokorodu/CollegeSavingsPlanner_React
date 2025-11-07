@@ -107,7 +107,7 @@ function App() {
     type: "none" | "expense_ratio" | "cost_increase" | "ror";
   }
 
-  const [showModal, setShowModal] = useState<ModalState>({ type: "ror" });
+  const [showModal, setShowModal] = useState<ModalState>({ type: "none" });
 
   useEffect(() => {
     init();
@@ -274,8 +274,8 @@ function App() {
           <div id="graphContainer">
 
             <div className="keyContainer">
-              <KeyItem label='future savings' ref={savedKeyRectRef} />
               <KeyItem label='future cost' ref={costKeyRectRef} />
+              <KeyItem label='future savings' ref={savedKeyRectRef} />
             </div>
             <div className={`chartContainer ${pieChartActive ? '' : 'chartContainerHiddenLeft'}`}>
               <PieChart ref={pieChartRef} />
