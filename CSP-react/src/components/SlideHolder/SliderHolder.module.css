@@ -1,7 +1,26 @@
 .sliderHolder {
   width: 100%;
   display: grid;
-  grid-template-columns: 2fr 2fr 1fr;
+  grid-template-columns: 1fr 1.5fr 80px;
   gap: 1rem;
-  padding: 0.4rem 1rem;
+  margin: 1rem 0;
+}
+
+@media (max-width: 600px) {
+  .sliderHolder {
+    grid-template-columns: 3fr 80px;
+    grid-template-rows: auto auto;
+    gap: 0.25rem 1rem;
+    margin: 0.25rem 0;
+  }
+
+  /* first item spans the full first row, others sit side-by-side on the second row */
+  .sliderHolder > *:first-child {
+    grid-column: 1 / -1;
+  }
+}
+.label {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

@@ -152,3 +152,32 @@ select {
   margin-left: 0.25rem;
   vertical-align: middle;
 }
+
+input[type="range"] {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 20px;
+  border-radius: 4px;
+  background: #d3d3d3;
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: 0.2s;
+  transition: opacity 0.2s;
+  margin: 0;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 10%;
+  background: #027fe6;
+  cursor: pointer;
+}
+input[type="range"]::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 10%;
+  background: #4caf50;
+  cursor: pointer;
+}
