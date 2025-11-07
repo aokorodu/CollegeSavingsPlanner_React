@@ -3,6 +3,7 @@ import styles from './Modal.module.css';
 
 import ExpenseRatioModal from './ExpenseRatioModal';
 import RateOfReturnModal from './RateOfReturnModal';
+import CostIncreaseModal from './CostIncreaseModal';
 
 type ModalProps = {
     type?: "expense_ratio" | "cost_increase" | "ror";
@@ -19,7 +20,7 @@ const Modal = ({ type, onClose }: ModalProps) => {
                 <div className={styles.content} onClick={stopPropagation}>
                     <button className={styles.closeButton} onClick={onClose} aria-label="Close">×</button>
                     {type === "expense_ratio" && <ExpenseRatioModal />}
-                    {type === "cost_increase" && <div style={{ padding: '1rem' }}><h2>Warning Modal</h2><p>This is a warning modal.</p></div>}
+                    {type === "cost_increase" && <CostIncreaseModal />}
                     {type === "ror" && <RateOfReturnModal />}
                 </div>
             </div>
