@@ -137,19 +137,6 @@ select {
   border-radius: 8px;
 }
 
-.disclaimerContainer {
-  margin-top: 2rem;
-  width: 80%;
-  max-width: 800px;
-  font-size: 10px;
-  font-style: italic;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-
-  padding-top: 1rem;
-}
-
 .helpLabel {
   cursor: pointer;
 }

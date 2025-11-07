@@ -14,9 +14,11 @@ import ContentHolder from './components/uicomponents/ContentHolder/ContentHolder
 import Header from './components/uicomponents/Header/Header';
 import WhatIs from './components/uicomponents/WhatIsSection/WhatIs';
 import Modal from './components/Modals/Modal';
+import Disclaimer from './components/GraphButton/Disclaimer/Disclaimer';
 
 // material ui
 import { Select, TextField, FormControl, FormHelperText } from '@mui/material';
+
 
 
 type College = {
@@ -551,10 +553,7 @@ function App() {
         </InfoHolder>
       </div>
 
-      <div className="disclaimerContainer">
-        <p>* projected future savings is an estimate of the total amount you will have saved by the time college starts, based on the information provided. This amount does not guarantee future results.</p>
-        <p>** projected future cost is an estimate of the total annual cost of attendance for the first year of college, based on the information provided. This amount does not guarantee future results.</p>
-      </div>
+      <Disclaimer />
       {showModal.type !== "none" &&
         <Modal type={showModal.type} onClose={() => setShowModal({ type: "none" })}>
         </Modal>}
