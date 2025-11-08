@@ -1,10 +1,12 @@
 import styles from './PieChart.module.css';
 import React, { forwardRef, useImperativeHandle } from 'react';
 import GraduationCap from '../../assets/graduationCap';
+import classNames from 'classnames';
 
 const PieChart = forwardRef((props, ref) => {
 
     const dividerColor = "#212121";
+    const containerRef = React.useRef<HTMLDivElement | null>(null);
     const outlineRef = React.useRef<SVGCircleElement | null>(null);
     const bgRef = React.useRef<SVGCircleElement | null>(null);
     const arcRef = React.useRef<SVGCircleElement | null>(null);
@@ -23,6 +25,8 @@ const PieChart = forwardRef((props, ref) => {
                 percentTextRef.current.textContent = `${Math.round(percentage)}%`;
             }
         }
+
+        showExtra(percentage);
     };
 
     const updateColors = (colors: string[]) => {
@@ -35,13 +39,28 @@ const PieChart = forwardRef((props, ref) => {
         }
     }
 
+    const showExtra = (percentage: number) => {
+        console.log("show extra called with percentage:", percentage);
+        if (percentage > 100) {
+            if (!containerRef.current?.classList.contains(styles.shrunk)) {
+                containerRef.current?.classList.add(styles.shrunk);
+            }
+
+        } else {
+            if (containerRef.current?.classList.contains(styles.shrunk)) {
+                containerRef.current?.classList.remove(styles.shrunk);
+            }
+        }
+
+    }
+
     useImperativeHandle(ref, () => ({
         updatePercentage,
         updateColors
     }));
 
     return (
-        <div className={styles.pieChartContainer}>
+        <div ref={containerRef} className={classNames(styles.pieChartContainer)}>
             <svg id="svg" width="100%" height="100%" viewBox="0 0 1000 1000">
                 <defs>
                     <linearGradient
