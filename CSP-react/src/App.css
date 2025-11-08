@@ -126,6 +126,7 @@ select {
 }
 
 .resultsContainer {
+  max-width: 800px;
   background-color: #212121;
   color: #eaeaea;
   margin-top: 2rem;

@@ -321,9 +321,10 @@ function App() {
                 </Select>
 
               </FormControl>
-              <FormControl>
+              <FormControl fullWidth={true}>
                 <FormHelperText>select college</FormHelperText>
                 <Select
+                  fullWidth={true}
                   native
                   inputRef={collegeDropdownRef}
                   className="collegeDropdown"
@@ -493,7 +494,7 @@ function App() {
             </SliderHolder>
 
             {/* input current amount saved */}
-            <SliderHolder>
+            <InfoHolder>
               <label htmlFor="startingAmountInput">current amount saved</label>
               <TextField
                 id="startingAmountInput"
@@ -514,7 +515,7 @@ function App() {
                   calculateAmounts();
                 }}
               />
-            </SliderHolder>
+            </InfoHolder>
           </div>
 
 
