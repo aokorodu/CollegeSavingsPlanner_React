@@ -75,6 +75,7 @@ function App() {
   const barGraphRef = React.useRef<{ updateBarValues: (f: number, c: number[]) => void; updateaBarColors: (c: string[]) => void } | null>(null);
   const costKeyRectRef = React.useRef<SVGRectElement | null>(null);
   const savedKeyRectRef = React.useRef<SVGRectElement | null>(null);
+  const extraContentRef = React.useRef<HTMLDivElement | null>(null);
 
   // dropdowns refs
   const stateDropdownRef = React.useRef<HTMLSelectElement>(null);
@@ -96,7 +97,6 @@ function App() {
   const contributionRef = React.useRef<HTMLSpanElement>(null);
   const initialContributionRef = React.useRef<HTMLInputElement>(null);
   const expenseRatioRef = React.useRef<HTMLSpanElement>(null);
-
 
   // refs for future values
   const futureAmountSavedRef = React.useRef<HTMLSpanElement>(null);
@@ -208,6 +208,15 @@ function App() {
       percentSavedRef.current.innerText = `${percentage.toFixed(2)}%`;
     }
 
+    if (extraContentRef.current) {
+      let percentage = data.current.futureSaved / data.current.futureCost.futureCost * 100;
+      if (percentage > 100) {
+        extraContentRef.current.classList.add("showExtraContent");
+      } else {
+        extraContentRef.current.classList.remove("showExtraContent");
+      }
+    }
+
   }
 
   const updateGraphs = () => {
@@ -284,6 +293,9 @@ function App() {
             </div>
             <div className={`chartContainer ${pieChartActive ? 'chartContainerHiddenRight' : ''}`}>
               <BarGraph ref={barGraphRef} />
+            </div>
+            <div className="extraContent" ref={extraContentRef}>
+              <h3>note: you may have extra funds</h3>You can use leftover 529 funds by changing the beneficiary to another family member, rolling it into a Roth IRA (up to a lifetime limit of $35,000), paying up to $10,000 in student loans, or using it for your own further education. If you take a non-qualified withdrawal, you will likely have to pay taxes and a 10% penalty on the earnings.
             </div>
 
             <div className="graphButtonHolder">

@@ -40,7 +40,6 @@ h3 {
   margin-top: 0;
   font-size: 16px;
   font-weight: bold;
-  color: #cccccc;
 }
 
 text {
@@ -118,6 +117,26 @@ select {
   justify-content: center;
   gap: 1rem;
   margin-top: 2rem;
+}
+
+.extraContent {
+  position: absolute;
+  top: 50%;
+  right: 1rem;
+  transform: translate(0, -50%);
+  width: 40%;
+  height: fit-content;
+  border: 1px solid #ccc;
+  padding: 1rem;
+  opacity: 0;
+  transition-property: opacity;
+  transition-duration: var(--transition-duration);
+  transition-delay: none;
+}
+
+.showExtraContent {
+  opacity: 1;
+  transition-delay: var(--transition-delay);
 }
 
 .collegeDropdown {
