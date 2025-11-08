@@ -121,10 +121,10 @@ select {
 
 .extraContent {
   position: absolute;
-  top: 50%;
-  right: 1rem;
-  transform: translate(0, -50%);
-  width: 40%;
+  top: 60%;
+  left: 0%;
+  transform: translate(0, 0);
+  width: 100%;
   height: fit-content;
   border: 1px solid #ccc;
   padding: 1rem;
@@ -132,6 +132,19 @@ select {
   transition-property: opacity;
   transition-duration: var(--transition-duration);
   transition-delay: none;
+  font-size: small;
+}
+
+@media (max-width: 600px) {
+  .extraContent {
+    font-size: x-small;
+  }
+}
+
+@media (max-width: 400px) {
+  .extraContent {
+    top: 50%;
+  }
 }
 
 .showExtraContent {

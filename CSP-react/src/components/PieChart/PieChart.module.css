@@ -18,5 +18,5 @@
 }
 
 .shrunk {
-  transform: scale(0.7) translateX(-30%);
+  transform: scale(0.6) translateY(-30%);
 }
