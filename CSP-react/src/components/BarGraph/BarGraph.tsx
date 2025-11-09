@@ -1,5 +1,6 @@
 import Bar from './Bar';
 import styles from './BarGraph.module.css';
+import classNames from 'classnames';
 import React, { forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
 import GraphLabel from './GraphLabel';
 
@@ -20,6 +21,7 @@ const BarGraph = forwardRef((props, ref) => {
     } | null;
 
     const makeBarRef = () => React.useRef<BarRef>(null);
+    const containerRef = React.useRef<HTMLDivElement | null>(null);
 
     const costBar1Ref = makeBarRef();
     const costBar2Ref = makeBarRef();
@@ -85,6 +87,7 @@ const BarGraph = forwardRef((props, ref) => {
         });
 
         organizeGraphLabels();
+        showExtra(percentageSaved * 100);
     }
 
     const updateaBarColors = (colors: string[]) => {
@@ -117,6 +120,21 @@ const BarGraph = forwardRef((props, ref) => {
             }
         }
     };
+
+    const showExtra = (percentage: number) => {
+        console.log("show extra called with percentage:", percentage);
+        if (percentage > 100) {
+            if (!containerRef.current?.classList.contains(styles.shrunk)) {
+                containerRef.current?.classList.add(styles.shrunk);
+            }
+
+        } else {
+            if (containerRef.current?.classList.contains(styles.shrunk)) {
+                containerRef.current?.classList.remove(styles.shrunk);
+            }
+        }
+
+    }
 
     useImperativeHandle(ref, () => ({
         updateBarValues,
@@ -157,7 +175,7 @@ const BarGraph = forwardRef((props, ref) => {
     }
 
     return (
-        <div className={styles.barGraphContainer}>
+        <div ref={containerRef} className={classNames(styles.barGraphContainer)}>
             <svg width="100%" height="100%" viewBox={`${-vbMargin} ${-vbMargin} ${vbWidth + vbMargin * 2} ${vbHeight + vbMargin * 2}`} preserveAspectRatio="xMidYMid meet" >
                 <defs>
                     <clipPath id="barGraphClipPath">
