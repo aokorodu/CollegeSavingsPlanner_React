@@ -329,28 +329,6 @@ function App() {
               </FormControl>
             </InfoHolder>
 
-            {/* select years until college */}
-            <SliderHolder>
-              <label htmlFor="yearsSlider">years until college</label>
-              <input
-                ref={yearsToCollegeSliderRef}
-                type="range"
-                min="1"
-                max="30"
-                step=".1"
-                onChange={(e) => {
-                  const yrs = parseInt(e.target.value);
-                  data.current.yearsToCollege = yrs;
-                  if (yearsToCollegeRef.current) {
-                    yearsToCollegeRef.current.innerText = yrs.toString();
-                  }
-
-                  calculateAmounts();
-                }}
-              />
-              <span ref={yearsToCollegeRef}>17</span>
-            </SliderHolder>
-
             {/* select annual const */}
             <SliderHolder>
               <label htmlFor="annualCollegeCostSlider">current cost</label>
@@ -375,6 +353,69 @@ function App() {
               />
               <span ref={annualCostRef}>$0</span>
             </SliderHolder>
+
+            {/* select years until college */}
+            <SliderHolder>
+              <label htmlFor="yearsSlider">years until college</label>
+              <input
+                ref={yearsToCollegeSliderRef}
+                type="range"
+                min="1"
+                max="30"
+                step=".1"
+                onChange={(e) => {
+                  const yrs = parseInt(e.target.value);
+                  data.current.yearsToCollege = yrs;
+                  if (yearsToCollegeRef.current) {
+                    yearsToCollegeRef.current.innerText = yrs.toString();
+                  }
+
+                  calculateAmounts();
+                }}
+              />
+              <span ref={yearsToCollegeRef}>17</span>
+            </SliderHolder>
+
+            {/* select contribution cadence */}
+            <SliderHolder>
+              <div>
+                <Select
+                  variant="standard"
+                  native
+                  defaultValue={"12"}
+                  onChange={(e) => {
+                    data.current.periods = parseInt(e.target.value as string);
+                    calculateAmounts();
+                  }}
+                >
+                  <option value="52">weekly contribution</option>
+                  <option value="26">bi-weekly contribution</option>
+                  <option value="24">bi-monthly contribution</option>
+                  <option value="12">monthly contribution</option>
+                  <option value="4">quarterly contribution</option>
+                  <option value="1">yearly contribution</option>
+                </Select>
+              </div>
+
+              <input
+                type="range"
+                ref={plannedContributionRef}
+                min="0"
+                max="3000"
+                step="25"
+                onChange={(e) => {
+                  const contribution = parseInt(e.target.value);
+                  contributionRef.current!.innerText = getDollarString(contribution);
+                  data.current.contribution = contribution;
+                  calculateAmounts();
+                }}
+              />
+              <span ref={contributionRef}>
+                000
+              </span>
+            </SliderHolder>
+
+
 
             {/* select rate of return */}
             <SliderHolder>
@@ -442,45 +483,6 @@ function App() {
               <span ref={expenseRatioRef}>{data.current.expenseRatio}%</span>
             </SliderHolder>
 
-            {/* select contribution cadence */}
-            <SliderHolder>
-              <div>
-                <Select
-                  variant="standard"
-                  native
-                  defaultValue={"12"}
-                  onChange={(e) => {
-                    data.current.periods = parseInt(e.target.value as string);
-                    calculateAmounts();
-                  }}
-                >
-                  <option value="56">weekly contribution</option>
-                  <option value="26">bi-weekly contribution</option>
-                  <option value="24">bi-monthly contribution</option>
-                  <option value="12">monthly contribution</option>
-                  <option value="4">quarterly contribution</option>
-                  <option value="1">yearly contribution</option>
-                </Select>
-              </div>
-
-              <input
-                type="range"
-                ref={plannedContributionRef}
-                min="0"
-                max="3000"
-                step="25"
-                onChange={(e) => {
-                  const contribution = parseInt(e.target.value);
-                  contributionRef.current!.innerText = getDollarString(contribution);
-                  data.current.contribution = contribution;
-                  calculateAmounts();
-                }}
-              />
-              <span ref={contributionRef}>
-                000
-              </span>
-            </SliderHolder>
-
             {/* input current amount saved */}
             <InfoHolder>
               <label htmlFor="startingAmountInput">current amount saved</label>
@@ -508,7 +510,7 @@ function App() {
         </div>
       </ContentHolder>
       <Summary ref={summaryRef} />
-      <Disclaimer />
+
       {showModal.type !== "none" &&
         <Modal type={showModal.type} onClose={() => setShowModal({ type: "none" })}>
         </Modal>}
