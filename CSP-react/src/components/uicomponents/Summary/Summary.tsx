@@ -1,8 +1,8 @@
 import { forwardRef, useImperativeHandle } from "react";
-import type { calcObject } from "../../App";
-import InfoHolder from '../uicomponents/InfoHolder/InfoHolder';
+import type { calcObject } from "../../../App";
+import InfoHolder from '../InfoHolder/InfoHolder';
 import React from "react";
-import { getDollarString } from "../../utils/Utils";
+import { getDollarString } from "../../../utils/Utils";
 import styles from './Summary.module.css';
 
 const Summary = forwardRef((_, ref) => {

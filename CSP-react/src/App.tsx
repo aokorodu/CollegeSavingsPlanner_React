@@ -20,7 +20,7 @@ import Disclaimer from './components/GraphButton/Disclaimer/Disclaimer';
 import { Select, TextField, FormControl, FormHelperText } from '@mui/material';
 import ExtraFundsNote from './components/uicomponents/ExtraFundsNote/ExtraFundsNote';
 import extraStyles from './components/uicomponents/ExtraFundsNote/ExtraFundsNote.module.css';
-import Summary from './components/Summary/Summary';
+import Summary from './components/uicomponents/Summary/Summary';
 
 
 
@@ -80,6 +80,7 @@ function App() {
   const savedKeyRectRef = React.useRef<SVGRectElement | null>(null);
   const extraContentRef = React.useRef<HTMLDivElement | null>(null);
 
+  // summary ref
   const summaryRef = React.useRef<{ updateSummary: (obj: calcObject) => void } | null>(null);
 
   // dropdowns refs
@@ -103,11 +104,6 @@ function App() {
   const initialContributionRef = React.useRef<HTMLInputElement>(null);
   const expenseRatioRef = React.useRef<HTMLSpanElement>(null);
 
-  // refs for future values
-  // const futureAmountSavedRef = React.useRef<HTMLSpanElement>(null);
-  // const futureCostRef = React.useRef<HTMLSpanElement>(null);
-  // const futureAmountNeededRef = React.useRef<HTMLSpanElement>(null);
-  // const percentSavedRef = React.useRef<HTMLSpanElement>(null);
 
   // modal props
   type ModalState = {
@@ -168,25 +164,9 @@ function App() {
     if (summaryRef.current) {
       summaryRef.current.updateSummary(data.current);
     }
-    // if (futureCostRef.current) {
-    //   futureCostRef.current.innerText = getDollarString(data.current.futureCost.futureCost);
-    // }
-    // if (futureAmountSavedRef.current) {
-    //   futureAmountSavedRef.current.innerText = getDollarString(0);
-    // }
-
-    // if (futureAmountNeededRef.current) {
-    //   futureAmountNeededRef.current.innerText = getDollarString(data.current.futureCost.futureCost - data.current.futureSaved);
-    // }
-    // if (percentSavedRef.current) {
-    //   percentSavedRef.current.innerText = "0%";
-    // }
   }
   // college selected or cost changed
   const calculateAmounts = () => {
-    //data.current.contribution = parseInt(plannedContributionRef.current?.value || "0"); // retain contribution value
-    //data.current.currentCost = parseInt(annualCostSliderRef.current?.value || "0"); // selectedCollege ? selectedCollege.cost : 0;
-
     const futureCostResult = calculateFutureCost({ yearlyCost: data.current.currentCost || 0, annualCostIncrease: data.current.annalCostIncrease, yearsToCollege: data.current.yearsToCollege, yearsOfCollege });
 
     const futureSaved = calculateFutureValue({ annualRateOfReturn: data.current.annualRateOfReturn, expenseRatio: data.current.expenseRatio, periodsPerYear: data.current.periods, years: data.current.yearsToCollege, initialInvestment: data.current.initialBalance, periodicContribution: data.current.contribution });
@@ -201,21 +181,7 @@ function App() {
   }
 
   const updateContent = () => {
-    // if (futureAmountSavedRef.current) {
-    //   futureAmountSavedRef.current.innerText = getDollarString(data.current.futureSaved);
-    // }
-    // if (futureCostRef.current) {
-    //   futureCostRef.current.innerText = getDollarString(data.current.futureCost.futureCost);
-    // }
-    // if (futureAmountNeededRef.current) {
-    //   const amountNeeded = data.current.futureCost.futureCost - data.current.futureSaved;
-    //   futureAmountNeededRef.current.innerText = getDollarString(amountNeeded < 0 ? 0 : amountNeeded);
-    // }
-    // if (percentSavedRef.current) {
-    //   let percentage = data.current.futureSaved / data.current.futureCost.futureCost * 100;
-    //   if (isNaN(percentage)) percentage = 0;
-    //   percentSavedRef.current.innerText = `${percentage.toFixed(2)}%`;
-    // }
+
     if (summaryRef.current) {
       summaryRef.current.updateSummary(data.current);
     }
@@ -223,10 +189,6 @@ function App() {
     if (extraContentRef.current) {
       let percentage = data.current.futureSaved / data.current.futureCost.futureCost * 100;
       if (percentage > 100) {
-        // preserve existing classes — add the class without overwriting
-        // add this near the top of App.tsx
-
-        // replace the placeholder with this
         extraContentRef.current.classList.toggle(extraStyles.showExtraContent, true);
       } else {
         extraContentRef.current.classList.toggle(extraStyles.showExtraContent, false);
@@ -310,9 +272,6 @@ function App() {
             <div className={`chartContainer ${pieChartActive ? 'chartContainerHiddenRight' : ''}`}>
               <BarGraph ref={barGraphRef} />
             </div>
-            {/* <div className="extraContent" ref={extraContentRef}>
-              <h3>note: you may have extra funds</h3>You can use leftover 529 funds by changing the beneficiary to another family member, rolling it into a Roth IRA (up to a lifetime limit of $35,000), paying up to $10,000 in student loans, or using it for your own further education. If you take a non-qualified withdrawal, you will likely have to pay taxes and a 10% penalty on the earnings.
-            </div> */}
             <ExtraFundsNote ref={extraContentRef} />
 
             <div className="graphButtonHolder">
@@ -546,44 +505,9 @@ function App() {
               />
             </InfoHolder>
           </div>
-
-
-
         </div>
-
-
-
-
-
-
-
-
-
       </ContentHolder>
       <Summary ref={summaryRef} />
-      {/* <div id="resultsContainer" className='resultsContainer'>
-        <h2>SUMMARY:</h2>
-        <InfoHolder>
-          <label>projected future savings *</label>
-          <span ref={futureAmountSavedRef}>$0</span>
-        </InfoHolder>
-
-        <InfoHolder>
-          <label>projected future cost **</label>
-          <span ref={futureCostRef}>$0</span>
-        </InfoHolder>
-
-        <InfoHolder>
-          <label>amount for which you'll need funding</label>
-          <span ref={futureAmountNeededRef}>$0</span>
-        </InfoHolder>
-
-        <InfoHolder>
-          <label>percent saved</label>
-          <span ref={percentSavedRef}>0%</span>
-        </InfoHolder>
-      </div> */}
-
       <Disclaimer />
       {showModal.type !== "none" &&
         <Modal type={showModal.type} onClose={() => setShowModal({ type: "none" })}>
