@@ -291,8 +291,8 @@ function App() {
           <div id="controlsContainer">
             {/* select state and college */}
             <InfoHolder>
-              <FormControl>
-                <FormHelperText>select state</FormHelperText>
+              <FormControl size="small">
+                <FormHelperText>state</FormHelperText>
                 <Select
                   native
                   inputRef={stateDropdownRef}
@@ -308,9 +308,9 @@ function App() {
                   ))}
                 </Select>
 
-              </FormControl>
-              <FormControl fullWidth={true}>
-                <FormHelperText>select college</FormHelperText>
+              </FormControl >
+              <FormControl fullWidth={true} size="small">
+                <FormHelperText>college</FormHelperText>
                 <Select
                   fullWidth={true}
                   native
@@ -487,6 +487,7 @@ function App() {
             <InfoHolder>
               <label htmlFor="startingAmountInput">current amount saved</label>
               <TextField
+                size="small"
                 id="startingAmountInput"
                 inputRef={initialContributionRef}
 
