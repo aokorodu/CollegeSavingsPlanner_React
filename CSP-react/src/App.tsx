@@ -20,6 +20,7 @@ import Disclaimer from './components/GraphButton/Disclaimer/Disclaimer';
 import { Select, TextField, FormControl, FormHelperText } from '@mui/material';
 import ExtraFundsNote from './components/uicomponents/ExtraFundsNote/ExtraFundsNote';
 import extraStyles from './components/uicomponents/ExtraFundsNote/ExtraFundsNote.module.css';
+import Summary from './components/Summary/Summary';
 
 
 
@@ -34,7 +35,7 @@ type FCost = {
   yearlyCostByYear: number[],
 };
 
-type calcObject = {
+export type calcObject = {
   selectedCollege?: College | null;
   currentCost?: number;
   yearsToCollege: number;
@@ -79,6 +80,8 @@ function App() {
   const savedKeyRectRef = React.useRef<SVGRectElement | null>(null);
   const extraContentRef = React.useRef<HTMLDivElement | null>(null);
 
+  const summaryRef = React.useRef<{ updateSummary: (obj: calcObject) => void } | null>(null);
+
   // dropdowns refs
   const stateDropdownRef = React.useRef<HTMLSelectElement>(null);
   const collegeDropdownRef = React.useRef<HTMLSelectElement>(null);
@@ -101,10 +104,10 @@ function App() {
   const expenseRatioRef = React.useRef<HTMLSpanElement>(null);
 
   // refs for future values
-  const futureAmountSavedRef = React.useRef<HTMLSpanElement>(null);
-  const futureCostRef = React.useRef<HTMLSpanElement>(null);
-  const futureAmountNeededRef = React.useRef<HTMLSpanElement>(null);
-  const percentSavedRef = React.useRef<HTMLSpanElement>(null);
+  // const futureAmountSavedRef = React.useRef<HTMLSpanElement>(null);
+  // const futureCostRef = React.useRef<HTMLSpanElement>(null);
+  // const futureAmountNeededRef = React.useRef<HTMLSpanElement>(null);
+  // const percentSavedRef = React.useRef<HTMLSpanElement>(null);
 
   // modal props
   type ModalState = {
@@ -161,19 +164,23 @@ function App() {
     if (initialContributionRef.current) {
       initialContributionRef.current.value = convertToDollarString(data.current.initialBalance);
     }
-    if (futureCostRef.current) {
-      futureCostRef.current.innerText = getDollarString(data.current.futureCost.futureCost);
-    }
-    if (futureAmountSavedRef.current) {
-      futureAmountSavedRef.current.innerText = getDollarString(0);
-    }
 
-    if (futureAmountNeededRef.current) {
-      futureAmountNeededRef.current.innerText = getDollarString(data.current.futureCost.futureCost - data.current.futureSaved);
+    if (summaryRef.current) {
+      summaryRef.current.updateSummary(data.current);
     }
-    if (percentSavedRef.current) {
-      percentSavedRef.current.innerText = "0%";
-    }
+    // if (futureCostRef.current) {
+    //   futureCostRef.current.innerText = getDollarString(data.current.futureCost.futureCost);
+    // }
+    // if (futureAmountSavedRef.current) {
+    //   futureAmountSavedRef.current.innerText = getDollarString(0);
+    // }
+
+    // if (futureAmountNeededRef.current) {
+    //   futureAmountNeededRef.current.innerText = getDollarString(data.current.futureCost.futureCost - data.current.futureSaved);
+    // }
+    // if (percentSavedRef.current) {
+    //   percentSavedRef.current.innerText = "0%";
+    // }
   }
   // college selected or cost changed
   const calculateAmounts = () => {
@@ -194,20 +201,23 @@ function App() {
   }
 
   const updateContent = () => {
-    if (futureAmountSavedRef.current) {
-      futureAmountSavedRef.current.innerText = getDollarString(data.current.futureSaved);
-    }
-    if (futureCostRef.current) {
-      futureCostRef.current.innerText = getDollarString(data.current.futureCost.futureCost);
-    }
-    if (futureAmountNeededRef.current) {
-      const amountNeeded = data.current.futureCost.futureCost - data.current.futureSaved;
-      futureAmountNeededRef.current.innerText = getDollarString(amountNeeded < 0 ? 0 : amountNeeded);
-    }
-    if (percentSavedRef.current) {
-      let percentage = data.current.futureSaved / data.current.futureCost.futureCost * 100;
-      if (isNaN(percentage)) percentage = 0;
-      percentSavedRef.current.innerText = `${percentage.toFixed(2)}%`;
+    // if (futureAmountSavedRef.current) {
+    //   futureAmountSavedRef.current.innerText = getDollarString(data.current.futureSaved);
+    // }
+    // if (futureCostRef.current) {
+    //   futureCostRef.current.innerText = getDollarString(data.current.futureCost.futureCost);
+    // }
+    // if (futureAmountNeededRef.current) {
+    //   const amountNeeded = data.current.futureCost.futureCost - data.current.futureSaved;
+    //   futureAmountNeededRef.current.innerText = getDollarString(amountNeeded < 0 ? 0 : amountNeeded);
+    // }
+    // if (percentSavedRef.current) {
+    //   let percentage = data.current.futureSaved / data.current.futureCost.futureCost * 100;
+    //   if (isNaN(percentage)) percentage = 0;
+    //   percentSavedRef.current.innerText = `${percentage.toFixed(2)}%`;
+    // }
+    if (summaryRef.current) {
+      summaryRef.current.updateSummary(data.current);
     }
 
     if (extraContentRef.current) {
@@ -550,7 +560,8 @@ function App() {
 
 
       </ContentHolder>
-      <div id="resultsContainer" className='resultsContainer'>
+      <Summary ref={summaryRef} />
+      {/* <div id="resultsContainer" className='resultsContainer'>
         <h2>SUMMARY:</h2>
         <InfoHolder>
           <label>projected future savings *</label>
@@ -571,7 +582,7 @@ function App() {
           <label>percent saved</label>
           <span ref={percentSavedRef}>0%</span>
         </InfoHolder>
-      </div>
+      </div> */}
 
       <Disclaimer />
       {showModal.type !== "none" &&
