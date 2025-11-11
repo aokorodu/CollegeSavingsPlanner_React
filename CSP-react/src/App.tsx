@@ -74,7 +74,7 @@ function App() {
   let data = useRef<calcObject>(defaultData);
 
   // graph refs
-  const pieChartRef = React.useRef<{ updatePercentage: (p: number) => void; updateColors: (c: string[]) => void } | null>(null);
+  const pieChartRef = React.useRef<{ updatePercentage: (p: number, c: number) => void; updateColors: (c: string[]) => void } | null>(null);
   const barGraphRef = React.useRef<{ updateBarValues: (f: number, c: number[]) => void; updateaBarColors: (c: string[]) => void } | null>(null);
   const costKeyRectRef = React.useRef<SVGRectElement | null>(null);
   const savedKeyRectRef = React.useRef<SVGRectElement | null>(null);
@@ -204,7 +204,7 @@ function App() {
       colors = defaultColors;
     }
     if (pieChartRef.current) {
-      pieChartRef.current?.updatePercentage(percentage);
+      pieChartRef.current?.updatePercentage(percentage, data.current.futureCost.futureCost);
       pieChartRef.current.updateColors(colors);
     }
 

@@ -18,7 +18,7 @@ const PieChart = forwardRef((props, ref) => {
     const strokeWidth = 200;
     const radius = 350;
 
-    const updatePercentage = (percentage: number) => {
+    const updatePercentage = (percentage: number, futureCost: number) => {
         if (arcRef.current) {
             const offset = 100 - percentage < 0 ? 0 : 100 - percentage;
             arcRef.current.setAttribute("stroke-dashoffset", offset.toString());
@@ -29,9 +29,11 @@ const PieChart = forwardRef((props, ref) => {
             }
         }
         let angle = percentage > 100 ? 360 : (percentage / 100) * 360;
+        let val = Math.round(percentage / 100 * futureCost);
         let adjustedAngle = angle / 2 - 180;
         spinnerRef.current?.setAttribute("transform", `rotate(${adjustedAngle} 500 500)`);
         spinnerTextRef.current!.setAttribute("transform", `rotate(${-adjustedAngle})`);
+        spinnerTextRef.current!.textContent = `$${val.toLocaleString()}`;
 
         showExtra(percentage);
     };
@@ -135,6 +137,7 @@ const PieChart = forwardRef((props, ref) => {
                     <g transform="translate(500 500)">
 
                         <g transform="translate(0 550)">
+                            <line x1="0" y1="-50" x2="0" y2="-90" stroke="#000000" strokeWidth="4" />
                             <g>
                                 <text className={styles.spinnerText} ref={spinnerTextRef} x="0" y="0" fill='#ffffff' stroke="none" textAnchor="middle" dominantBaseline="middle">$2,000,000</text>
                             </g>
