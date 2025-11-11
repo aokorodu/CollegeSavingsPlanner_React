@@ -402,7 +402,7 @@ function App() {
                 ref={plannedContributionRef}
                 min="0"
                 max="3000"
-                step="25"
+                step="1"
                 onChange={(e) => {
                   const contribution = parseInt(e.target.value);
                   contributionRef.current!.innerText = getDollarString(contribution);

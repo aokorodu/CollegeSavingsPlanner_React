@@ -12,6 +12,9 @@ const PieChart = forwardRef((props, ref) => {
     const arcRef = React.useRef<SVGCircleElement | null>(null);
     const dividerRef = React.useRef<SVGPathElement | null>(null);
     const percentTextRef = React.useRef<SVGTextElement | null>(null);
+
+    const spinnerRef = React.useRef<SVGGElement | null>(null);
+    const spinnerTextRef = React.useRef<SVGTextElement | null>(null);
     const strokeWidth = 200;
     const radius = 350;
 
@@ -25,6 +28,10 @@ const PieChart = forwardRef((props, ref) => {
                 percentTextRef.current.textContent = `${Math.round(percentage)}%`;
             }
         }
+        let angle = percentage > 100 ? 360 : (percentage / 100) * 360;
+        let adjustedAngle = angle / 2 - 180;
+        spinnerRef.current?.setAttribute("transform", `rotate(${adjustedAngle} 500 500)`);
+        spinnerTextRef.current!.setAttribute("transform", `rotate(${-adjustedAngle})`);
 
         showExtra(percentage);
     };
@@ -61,46 +68,7 @@ const PieChart = forwardRef((props, ref) => {
 
     return (
         <div ref={containerRef} className={classNames(styles.pieChartContainer)}>
-            <svg id="svg" width="100%" height="100%" viewBox="0 0 1000 1000">
-                <defs>
-                    <linearGradient
-                        id="numberBackgroundGradient"
-                        gradientUnits="userSpaceOnUse"
-                        x1="0"
-                        y1="-80"
-                        x2="0"
-                        y2="0"
-                    >
-                        <stop offset="0%" stopColor="#000" stopOpacity="0%" />
-                        <stop offset="100%" stopColor="#000" stopOpacity="25%" />
-                    </linearGradient>
-                    <g id="barGraphic">
-                        <rect
-                            x="5"
-                            y="-2000"
-                            width="245"
-                            height="2000"
-                            rx="10"
-                            ry="10"
-                        />
-                        <rect
-                            x="5"
-                            y="-80"
-                            width="245"
-                            height="80"
-                            rx="10"
-                            ry="10"
-                            fill="url(#numberBackgroundGradient)"
-                            stroke="none"
-                        />
-                    </g>
-                    <clipPath id="rectClip">
-                        <rect x="0" y="0" width="1000" height="1000" />
-                    </clipPath>
-                    <clipPath id="axisClip">
-                        <rect x="-100" y="0" width="1100" height="1000" />
-                    </clipPath>
-                </defs>
+            <svg id="svg" width="100%" height="100%" viewBox="-100 -100 1200 1200">
                 <g id="pieChart" className="graph">
                     <g transform="translate(500 500) rotate(-90)">
                         <circle
@@ -163,6 +131,18 @@ const PieChart = forwardRef((props, ref) => {
                         </g>
                     </g>
                 </g>
+                <g id="spinner" ref={spinnerRef} transform="rotate(-90 500 500)">
+                    <g transform="translate(500 500)">
+
+                        <g transform="translate(0 550)">
+                            <g>
+                                <text className={styles.spinnerText} ref={spinnerTextRef} x="0" y="0" fill='#ffffff' stroke="none" textAnchor="middle" dominantBaseline="middle">$2,000,000</text>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+
+
                 <g transform="translate(370 290)">
                     <GraduationCap />
                 </g>
