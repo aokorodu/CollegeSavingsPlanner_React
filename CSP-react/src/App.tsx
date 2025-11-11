@@ -20,6 +20,7 @@ import Disclaimer from './components/GraphButton/Disclaimer/Disclaimer';
 import { Select, TextField, FormControl, FormHelperText } from '@mui/material';
 import ExtraFundsNote from './components/uicomponents/ExtraFundsNote/ExtraFundsNote';
 import extraStyles from './components/uicomponents/ExtraFundsNote/ExtraFundsNote.module.css';
+import Summary from './components/uicomponents/Summary/Summary';
 
 
 
@@ -34,7 +35,7 @@ type FCost = {
   yearlyCostByYear: number[],
 };
 
-type calcObject = {
+export type calcObject = {
   selectedCollege?: College | null;
   currentCost?: number;
   yearsToCollege: number;
@@ -73,11 +74,14 @@ function App() {
   let data = useRef<calcObject>(defaultData);
 
   // graph refs
-  const pieChartRef = React.useRef<{ updatePercentage: (p: number) => void; updateColors: (c: string[]) => void } | null>(null);
+  const pieChartRef = React.useRef<{ updatePercentage: (p: number, c: number) => void; updateColors: (c: string[]) => void } | null>(null);
   const barGraphRef = React.useRef<{ updateBarValues: (f: number, c: number[]) => void; updateaBarColors: (c: string[]) => void } | null>(null);
   const costKeyRectRef = React.useRef<SVGRectElement | null>(null);
   const savedKeyRectRef = React.useRef<SVGRectElement | null>(null);
   const extraContentRef = React.useRef<HTMLDivElement | null>(null);
+
+  // summary ref
+  const summaryRef = React.useRef<{ updateSummary: (obj: calcObject) => void } | null>(null);
 
   // dropdowns refs
   const stateDropdownRef = React.useRef<HTMLSelectElement>(null);
@@ -100,11 +104,6 @@ function App() {
   const initialContributionRef = React.useRef<HTMLInputElement>(null);
   const expenseRatioRef = React.useRef<HTMLSpanElement>(null);
 
-  // refs for future values
-  const futureAmountSavedRef = React.useRef<HTMLSpanElement>(null);
-  const futureCostRef = React.useRef<HTMLSpanElement>(null);
-  const futureAmountNeededRef = React.useRef<HTMLSpanElement>(null);
-  const percentSavedRef = React.useRef<HTMLSpanElement>(null);
 
   // modal props
   type ModalState = {
@@ -161,25 +160,13 @@ function App() {
     if (initialContributionRef.current) {
       initialContributionRef.current.value = convertToDollarString(data.current.initialBalance);
     }
-    if (futureCostRef.current) {
-      futureCostRef.current.innerText = getDollarString(data.current.futureCost.futureCost);
-    }
-    if (futureAmountSavedRef.current) {
-      futureAmountSavedRef.current.innerText = getDollarString(0);
-    }
 
-    if (futureAmountNeededRef.current) {
-      futureAmountNeededRef.current.innerText = getDollarString(data.current.futureCost.futureCost - data.current.futureSaved);
-    }
-    if (percentSavedRef.current) {
-      percentSavedRef.current.innerText = "0%";
+    if (summaryRef.current) {
+      summaryRef.current.updateSummary(data.current);
     }
   }
   // college selected or cost changed
   const calculateAmounts = () => {
-    //data.current.contribution = parseInt(plannedContributionRef.current?.value || "0"); // retain contribution value
-    //data.current.currentCost = parseInt(annualCostSliderRef.current?.value || "0"); // selectedCollege ? selectedCollege.cost : 0;
-
     const futureCostResult = calculateFutureCost({ yearlyCost: data.current.currentCost || 0, annualCostIncrease: data.current.annalCostIncrease, yearsToCollege: data.current.yearsToCollege, yearsOfCollege });
 
     const futureSaved = calculateFutureValue({ annualRateOfReturn: data.current.annualRateOfReturn, expenseRatio: data.current.expenseRatio, periodsPerYear: data.current.periods, years: data.current.yearsToCollege, initialInvestment: data.current.initialBalance, periodicContribution: data.current.contribution });
@@ -194,29 +181,14 @@ function App() {
   }
 
   const updateContent = () => {
-    if (futureAmountSavedRef.current) {
-      futureAmountSavedRef.current.innerText = getDollarString(data.current.futureSaved);
-    }
-    if (futureCostRef.current) {
-      futureCostRef.current.innerText = getDollarString(data.current.futureCost.futureCost);
-    }
-    if (futureAmountNeededRef.current) {
-      const amountNeeded = data.current.futureCost.futureCost - data.current.futureSaved;
-      futureAmountNeededRef.current.innerText = getDollarString(amountNeeded < 0 ? 0 : amountNeeded);
-    }
-    if (percentSavedRef.current) {
-      let percentage = data.current.futureSaved / data.current.futureCost.futureCost * 100;
-      if (isNaN(percentage)) percentage = 0;
-      percentSavedRef.current.innerText = `${percentage.toFixed(2)}%`;
+
+    if (summaryRef.current) {
+      summaryRef.current.updateSummary(data.current);
     }
 
     if (extraContentRef.current) {
       let percentage = data.current.futureSaved / data.current.futureCost.futureCost * 100;
       if (percentage > 100) {
-        // preserve existing classes — add the class without overwriting
-        // add this near the top of App.tsx
-
-        // replace the placeholder with this
         extraContentRef.current.classList.toggle(extraStyles.showExtraContent, true);
       } else {
         extraContentRef.current.classList.toggle(extraStyles.showExtraContent, false);
@@ -232,7 +204,7 @@ function App() {
       colors = defaultColors;
     }
     if (pieChartRef.current) {
-      pieChartRef.current?.updatePercentage(percentage);
+      pieChartRef.current?.updatePercentage(percentage, data.current.futureCost.futureCost);
       pieChartRef.current.updateColors(colors);
     }
 
@@ -300,9 +272,6 @@ function App() {
             <div className={`chartContainer ${pieChartActive ? 'chartContainerHiddenRight' : ''}`}>
               <BarGraph ref={barGraphRef} />
             </div>
-            {/* <div className="extraContent" ref={extraContentRef}>
-              <h3>note: you may have extra funds</h3>You can use leftover 529 funds by changing the beneficiary to another family member, rolling it into a Roth IRA (up to a lifetime limit of $35,000), paying up to $10,000 in student loans, or using it for your own further education. If you take a non-qualified withdrawal, you will likely have to pay taxes and a 10% penalty on the earnings.
-            </div> */}
             <ExtraFundsNote ref={extraContentRef} />
 
             <div className="graphButtonHolder">
@@ -322,8 +291,8 @@ function App() {
           <div id="controlsContainer">
             {/* select state and college */}
             <InfoHolder>
-              <FormControl>
-                <FormHelperText>select state</FormHelperText>
+              <FormControl size="small">
+                <FormHelperText>state</FormHelperText>
                 <Select
                   native
                   inputRef={stateDropdownRef}
@@ -339,9 +308,9 @@ function App() {
                   ))}
                 </Select>
 
-              </FormControl>
-              <FormControl fullWidth={true}>
-                <FormHelperText>select college</FormHelperText>
+              </FormControl >
+              <FormControl fullWidth={true} size="small">
+                <FormHelperText>college</FormHelperText>
                 <Select
                   fullWidth={true}
                   native
@@ -359,28 +328,6 @@ function App() {
                 </Select>
               </FormControl>
             </InfoHolder>
-
-            {/* select years until college */}
-            <SliderHolder>
-              <label htmlFor="yearsSlider">years until college</label>
-              <input
-                ref={yearsToCollegeSliderRef}
-                type="range"
-                min="1"
-                max="30"
-                step=".1"
-                onChange={(e) => {
-                  const yrs = parseInt(e.target.value);
-                  data.current.yearsToCollege = yrs;
-                  if (yearsToCollegeRef.current) {
-                    yearsToCollegeRef.current.innerText = yrs.toString();
-                  }
-
-                  calculateAmounts();
-                }}
-              />
-              <span ref={yearsToCollegeRef}>17</span>
-            </SliderHolder>
 
             {/* select annual const */}
             <SliderHolder>
@@ -406,6 +353,69 @@ function App() {
               />
               <span ref={annualCostRef}>$0</span>
             </SliderHolder>
+
+            {/* select years until college */}
+            <SliderHolder>
+              <label htmlFor="yearsSlider">years until college</label>
+              <input
+                ref={yearsToCollegeSliderRef}
+                type="range"
+                min="1"
+                max="30"
+                step=".1"
+                onChange={(e) => {
+                  const yrs = parseInt(e.target.value);
+                  data.current.yearsToCollege = yrs;
+                  if (yearsToCollegeRef.current) {
+                    yearsToCollegeRef.current.innerText = yrs.toString();
+                  }
+
+                  calculateAmounts();
+                }}
+              />
+              <span ref={yearsToCollegeRef}>17</span>
+            </SliderHolder>
+
+            {/* select contribution cadence */}
+            <SliderHolder>
+              <div>
+                <Select
+                  variant="standard"
+                  native
+                  defaultValue={"12"}
+                  onChange={(e) => {
+                    data.current.periods = parseInt(e.target.value as string);
+                    calculateAmounts();
+                  }}
+                >
+                  <option value="52">weekly contribution</option>
+                  <option value="26">bi-weekly contribution</option>
+                  <option value="24">bi-monthly contribution</option>
+                  <option value="12">monthly contribution</option>
+                  <option value="4">quarterly contribution</option>
+                  <option value="1">yearly contribution</option>
+                </Select>
+              </div>
+
+              <input
+                type="range"
+                ref={plannedContributionRef}
+                min="0"
+                max="3000"
+                step="1"
+                onChange={(e) => {
+                  const contribution = parseInt(e.target.value);
+                  contributionRef.current!.innerText = getDollarString(contribution);
+                  data.current.contribution = contribution;
+                  calculateAmounts();
+                }}
+              />
+              <span ref={contributionRef}>
+                000
+              </span>
+            </SliderHolder>
+
+
 
             {/* select rate of return */}
             <SliderHolder>
@@ -473,49 +483,11 @@ function App() {
               <span ref={expenseRatioRef}>{data.current.expenseRatio}%</span>
             </SliderHolder>
 
-            {/* select contribution cadence */}
-            <SliderHolder>
-              <div>
-                <Select
-                  variant="standard"
-                  native
-                  defaultValue={"12"}
-                  onChange={(e) => {
-                    data.current.periods = parseInt(e.target.value as string);
-                    calculateAmounts();
-                  }}
-                >
-                  <option value="56">weekly contribution</option>
-                  <option value="26">bi-weekly contribution</option>
-                  <option value="24">bi-monthly contribution</option>
-                  <option value="12">monthly contribution</option>
-                  <option value="4">quarterly contribution</option>
-                  <option value="1">yearly contribution</option>
-                </Select>
-              </div>
-
-              <input
-                type="range"
-                ref={plannedContributionRef}
-                min="0"
-                max="3000"
-                step="25"
-                onChange={(e) => {
-                  const contribution = parseInt(e.target.value);
-                  contributionRef.current!.innerText = getDollarString(contribution);
-                  data.current.contribution = contribution;
-                  calculateAmounts();
-                }}
-              />
-              <span ref={contributionRef}>
-                000
-              </span>
-            </SliderHolder>
-
             {/* input current amount saved */}
             <InfoHolder>
               <label htmlFor="startingAmountInput">current amount saved</label>
               <TextField
+                size="small"
                 id="startingAmountInput"
                 inputRef={initialContributionRef}
 
@@ -536,44 +508,10 @@ function App() {
               />
             </InfoHolder>
           </div>
-
-
-
         </div>
-
-
-
-
-
-
-
-
-
       </ContentHolder>
-      <div id="resultsContainer" className='resultsContainer'>
-        <h2>SUMMARY:</h2>
-        <InfoHolder>
-          <label>projected future savings *</label>
-          <span ref={futureAmountSavedRef}>$0</span>
-        </InfoHolder>
+      <Summary ref={summaryRef} />
 
-        <InfoHolder>
-          <label>projected future cost **</label>
-          <span ref={futureCostRef}>$0</span>
-        </InfoHolder>
-
-        <InfoHolder>
-          <label>amount for which you'll need funding</label>
-          <span ref={futureAmountNeededRef}>$0</span>
-        </InfoHolder>
-
-        <InfoHolder>
-          <label>percent saved</label>
-          <span ref={percentSavedRef}>0%</span>
-        </InfoHolder>
-      </div>
-
-      <Disclaimer />
       {showModal.type !== "none" &&
         <Modal type={showModal.type} onClose={() => setShowModal({ type: "none" })}>
         </Modal>}
