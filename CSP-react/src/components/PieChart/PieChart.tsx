@@ -3,6 +3,7 @@ import React, { forwardRef, useImperativeHandle } from 'react';
 import GraduationCap from '../../assets/graduationCap';
 import classNames from 'classnames';
 import Spinnertext from './Spinnertext';
+import KeyItem from '../KeyItem/KeyItem';
 
 const PieChart = forwardRef((props, ref) => {
 
@@ -13,6 +14,10 @@ const PieChart = forwardRef((props, ref) => {
     const arcRef = React.useRef<SVGCircleElement | null>(null);
     const dividerRef = React.useRef<SVGPathElement | null>(null);
     const percentTextRef = React.useRef<SVGTextElement | null>(null);
+
+    // key
+    const constKeyRef = React.useRef<SVGRectElement | null>(null);
+    const savedKeyRef = React.useRef<SVGRectElement | null>(null);
 
     const spinnerRef = React.useRef<{ updateText: (p: number, v: number) => void } | null>(null);
     const spinnerRef2 = React.useRef<{ updateText: (p: number, v: number) => void } | null>(null);
@@ -53,6 +58,12 @@ const PieChart = forwardRef((props, ref) => {
         if (arcRef.current) {
             arcRef.current.setAttribute("stroke", colors[0]);
         }
+        if (constKeyRef.current) {
+            constKeyRef.current.setAttribute("fill", colors[0]);
+        }
+        if (savedKeyRef.current) {
+            savedKeyRef.current.setAttribute("fill", colors[1]);
+        }
     }
 
     const showExtra = (percentage: number) => {
@@ -76,71 +87,77 @@ const PieChart = forwardRef((props, ref) => {
     }));
 
     return (
-        <div ref={containerRef} className={classNames(styles.pieChartContainer)}>
-            <svg id="svg" width="100%" height="100%" viewBox="-100 -100 1200 1200">
-                <g id="pieChart" className="graph">
-                    <g transform="translate(500 500) rotate(-90)">
-                        <circle
-                            ref={outlineRef}
-                            cx="0"
-                            cy="0"
-                            r={radius}
-                            fill="none"
-                            stroke={dividerColor}
-                            strokeOpacity="1"
-                            strokeWidth={strokeWidth + 4}
-                        ></circle>
+        <>
+            <div className={styles.keyContainer}>
+                <KeyItem ref={constKeyRef} label="projected savings" />
+                <KeyItem ref={savedKeyRef} label="projected amount needed" />
+            </div>
+            <div ref={containerRef} className={classNames(styles.pieChartContainer)}>
 
-                        <circle
-                            ref={bgRef}
-                            cx="0"
-                            cy="0"
-                            r={radius}
-                            fill="none"
-                            stroke="#555879"
-                            strokeOpacity="1"
-                            strokeWidth={strokeWidth}
-                        ></circle>
-
-                        <circle
-                            ref={arcRef}
-                            className={styles.savedPath}
-                            cx="0"
-                            cy="0"
-                            r={radius}
-                            fill="none"
-                            stroke="#98A1BC"
-                            strokeWidth={strokeWidth}
-                            strokeLinecap="inherit"
-                            pathLength="100"
-                            strokeDasharray="100 100"
-                            strokeDashoffset=" -100"
-                        ></circle>
-
-                        <g id="dividerPath">
-                            <path
-                                id="staticDivider"
-                                className={styles.savedPath}
-                                d={`M${radius - strokeWidth / 2} 0 H${radius + strokeWidth / 2}`}
+                <svg id="svg" width="100%" height="100%" viewBox="-100 -100 1200 1200">
+                    <g id="pieChart" className="graph">
+                        <g transform="translate(500 500) rotate(-90)">
+                            <circle
+                                ref={outlineRef}
+                                cx="0"
+                                cy="0"
+                                r={radius}
+                                fill="none"
                                 stroke={dividerColor}
-                                strokeWidth="2"
-                                strokeLinecap="inherit"
-                                transform="rotate(0)"
-                            ></path>
-                            <path
-                                ref={dividerRef}
-                                className={styles.savedPath}
-                                d={`M${radius - strokeWidth / 2} 0 H${radius + strokeWidth / 2}`}
-                                stroke={dividerColor}
-                                strokeWidth="2"
-                                strokeLinecap="inherit"
-                                transform="rotate(0)"
-                            ></path>
+                                strokeOpacity="1"
+                                strokeWidth={strokeWidth + 4}
+                            ></circle>
 
+                            <circle
+                                ref={bgRef}
+                                cx="0"
+                                cy="0"
+                                r={radius}
+                                fill="none"
+                                stroke="#555879"
+                                strokeOpacity="1"
+                                strokeWidth={strokeWidth}
+                            ></circle>
+
+                            <circle
+                                ref={arcRef}
+                                className={styles.savedPath}
+                                cx="0"
+                                cy="0"
+                                r={radius}
+                                fill="none"
+                                stroke="#98A1BC"
+                                strokeWidth={strokeWidth}
+                                strokeLinecap="inherit"
+                                pathLength="100"
+                                strokeDasharray="100 100"
+                                strokeDashoffset=" -100"
+                            ></circle>
+
+                            <g id="dividerPath">
+                                <path
+                                    id="staticDivider"
+                                    className={styles.savedPath}
+                                    d={`M${radius - strokeWidth / 2} 0 H${radius + strokeWidth / 2}`}
+                                    stroke={dividerColor}
+                                    strokeWidth="2"
+                                    strokeLinecap="inherit"
+                                    transform="rotate(0)"
+                                ></path>
+                                <path
+                                    ref={dividerRef}
+                                    className={styles.savedPath}
+                                    d={`M${radius - strokeWidth / 2} 0 H${radius + strokeWidth / 2}`}
+                                    stroke={dividerColor}
+                                    strokeWidth="2"
+                                    strokeLinecap="inherit"
+                                    transform="rotate(0)"
+                                ></path>
+
+                            </g>
                         </g>
                     </g>
-                </g>
-                {/* <g id="spinner" ref={spinnerRef} transform="rotate(-90 500 500)">
+                    {/* <g id="spinner" ref={spinnerRef} transform="rotate(-90 500 500)">
                     <g transform="translate(500 500)">
 
                         <g transform="translate(0 550)">
@@ -151,18 +168,18 @@ const PieChart = forwardRef((props, ref) => {
                         </g>
                     </g>
                 </g> */}
-                <Spinnertext ref={spinnerRef} />
-                <Spinnertext ref={spinnerRef2} />
+                    <Spinnertext ref={spinnerRef} />
+                    <Spinnertext ref={spinnerRef2} />
 
-                <g transform="translate(370 290)">
-                    <GraduationCap />
-                </g>
-                <text ref={percentTextRef} x={500} y={550} fill='#000000' stroke="none" fontSize={120} fontWeight="bold" textAnchor="middle" dominantBaseline="middle">%</text>
-                <text x={500} y={620} fill='#000000' stroke="none" fontSize={30} textAnchor="middle" dominantBaseline="middle">projected future Savings</text>
+                    <g transform="translate(370 290)">
+                        <GraduationCap />
+                    </g>
+                    <text ref={percentTextRef} x={500} y={550} fill='#000000' stroke="none" fontSize={120} fontWeight="bold" textAnchor="middle" dominantBaseline="middle">%</text>
+                    <text x={500} y={620} fill='#000000' stroke="none" fontSize={30} textAnchor="middle" dominantBaseline="middle">projected future Savings</text>
 
 
-            </svg>
-        </div>
+                </svg>
+            </div></>
     );
 });
 

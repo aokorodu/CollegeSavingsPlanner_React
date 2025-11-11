@@ -82,6 +82,7 @@ select {
 }
 
 .chartContainer {
+  position: relative;
   opacity: 1;
   transition-property: transform, opacity;
   transform: translateX(0px);
@@ -106,17 +107,6 @@ select {
   transition-property: transform, opacity;
   transition-duration: var(--transition-duration);
   transition-timing-function: ease-out;
-}
-
-.keyContainer {
-  position: relative;
-  width: fit-content;
-  height: 40px;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  gap: 1rem;
-  margin-top: 2rem;
 }
 
 .collegeDropdown {
