@@ -20,8 +20,3 @@
 .shrunk {
   transform: scale(0.6) translateY(-30%);
 }
-
-.spinnerText {
-  font-weight: 600;
-  font-size: 40px;
-}

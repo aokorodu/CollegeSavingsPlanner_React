@@ -2,6 +2,7 @@ import styles from './PieChart.module.css';
 import React, { forwardRef, useImperativeHandle } from 'react';
 import GraduationCap from '../../assets/graduationCap';
 import classNames from 'classnames';
+import Spinnertext from './Spinnertext';
 
 const PieChart = forwardRef((props, ref) => {
 
@@ -13,8 +14,8 @@ const PieChart = forwardRef((props, ref) => {
     const dividerRef = React.useRef<SVGPathElement | null>(null);
     const percentTextRef = React.useRef<SVGTextElement | null>(null);
 
-    const spinnerRef = React.useRef<SVGGElement | null>(null);
-    const spinnerTextRef = React.useRef<SVGTextElement | null>(null);
+    const spinnerRef = React.useRef<{ updateText: (p: number, v: number) => void } | null>(null);
+    const spinnerRef2 = React.useRef<{ updateText: (p: number, v: number) => void } | null>(null);
     const strokeWidth = 200;
     const radius = 350;
 
@@ -28,12 +29,18 @@ const PieChart = forwardRef((props, ref) => {
                 percentTextRef.current.textContent = `${Math.round(percentage)}%`;
             }
         }
-        let angle = percentage > 100 ? 360 : (percentage / 100) * 360;
-        let val = Math.round(percentage / 100 * futureCost);
-        let adjustedAngle = angle / 2 - 180;
-        spinnerRef.current?.setAttribute("transform", `rotate(${adjustedAngle} 500 500)`);
-        spinnerTextRef.current!.setAttribute("transform", `rotate(${-adjustedAngle})`);
-        spinnerTextRef.current!.textContent = `$${val.toLocaleString()}`;
+
+        spinnerRef.current?.updateText(percentage, futureCost);
+        const op = percentage - 100;
+        console.log("op:", op);
+        spinnerRef2.current?.updateText(percentage - 100, -futureCost);
+
+        // let angle = percentage > 100 ? 360 : (percentage / 100) * 360;
+        // let val = Math.round(percentage / 100 * futureCost);
+        // let adjustedAngle = angle / 2 - 180;
+        // spinnerRef.current?.setAttribute("transform", `rotate(${adjustedAngle} 500 500)`);
+        // spinnerTextRef.current!.setAttribute("transform", `rotate(${-adjustedAngle})`);
+        // spinnerTextRef.current!.textContent = `$${val.toLocaleString()}`;
 
         showExtra(percentage);
     };
@@ -133,7 +140,7 @@ const PieChart = forwardRef((props, ref) => {
                         </g>
                     </g>
                 </g>
-                <g id="spinner" ref={spinnerRef} transform="rotate(-90 500 500)">
+                {/* <g id="spinner" ref={spinnerRef} transform="rotate(-90 500 500)">
                     <g transform="translate(500 500)">
 
                         <g transform="translate(0 550)">
@@ -143,8 +150,9 @@ const PieChart = forwardRef((props, ref) => {
                             </g>
                         </g>
                     </g>
-                </g>
-
+                </g> */}
+                <Spinnertext ref={spinnerRef} />
+                <Spinnertext ref={spinnerRef2} />
 
                 <g transform="translate(370 290)">
                     <GraduationCap />
