@@ -38,7 +38,7 @@ const Spinnertext = forwardRef((_, ref) => {
                 <g transform="translate(0 570)">
                     <line ref={lineRef} x1="0" y1="-50" x2="0" y2="-90" stroke="#212121" strokeWidth="2" />
                     <g>
-                        <rect ref={spinnerBGRef} x="-100" y="-20" width="200" height="40" fill="#f5f5f5" />
+                        <rect ref={spinnerBGRef} x="-100" y="-25" width="200" height="50" fill="#f5f5f5" />
                         <text className={styles.spinnerText} ref={spinnerTextRef} x="0" y="0" fill='#ffffff' stroke="none" textAnchor="middle" dominantBaseline="middle">$2,000,000</text>
 
                     </g>
