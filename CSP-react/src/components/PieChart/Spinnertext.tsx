@@ -5,6 +5,7 @@ const Spinnertext = forwardRef((_, ref) => {
 
     const spinnerRef = useRef<SVGGElement | null>(null);
     const spinnerTextRef = useRef<SVGTextElement | null>(null);
+    const spinnerBGRef = useRef<SVGRectElement | null>(null);
     const lineRef = useRef<SVGLineElement | null>(null);
 
     const updateText = (percentage: number, value: number) => {
@@ -22,6 +23,7 @@ const Spinnertext = forwardRef((_, ref) => {
         }
         spinnerRef.current?.setAttribute("transform", `rotate(${adjustedAngle} 500 500)`);
         spinnerTextRef.current!.setAttribute("transform", `rotate(${-adjustedAngle})`);
+        spinnerBGRef.current!.setAttribute("transform", `rotate(${-adjustedAngle})`);
         spinnerTextRef.current!.textContent = `${prefix}$${val.toLocaleString()}`;
     }
 
@@ -34,9 +36,11 @@ const Spinnertext = forwardRef((_, ref) => {
             <g transform="translate(500 500)">
 
                 <g transform="translate(0 570)">
-                    <line ref={lineRef} x1="0" y1="-50" x2="0" y2="-90" stroke="#8a8a8aff" strokeWidth="2" />
+                    <line ref={lineRef} x1="0" y1="-50" x2="0" y2="-90" stroke="#212121" strokeWidth="2" />
                     <g>
+                        <rect ref={spinnerBGRef} x="-100" y="-20" width="200" height="40" fill="#f5f5f5" />
                         <text className={styles.spinnerText} ref={spinnerTextRef} x="0" y="0" fill='#ffffff' stroke="none" textAnchor="middle" dominantBaseline="middle">$2,000,000</text>
+
                     </g>
                 </g>
             </g>
