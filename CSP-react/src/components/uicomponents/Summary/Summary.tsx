@@ -2,9 +2,9 @@ import { forwardRef, useImperativeHandle } from "react";
 import type { calcObject } from "../../../App";
 import React from "react";
 import { getDollarString } from "../../../utils/Utils";
-import styles from './Summary.module.css';
 import Disclaimer from "../../GraphButton/Disclaimer/Disclaimer";
 import Card from "../Card/Card";
+import HeroImage from "./HeroImage";
 
 const periodsMap: { [key: number]: string } = {
     1: "yearly",
@@ -57,14 +57,16 @@ const Summary = forwardRef((_, ref) => {
 
 
     return (
-        <Card>
-            <h2>SUMMARY:</h2>
-            <div ref={summaryRef}></div>
-            <div ref={costProjectionRef}></div>
-            <div ref={assumptionsRef}></div>
+        <>
 
-            <Disclaimer />
-        </Card>
+            <Card>
+                <HeroImage />
+                <div ref={summaryRef}></div>
+                <div ref={costProjectionRef}></div>
+                <div ref={assumptionsRef}></div>
+
+                <Disclaimer />
+            </Card></>
     );
 });
 

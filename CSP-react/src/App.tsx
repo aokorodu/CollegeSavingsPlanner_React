@@ -13,6 +13,7 @@ import ContentHolder from './components/uicomponents/ContentHolder/ContentHolder
 import Header from './components/uicomponents/Header/Header';
 import WhatIs from './components/uicomponents/WhatIsSection/WhatIs';
 import Modal from './components/Modals/Modal';
+import BGImage from './components/uicomponents/BGImage/BGImage';
 
 // material ui
 import { Select, TextField, FormControl, FormHelperText } from '@mui/material';
@@ -253,6 +254,7 @@ function App() {
 
   return (
     <>
+      <BGImage />
       <ContentHolder>
         <div>
           <Header />
