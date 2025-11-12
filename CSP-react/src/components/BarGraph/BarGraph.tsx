@@ -3,6 +3,7 @@ import styles from './BarGraph.module.css';
 import classNames from 'classnames';
 import React, { forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
 import GraphLabel from './GraphLabel';
+import KeyItem from '../KeyItem/KeyItem';
 
 const years = ['freshman', 'sohpmore', 'junior', 'senior'];
 
@@ -175,81 +176,86 @@ const BarGraph = forwardRef((props, ref) => {
     }
 
     return (
-        <div ref={containerRef} className={classNames(styles.barGraphContainer)}>
-            <svg width="100%" height="100%" viewBox={`${-vbMargin} ${-vbMargin} ${vbWidth + vbMargin * 2} ${vbHeight + vbMargin * 2}`} preserveAspectRatio="xMidYMid meet" >
-                <defs>
-                    <clipPath id="barGraphClipPath">
-                        <rect x="0" y="-40" width={vbWidth} height={vbHeight + 40} />
-                    </clipPath>
-                </defs>
+        <>
+            <div className={styles.keyContainer}>
+                <KeyItem label='projected future cost' ref={costKeyRectRef} />
+                <KeyItem label='projected savings' ref={savedKeyRectRef} />
+            </div>
+            <div ref={containerRef} className={classNames(styles.barGraphContainer)}>
+                <svg width="100%" height="100%" viewBox={`${-vbMargin} ${-vbMargin} ${vbWidth + vbMargin * 2} ${vbHeight + vbMargin * 2}`} preserveAspectRatio="xMidYMid meet" >
+                    <defs>
+                        <clipPath id="barGraphClipPath">
+                            <rect x="0" y="-40" width={vbWidth} height={vbHeight + 40} />
+                        </clipPath>
+                    </defs>
 
 
-                <g id="background">
-                    <rect x="-150" y="-150" width={vbWidth + 300} height={vbHeight + vbMargin * 2} fill="#212121" fillOpacity=".025" rx="20" ry="20" stroke="none" strokeOpacity="1" strokeWidth={5} />
-                </g>
-                <g id="graphLabels">
-                    {getGraphLabels()}
-                </g>
-                <g clipPath="url(#barGraphClipPath)">
-                    <g id="costBars">
-                        <Bar
-                            ref={costBar1Ref}
-                            key={`cbar_0`}
-                            x={0 * vbWidth / 4 + yearGap / 2}
-                            width={barWidth}
-                        />
-                        <Bar
-                            ref={costBar2Ref}
-                            key={`cbar_1`}
-                            x={1 * vbWidth / 4 + yearGap / 2}
-                            width={barWidth}
-                        />
-                        <Bar
-                            ref={costBar3Ref}
-                            key={`cbar_2`}
-                            x={2 * vbWidth / 4 + yearGap / 2}
-                            width={barWidth}
-                        />
-                        <Bar
-                            ref={costBar4Ref}
-                            key={`cbar_3`}
-                            x={3 * vbWidth / 4 + yearGap / 2}
-                            width={barWidth}
-                        />
+                    <g id="background">
+                        <rect x="-150" y="-150" width={vbWidth + 300} height={vbHeight + vbMargin * 2} fill="#212121" fillOpacity=".025" rx="20" ry="20" stroke="none" strokeOpacity="1" strokeWidth={5} />
                     </g>
-                    <g id="savedBars">
-                        <Bar
-                            ref={savedBar1Ref}
-                            key={`sbar_${0}`}
-                            x={0 * vbWidth / 4 + 200 - yearGap / 2}
-                            width={barWidth}
-                        />
-                        <Bar
-                            ref={savedBar2Ref}
-                            key={`sbar_${1}`}
-                            x={1 * vbWidth / 4 + 200 - yearGap / 2}
-                            width={barWidth}
-                        />
-                        <Bar
-                            ref={savedBar3Ref}
-                            key={`sbar_${2}`}
-                            x={2 * vbWidth / 4 + 200 - yearGap / 2}
-                            width={barWidth}
-                        />
-                        <Bar
-                            ref={savedBar4Ref}
-                            key={`sbar_${3}`}
-                            x={3 * vbWidth / 4 + 200 - yearGap / 2}
-                            width={barWidth}
-                        />
+                    <g id="graphLabels">
+                        {getGraphLabels()}
                     </g>
-                </g>
-                {getHorizontalAxis()}
+                    <g clipPath="url(#barGraphClipPath)">
+                        <g id="costBars">
+                            <Bar
+                                ref={costBar1Ref}
+                                key={`cbar_0`}
+                                x={0 * vbWidth / 4 + yearGap / 2}
+                                width={barWidth}
+                            />
+                            <Bar
+                                ref={costBar2Ref}
+                                key={`cbar_1`}
+                                x={1 * vbWidth / 4 + yearGap / 2}
+                                width={barWidth}
+                            />
+                            <Bar
+                                ref={costBar3Ref}
+                                key={`cbar_2`}
+                                x={2 * vbWidth / 4 + yearGap / 2}
+                                width={barWidth}
+                            />
+                            <Bar
+                                ref={costBar4Ref}
+                                key={`cbar_3`}
+                                x={3 * vbWidth / 4 + yearGap / 2}
+                                width={barWidth}
+                            />
+                        </g>
+                        <g id="savedBars">
+                            <Bar
+                                ref={savedBar1Ref}
+                                key={`sbar_${0}`}
+                                x={0 * vbWidth / 4 + 200 - yearGap / 2}
+                                width={barWidth}
+                            />
+                            <Bar
+                                ref={savedBar2Ref}
+                                key={`sbar_${1}`}
+                                x={1 * vbWidth / 4 + 200 - yearGap / 2}
+                                width={barWidth}
+                            />
+                            <Bar
+                                ref={savedBar3Ref}
+                                key={`sbar_${2}`}
+                                x={2 * vbWidth / 4 + 200 - yearGap / 2}
+                                width={barWidth}
+                            />
+                            <Bar
+                                ref={savedBar4Ref}
+                                key={`sbar_${3}`}
+                                x={3 * vbWidth / 4 + 200 - yearGap / 2}
+                                width={barWidth}
+                            />
+                        </g>
+                    </g>
+                    {getHorizontalAxis()}
 
-                <path d={`M 0 ${0} V${vbHeight} H${vbWidth}`} stroke="#212121" strokeOpacity=".5" fill="none" strokeWidth={1} />
+                    <path d={`M 0 ${0} V${vbHeight} H${vbWidth}`} stroke="#212121" strokeOpacity=".5" fill="none" strokeWidth={1} />
 
-            </svg>
-        </div>
+                </svg>
+            </div></>
     );
 });
 

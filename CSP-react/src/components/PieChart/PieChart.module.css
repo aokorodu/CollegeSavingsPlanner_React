@@ -10,6 +10,7 @@
 
 .pieChartContainer {
   position: absolute;
+  top: 50px;
   width: 100%;
   height: 500px;
   transition-property: transform;
@@ -19,4 +20,18 @@
 
 .shrunk {
   transform: scale(0.8) translateY(-10%);
+}
+
+.keyContainer {
+  /* display: flex;
+  flex-direction: row; */
+  position: absolute;
+  display: flex;
+  justify-content: flex-end;
+  top: 0px;
+  left: 20px;
+  height: 30px;
+  width: fit-content;
+  gap: 20px;
+  margin-bottom: 2rem;
 }

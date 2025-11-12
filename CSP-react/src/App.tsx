@@ -9,12 +9,10 @@ import SliderHolder from './components/SlideHolder/SlideHolder';
 import InfoHolder from './components/uicomponents/InfoHolder/InfoHolder';
 import { getCollegesByState2, stateNames } from './data/costData';
 import GraphButton from './components/GraphButton/GraphButton';
-import KeyItem from './components/KeyItem/KeyItem';
 import ContentHolder from './components/uicomponents/ContentHolder/ContentHolder';
 import Header from './components/uicomponents/Header/Header';
 import WhatIs from './components/uicomponents/WhatIsSection/WhatIs';
 import Modal from './components/Modals/Modal';
-import Disclaimer from './components/GraphButton/Disclaimer/Disclaimer';
 
 // material ui
 import { Select, TextField, FormControl, FormHelperText } from '@mui/material';
@@ -262,10 +260,7 @@ function App() {
 
           <div id="graphContainer">
 
-            <div className="keyContainer">
-              <KeyItem label='future cost' ref={costKeyRectRef} />
-              <KeyItem label='future savings' ref={savedKeyRectRef} />
-            </div>
+
             <div className={`chartContainer ${pieChartActive ? '' : 'chartContainerHiddenLeft'}`}>
               <PieChart ref={pieChartRef} />
             </div>
