@@ -29,7 +29,12 @@ const Summary = forwardRef((_, ref) => {
         const initInvestString = obj.initialBalance > 0 ? `an initial investment of <b>$${obj.initialBalance.toLocaleString()}</b> plus ` : "";
 
         if (summaryRef.current) {
-            summaryRef.current.innerHTML = `With ${initInvestString} a ${cadence} contribution of <b>$${obj.contribution.toLocaleString()}</b> over <b>${obj.yearsToCollege}</b> years, you are projected to save <b>$${obj.futureSaved.toLocaleString()}</b> towards a future college cost of <b>$${Math.round(obj.futureCost.futureCost).toLocaleString()}</b>, covering <b>${((obj.futureSaved / obj.futureCost.futureCost) * 100).toFixed(2)}%</b> of the total amount needed.  This means you will need to finance an additional <b>$${getDollarString(obj.futureCost.futureCost - obj.futureSaved)}</b>.`;
+            if (obj.futureSaved >= obj.futureCost.futureCost) {
+                summaryRef.current.innerHTML = `With ${initInvestString} a ${cadence} contribution of <b>$${obj.contribution.toLocaleString()}</b> over <b>${obj.yearsToCollege}</b> years, you are projected to save <b>$${obj.futureSaved.toLocaleString()}</b> towards a future college cost of <b>$${Math.round(obj.futureCost.futureCost).toLocaleString()}</b>, fully covering the total amount needed. Congratulations! You have exceeded your college savings goal by <b>$${getDollarString(obj.futureSaved - obj.futureCost.futureCost)}</b>.`;
+                return;
+            } else {
+                summaryRef.current.innerHTML = `With ${initInvestString} a ${cadence} contribution of <b>$${obj.contribution.toLocaleString()}</b> over <b>${obj.yearsToCollege}</b> years, you are projected to save <b>$${obj.futureSaved.toLocaleString()}</b> towards a future college cost of <b>$${Math.round(obj.futureCost.futureCost).toLocaleString()}</b>, covering <b>${((obj.futureSaved / obj.futureCost.futureCost) * 100).toFixed(2)}%</b> of the total amount needed.  This means you will need to finance an additional <b>$${getDollarString(obj.futureCost.futureCost - obj.futureSaved)}</b>.`;
+            }
         };
 
 
