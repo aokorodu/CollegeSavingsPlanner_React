@@ -1,10 +1,10 @@
-import styles from './ContentHolder.module.css';
 import React from 'react';
+import Card from '../Card/Card';
 const ContentHolder: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     return (
-        <div className={styles.holder}>
+        <Card>
             {children}
-        </div>
+        </Card>
     );
 };
 
