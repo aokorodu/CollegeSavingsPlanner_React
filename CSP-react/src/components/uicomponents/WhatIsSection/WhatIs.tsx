@@ -21,7 +21,7 @@ const WhatIs = () => {
             </div>
             <h2>Disclaimer</h2>
             <div className={styles.paragraph}>
-                <i><strong>Please note</strong> that the College Savings Planner provides estimates based on the inputs you provide and current market conditions. Actual costs and investment returns may vary. It's always a good idea to consult with a financial advisor for personalized advice tailored to your specific situation.</i>
+                <i><strong>Please note</strong> that the College Savings Planner provides estimates based on the inputs you provide. Actual costs and investment returns may vary. It's always a good idea to consult with a financial advisor for personalized advice tailored to your specific situation.</i>
             </div>
             <p>
 

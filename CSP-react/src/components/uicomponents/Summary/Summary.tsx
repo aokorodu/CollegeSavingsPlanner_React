@@ -1,10 +1,10 @@
 import { forwardRef, useImperativeHandle } from "react";
 import type { calcObject } from "../../../App";
-import InfoHolder from '../InfoHolder/InfoHolder';
 import React from "react";
 import { getDollarString } from "../../../utils/Utils";
-import styles from './Summary.module.css';
 import Disclaimer from "../../GraphButton/Disclaimer/Disclaimer";
+import Card from "../Card/Card";
+import HeroImage from "./HeroImage";
 
 const periodsMap: { [key: number]: string } = {
     1: "yearly",
@@ -19,30 +19,36 @@ const periodsMap: { [key: number]: string } = {
 
 const Summary = forwardRef((_, ref) => {
 
-    const contributionRef = React.useRef<HTMLSpanElement | null>(null);
-    const futureAmountSavedRef = React.useRef<HTMLSpanElement | null>(null);
-    const futureCostRef = React.useRef<HTMLSpanElement | null>(null);
-    const futureAmountNeededRef = React.useRef<HTMLSpanElement | null>(null);
-    const percentSavedRef = React.useRef<HTMLSpanElement | null>(null);
+    const summaryRef = React.useRef<HTMLDivElement | null>(null);
+    const costProjectionRef = React.useRef<HTMLDivElement | null>(null);
+    const assumptionsRef = React.useRef<HTMLDivElement | null>(null);
 
     const updateSummary = (obj: calcObject) => {
         console.log("periods:", obj.periods);
         const cadence = periodsMap[obj.periods];
+        const initInvestString = obj.initialBalance > 0 ? `an initial investment of <b>$${obj.initialBalance.toLocaleString()}</b> plus ` : "";
 
-        contributionRef.current!.textContent = `With a ${cadence} contribution of $${obj.contribution.toLocaleString()}:`;
-        futureAmountSavedRef.current!.textContent = `$${obj.futureSaved.toLocaleString()} **`;
+        if (summaryRef.current) {
+            if (obj.futureSaved >= obj.futureCost.futureCost) {
+                summaryRef.current.innerHTML = `With ${initInvestString} a ${cadence} contribution of <b>$${obj.contribution.toLocaleString()}</b> over <b>${obj.yearsToCollege}</b> years, you are projected to save <b>$${obj.futureSaved.toLocaleString()}</b> towards a future college cost of <b>$${Math.round(obj.futureCost.futureCost).toLocaleString()}</b>, fully covering the total amount needed. Congratulations! You have exceeded your college savings goal by <b>$${getDollarString(obj.futureSaved - obj.futureCost.futureCost)}</b>.`;
+                return;
+            } else {
+                summaryRef.current.innerHTML = `With ${initInvestString} a ${cadence} contribution of <b>$${obj.contribution.toLocaleString()}</b> over <b>${obj.yearsToCollege}</b> years, you are projected to save <b>$${obj.futureSaved.toLocaleString()}</b> towards a future college cost of <b>$${Math.round(obj.futureCost.futureCost).toLocaleString()}</b>, covering <b>${((obj.futureSaved / obj.futureCost.futureCost) * 100).toFixed(2)}%</b> of the total amount needed.  This means you will need to finance an additional <b>$${getDollarString(obj.futureCost.futureCost - obj.futureSaved)}</b>.`;
+            }
+        };
 
-        futureCostRef.current!.textContent = `$${Math.round(obj.futureCost.futureCost).toLocaleString()} *`;
 
-        futureAmountNeededRef.current!.innerText = getDollarString(obj.futureCost.futureCost - obj.futureSaved);
-
-        if (percentSavedRef.current) {
-            let percentage = obj.futureSaved / obj.futureCost.futureCost * 100;
-            if (isNaN(percentage)) percentage = 0;
-            percentSavedRef.current.innerText = `${percentage.toFixed(2)}%`;
+        if (costProjectionRef.current) {
+            const college = obj.selectedCollege ? ` (${obj.selectedCollege})` : "";
+            const str = `The projected future cost of college is based on your selected institution, which has a current annual cost of <b>$${obj.currentCost!.toLocaleString()}</b>. Assuming an annual tuition inflation rate of <b>${obj.annalCostIncrease}%</b>, the estimated cost when your child starts college in <b>${obj.yearsToCollege}</b> years is <b>$${Math.round(obj.futureCost.futureCost).toLocaleString()}</b>.`;
+            costProjectionRef.current.innerHTML = str;
         }
 
-    };
+        if (assumptionsRef.current) {
+            const str = `Assumptions used in this calculation include an average annual return rate of ${obj.annualRateOfReturn}% on your investments, an annual tuition inflation rate of ${obj.annalCostIncrease}%, and an expense ratio of ${obj.expenseRatio}%.`;
+            assumptionsRef.current.innerHTML = str;
+        }
+    }
 
 
     useImperativeHandle(ref, () => ({
@@ -51,31 +57,16 @@ const Summary = forwardRef((_, ref) => {
 
 
     return (
-        <div id="resultsContainer" className={styles.resultsContainer}>
-            <h2>SUMMARY:</h2>
-            <InfoHolder>
-                <span ref={contributionRef}>$0</span>
-            </InfoHolder>
-            <InfoHolder>
-                <label>projected future total cost:</label>
-                <span ref={futureCostRef}>$0</span>
-            </InfoHolder>
-            <InfoHolder>
-                <label>projected future 529 funds:</label>
-                <span ref={futureAmountSavedRef}>$0</span>
-            </InfoHolder>
-            <InfoHolder>
-                <label>total amount you'll need to finance</label>
-                <span ref={futureAmountNeededRef}>$0</span>
-            </InfoHolder>
+        <>
 
-            <InfoHolder>
-                <label>percent saved</label>
-                <span ref={percentSavedRef}>0%</span>
-            </InfoHolder>
+            <Card>
+                <HeroImage />
+                <div ref={summaryRef}></div>
+                <div ref={costProjectionRef}></div>
+                <div ref={assumptionsRef}></div>
 
-            <Disclaimer />
-        </div>
+                <Disclaimer />
+            </Card></>
     );
 });
 
