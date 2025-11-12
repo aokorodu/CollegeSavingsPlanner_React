@@ -178,8 +178,8 @@ const BarGraph = forwardRef((props, ref) => {
     return (
         <>
             <div className={styles.keyContainer}>
-                <KeyItem label='future cost' ref={costKeyRectRef} />
-                <KeyItem label='future savings' ref={savedKeyRectRef} />
+                <KeyItem label='projected future cost' ref={costKeyRectRef} />
+                <KeyItem label='projected savings' ref={savedKeyRectRef} />
             </div>
             <div ref={containerRef} className={classNames(styles.barGraphContainer)}>
                 <svg width="100%" height="100%" viewBox={`${-vbMargin} ${-vbMargin} ${vbWidth + vbMargin * 2} ${vbHeight + vbMargin * 2}`} preserveAspectRatio="xMidYMid meet" >
