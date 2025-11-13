@@ -14,6 +14,7 @@ import Header from './components/uicomponents/Header/Header';
 import WhatIs from './components/uicomponents/WhatIsSection/WhatIs';
 import Modal from './components/Modals/Modal';
 import BGImage from './components/uicomponents/BGImage/BGImage';
+import Resources from './components/uicomponents/Resources/Resources';
 
 // material ui
 import { Select, TextField, FormControl, FormHelperText } from '@mui/material';
@@ -508,6 +509,7 @@ function App() {
         </div>
       </ContentHolder>
       <Summary ref={summaryRef} />
+      <Resources />
 
       {showModal.type !== "none" &&
         <Modal type={showModal.type} onClose={() => setShowModal({ type: "none" })}>
