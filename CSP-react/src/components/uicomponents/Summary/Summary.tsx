@@ -33,7 +33,7 @@ const Summary = forwardRef((_, ref) => {
                 summaryRef.current.innerHTML = `With ${initInvestString} a ${cadence} contribution of <b>$${obj.contribution.toLocaleString()}</b> over <b>${obj.yearsToCollege}</b> years, you are projected to save <b>$${obj.futureSaved.toLocaleString()}</b> towards a future college cost of <b>$${Math.round(obj.futureCost.futureCost).toLocaleString()}</b>, fully covering the total amount needed. Congratulations! You have exceeded your college savings goal by <b>$${getDollarString(obj.futureSaved - obj.futureCost.futureCost)}</b>.`;
                 return;
             } else {
-                summaryRef.current.innerHTML = `With ${initInvestString} a ${cadence} contribution of <b>$${obj.contribution.toLocaleString()}</b> over <b>${obj.yearsToCollege}</b> years, you are projected to save <b>$${obj.futureSaved.toLocaleString()}</b> towards a future college cost of <b>$${Math.round(obj.futureCost.futureCost).toLocaleString()}</b>, covering <b>${((obj.futureSaved / obj.futureCost.futureCost) * 100).toFixed(2)}%</b> of the total amount needed.  This means you will need to finance an additional <b>$${getDollarString(obj.futureCost.futureCost - obj.futureSaved)}</b>.`;
+                summaryRef.current.innerHTML = `With ${initInvestString} a ${cadence} contribution of <b>$${obj.contribution.toLocaleString()}</b> over <b>${obj.yearsToCollege}</b> years, you are projected to save <b>$${obj.futureSaved.toLocaleString()}</b> towards a future college cost of <b>$${Math.round(obj.futureCost.futureCost).toLocaleString()}</b>, covering <b>${((obj.futureSaved / obj.futureCost.futureCost) * 100).toFixed(2)}%</b> of the total amount needed.  This means you will need to finance an additional <b>${getDollarString(obj.futureCost.futureCost - obj.futureSaved)}</b>.`;
             }
         };
 
@@ -45,7 +45,7 @@ const Summary = forwardRef((_, ref) => {
         }
 
         if (assumptionsRef.current) {
-            const str = `Assumptions used in this calculation include an average annual return rate of ${obj.annualRateOfReturn}% on your investments, an annual tuition inflation rate of ${obj.annalCostIncrease}%, and an expense ratio of ${obj.expenseRatio}%.`;
+            const str = `Assumptions used in this calculation include an average annual return rate of <b>${obj.annualRateOfReturn}%</b> on your investments, an annual tuition inflation rate of <b>${obj.annalCostIncrease}%</b> and an expense ratio of <b>${obj.expenseRatio}%</b>.`;
             assumptionsRef.current.innerHTML = str;
         }
     }
@@ -60,7 +60,8 @@ const Summary = forwardRef((_, ref) => {
         <>
 
             <Card>
-                <HeroImage />
+                {/* <HeroImage /> */}
+                <h2>Summary</h2>
                 <div ref={summaryRef}></div>
                 <div ref={costProjectionRef}></div>
                 <div ref={assumptionsRef}></div>
