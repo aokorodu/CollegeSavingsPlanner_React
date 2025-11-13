@@ -4,7 +4,6 @@ import React from "react";
 import { getDollarString } from "../../../utils/Utils";
 import Disclaimer from "../../GraphButton/Disclaimer/Disclaimer";
 import Card from "../Card/Card";
-import HeroImage from "./HeroImage";
 
 const periodsMap: { [key: number]: string } = {
     1: "yearly",
@@ -39,7 +38,6 @@ const Summary = forwardRef((_, ref) => {
 
 
         if (costProjectionRef.current) {
-            const college = obj.selectedCollege ? ` (${obj.selectedCollege})` : "";
             const str = `The projected future cost of college is based on your selected institution, which has a current annual cost of <b>$${obj.currentCost!.toLocaleString()}</b>. Assuming an annual tuition inflation rate of <b>${obj.annalCostIncrease}%</b>, the estimated cost when your child starts college in <b>${obj.yearsToCollege}</b> years is <b>$${Math.round(obj.futureCost.futureCost).toLocaleString()}</b>.`;
             costProjectionRef.current.innerHTML = str;
         }

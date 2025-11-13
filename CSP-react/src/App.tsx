@@ -9,7 +9,6 @@ import SliderHolder from './components/SlideHolder/SlideHolder';
 import InfoHolder from './components/uicomponents/InfoHolder/InfoHolder';
 import { getCollegesByState2, stateNames } from './data/costData';
 import GraphButton from './components/GraphButton/GraphButton';
-import ContentHolder from './components/uicomponents/ContentHolder/ContentHolder';
 import Header from './components/uicomponents/Header/Header';
 import WhatIs from './components/uicomponents/WhatIsSection/WhatIs';
 import Modal from './components/Modals/Modal';

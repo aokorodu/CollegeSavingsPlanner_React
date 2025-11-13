@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import Spinnertext from './Spinnertext';
 import KeyItem from '../KeyItem/KeyItem';
 
-const PieChart = forwardRef((props, ref) => {
+const PieChart = forwardRef((_, ref) => {
 
     const dividerColor = "#212121";
     const containerRef = React.useRef<HTMLDivElement | null>(null);

@@ -1,4 +1,3 @@
-import { useState } from "react";
 import styles from './GraphButton.module.css';
 
 type GraphButtonProps = {

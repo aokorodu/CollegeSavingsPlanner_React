@@ -12,7 +12,7 @@ const years = ['freshman', 'sohpmore', 'junior', 'senior'];
 //     updateColors: (c: string) => void;
 // };
 
-const BarGraph = forwardRef((props, ref) => {
+const BarGraph = forwardRef((_, ref) => {
 
     const defaultMax = 50000;
 
