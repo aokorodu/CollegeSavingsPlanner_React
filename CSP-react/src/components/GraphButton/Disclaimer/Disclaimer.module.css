@@ -1,8 +1,7 @@
 .disclaimerContainer {
-  margin-top: 2rem;
   width: 100%;
   max-width: 800px;
-  font-size: 10px;
+  font-size: 0.8rem;
   font-style: italic;
   display: flex;
   flex-direction: column;

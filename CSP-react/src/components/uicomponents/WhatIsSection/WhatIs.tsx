@@ -19,10 +19,6 @@ const WhatIs = () => {
             <div className={styles.paragraph}>
                 We've entered some sample values to get you started (<strong>$100/month</strong> contribution for <strong>17 years</strong> , costs for an <strong>Average Private College</strong>), but feel free to adjust them to fit your own situation.
             </div>
-            <h2>Disclaimer</h2>
-            <div className={styles.paragraph}>
-                <i><strong>Please note</strong> that the College Savings Planner provides estimates based on the inputs you provide. Actual costs and investment returns may vary. It's always a good idea to consult with a financial advisor for personalized advice tailored to your specific situation.</i>
-            </div>
             <p>
 
             </p>
