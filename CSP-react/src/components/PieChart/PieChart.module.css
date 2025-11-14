@@ -4,7 +4,7 @@
 
 .savedPath {
   fill: none;
-  transition-property: all;
+  transition-property: transform;
   transition-duration: var(--transitionDuration);
 }
 
@@ -19,7 +19,7 @@
 }
 
 .shrunk {
-  transform: scale(0.8) translateY(-10%);
+  transform: scale(0.9) translateY(-10%);
 }
 
 .keyContainer {

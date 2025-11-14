@@ -262,7 +262,7 @@ function App() {
         <WhatIs />
       </Card>
       <Card>
-        <div>
+        <div className='chartContent'>
           <div className={`chartContainer ${pieChartActive ? '' : 'chartContainerHiddenLeft'}`}>
             <PieChart ref={pieChartRef} />
           </div>
