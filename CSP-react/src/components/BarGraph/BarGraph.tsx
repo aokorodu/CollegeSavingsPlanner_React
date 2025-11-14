@@ -187,13 +187,16 @@ const BarGraph = forwardRef((_, ref) => {
                         <clipPath id="barGraphClipPath">
                             <rect x="0" y="-40" width={vbWidth} height={vbHeight + 40} />
                         </clipPath>
+                        <clipPath id="labelClipPath">
+                            <rect x="-100" y="-20" width={vbWidth} height={vbHeight + 20} />
+                        </clipPath>
                     </defs>
 
 
                     <g id="background">
                         <rect x="-150" y="-150" width={vbWidth + 300} height={vbHeight + vbMargin * 2} fill="#212121" fillOpacity=".025" rx="20" ry="20" stroke="none" strokeOpacity="1" strokeWidth={5} />
                     </g>
-                    <g id="graphLabels">
+                    <g id="graphLabels" clipPath="url(#labelClipPath)">
                         {getGraphLabels()}
                     </g>
                     <g clipPath="url(#barGraphClipPath)">
