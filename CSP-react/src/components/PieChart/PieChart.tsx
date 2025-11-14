@@ -12,7 +12,7 @@ const PieChart = forwardRef((_, ref) => {
     const outlineRef = React.useRef<SVGCircleElement | null>(null);
     const bgRef = React.useRef<SVGCircleElement | null>(null);
     const arcRef = React.useRef<SVGCircleElement | null>(null);
-    const dividerRef = React.useRef<SVGPathElement | null>(null);
+    //const dividerRef = React.useRef<SVGPathElement | null>(null);
     const percentTextRef = React.useRef<SVGTextElement | null>(null);
 
     // key
@@ -29,7 +29,7 @@ const PieChart = forwardRef((_, ref) => {
             const offset = 100 - percentage < 0 ? 0 : 100 - percentage;
             arcRef.current.setAttribute("stroke-dashoffset", offset.toString());
             const angle = percentage > 100 ? 360 : (percentage / 100) * 360;
-            dividerRef.current?.setAttribute("transform", `rotate(${angle})`);
+            //dividerRef.current?.setAttribute("transform", `rotate(${angle})`);
             if (percentTextRef.current) {
                 percentTextRef.current.textContent = `${Math.round(percentage)}%`;
             }
@@ -144,7 +144,7 @@ const PieChart = forwardRef((_, ref) => {
                                     strokeLinecap="inherit"
                                     transform="rotate(0)"
                                 ></path>
-                                <path
+                                {/* <path
                                     ref={dividerRef}
                                     className={styles.savedPath}
                                     d={`M${radius - strokeWidth / 2} 0 H${radius + strokeWidth / 2}`}
@@ -152,7 +152,7 @@ const PieChart = forwardRef((_, ref) => {
                                     strokeWidth="2"
                                     strokeLinecap="inherit"
                                     transform="rotate(0)"
-                                ></path>
+                                ></path> */}
 
                             </g>
                         </g>

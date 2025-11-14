@@ -4,8 +4,9 @@
 
 .savedPath {
   fill: none;
-  transition-property: none;
-  transition-duration: var(--transitionDuration);
+  transition-property: transform, stroke-dashoffset;
+  transition-duration: 100ms;
+  transition-timing-function: linear;
 }
 
 .pieChartContainer {
