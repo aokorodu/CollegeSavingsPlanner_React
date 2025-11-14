@@ -12,7 +12,8 @@
   position: absolute;
   top: 50px;
   width: 100%;
-  height: 500px;
+  height: 80vw;
+  max-height: 500px;
   transition-property: transform;
   transition-duration: var(--transitionDuration);
   transition-timing-function: ease-in-out;

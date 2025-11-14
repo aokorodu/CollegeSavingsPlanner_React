@@ -4,7 +4,7 @@ import styles from './ExtraFundsNote.module.css';
 const ExtraFundsNote = forwardRef<HTMLDivElement | null>((_, ref) => {
     return (
         <div className={styles.extraContent} ref={ref}>
-            <p><strong>Note:</strong> you may end up with extra funds. See the summary below for what to do when funds remain in your 529 plan after education expenses have been covered.</p>
+            <p><strong>Note:</strong> You may have extra funds with this contribution amount. See summary below for what to do.</p>
         </div>
     );
 });
