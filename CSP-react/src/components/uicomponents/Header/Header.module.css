@@ -14,7 +14,7 @@ p {
   flex-direction: row;
   gap: 1rem;
   justify-content: space-between;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   padding-bottom: 0.5rem;
   border-bottom: 3px solid #212121;
 }
