@@ -137,7 +137,7 @@ select {
   vertical-align: middle;
 }
 
-input[type="range"] {
+/* input[type="range"] {
   -webkit-appearance: none;
   width: 100%;
   height: 20px;
@@ -164,4 +164,4 @@ input[type="range"]::-moz-range-thumb {
   border-radius: 10%;
   background: #4caf50;
   cursor: pointer;
-}
+} */
