@@ -2,7 +2,7 @@ import styles from './PieChart.module.css';
 import React, { forwardRef, useImperativeHandle } from 'react';
 import GraduationCap from '../../assets/graduationCap';
 import classNames from 'classnames';
-import Spinnertext from './Spinnertext';
+// x
 import KeyItem from '../KeyItem/KeyItem';
 
 const PieChart = forwardRef((_, ref) => {
@@ -19,26 +19,56 @@ const PieChart = forwardRef((_, ref) => {
     const constKeyRef = React.useRef<SVGRectElement | null>(null);
     const savedKeyRef = React.useRef<SVGRectElement | null>(null);
 
-    const spinnerRef = React.useRef<{ updateText: (p: number, v: number) => void } | null>(null);
-    const spinnerRef2 = React.useRef<{ updateText: (p: number, v: number) => void } | null>(null);
     const strokeWidth = 200;
     const radius = 350;
+
+    // textRefs
+    const projectedSavingsRef = React.useRef<SVGTextElement | null>(null);
+    const amountNeededRef = React.useRef<SVGTextElement | null>(null);
+    const amountNeededLabelRef = React.useRef<SVGTextElement | null>(null);
+    const totalCostRef = React.useRef<SVGTextElement | null>(null);
+
+    // dimensions
+    const vbHeight = 1000;
+    const vbWidth = 1600;
+    const vbMargin = 0;
+    const headingSize = 55;
+    const detailSize = 40;
+
 
     const updatePercentage = (percentage: number, futureCost: number) => {
         if (arcRef.current) {
             const offset = 100 - percentage < 0 ? 0 : 100 - percentage;
             arcRef.current.setAttribute("stroke-dashoffset", offset.toString());
-            const angle = percentage > 100 ? 360 : (percentage / 100) * 360;
-            //dividerRef.current?.setAttribute("transform", `rotate(${angle})`);
             if (percentTextRef.current) {
                 percentTextRef.current.textContent = `${Math.round(percentage)}%`;
             }
         }
 
-        spinnerRef.current?.updateText(percentage, futureCost);
+        const futureSavings = futureCost * (percentage / 100);
+        let amountNeeded = futureCost - futureSavings;
+
+        if (projectedSavingsRef.current) {
+            projectedSavingsRef.current.textContent = `$${futureSavings.toLocaleString(undefined, { maximumFractionDigits: 0 })}`;
+        }
+        if (amountNeededRef.current) {
+
+            if (amountNeeded < 0) {
+                amountNeeded *= -1;
+                amountNeededLabelRef.current!.textContent = "excess savings *";
+            } else {
+                amountNeededLabelRef.current!.textContent = "amount needed";
+            }
+            amountNeededRef.current.textContent = `$${amountNeeded.toLocaleString(undefined, { maximumFractionDigits: 0 })}`;
+        }
+        if (totalCostRef.current) {
+            totalCostRef.current.textContent = `$${futureCost.toLocaleString(undefined, { maximumFractionDigits: 0 })}`;
+        }
+
+        //spinnerRef.current?.updateText(percentage, futureCost);
         const op = percentage - 100;
         console.log("op:", op);
-        spinnerRef2.current?.updateText(percentage - 100, -futureCost);
+        //spinnerRef2.current?.updateText(percentage - 100, -futureCost);
 
         // let angle = percentage > 100 ? 360 : (percentage / 100) * 360;
         // let val = Math.round(percentage / 100 * futureCost);
@@ -94,7 +124,8 @@ const PieChart = forwardRef((_, ref) => {
             </div>
             <div ref={containerRef} className={classNames(styles.pieChartContainer)}>
 
-                <svg id="svg" width="100%" height="100%" viewBox="-100 -100 1200 1200">
+                <svg width="100%" height="100%" viewBox={`${-vbMargin} ${-vbMargin} ${vbWidth + vbMargin * 2} ${vbHeight + vbMargin * 2}`} preserveAspectRatio="xMidYMid meet" >
+
                     <g id="pieChart" className="graph">
                         <g transform="translate(500 500) rotate(-90)">
                             <circle
@@ -144,38 +175,28 @@ const PieChart = forwardRef((_, ref) => {
                                     strokeLinecap="inherit"
                                     transform="rotate(0)"
                                 ></path>
-                                {/* <path
-                                    ref={dividerRef}
-                                    className={styles.savedPath}
-                                    d={`M${radius - strokeWidth / 2} 0 H${radius + strokeWidth / 2}`}
-                                    stroke={dividerColor}
-                                    strokeWidth="2"
-                                    strokeLinecap="inherit"
-                                    transform="rotate(0)"
-                                ></path> */}
-
                             </g>
                         </g>
                     </g>
-                    {/* <g id="spinner" ref={spinnerRef} transform="rotate(-90 500 500)">
-                    <g transform="translate(500 500)">
-
-                        <g transform="translate(0 550)">
-                            <line x1="0" y1="-50" x2="0" y2="-90" stroke="#000000" strokeWidth="4" />
-                            <g>
-                                <text className={styles.spinnerText} ref={spinnerTextRef} x="0" y="0" fill='#ffffff' stroke="none" textAnchor="middle" dominantBaseline="middle">$2,000,000</text>
-                            </g>
-                        </g>
-                    </g>
-                </g> */}
-                    <Spinnertext ref={spinnerRef} />
-                    <Spinnertext ref={spinnerRef2} />
+                    {/* <Spinnertext ref={spinnerRef} />
+                    <Spinnertext ref={spinnerRef2} /> */}
 
                     <g transform="translate(370 290)">
                         <GraduationCap />
                     </g>
                     <text ref={percentTextRef} x={500} y={550} fill='#000000' stroke="none" fontSize={120} fontWeight="bold" textAnchor="middle" dominantBaseline="middle">%</text>
                     <text x={500} y={620} fill='#000000' stroke="none" fontSize={30} textAnchor="middle" dominantBaseline="middle">projected future Savings</text>
+
+                    <g id="summaryText" transform="translate(1025 300)">
+                        <text x={0} y={0} fill='#000000' stroke="none" fontSize={headingSize} fontWeight="500" textAnchor="start" dominantBaseline="middle">projected 529 savings</text>
+                        <text ref={projectedSavingsRef} x={0} y={70} fill='#000000' stroke="none" fontSize={detailSize} fontWeight="400" textAnchor="start" dominantBaseline="middle">$20,999</text>
+
+                        <text ref={amountNeededLabelRef} x={0} y={200} fill='#000000' stroke="none" fontSize={headingSize} fontWeight="500" textAnchor="start" dominantBaseline="middle">amount needed</text>
+                        <text ref={amountNeededRef} x={0} y={270} fill='#000000' stroke="none" fontSize={detailSize} fontWeight="400" textAnchor="start" dominantBaseline="middle">$20,999</text>
+
+                        <text x={0} y={400} fill='#000000' stroke="none" fontSize={headingSize} fontWeight="500" textAnchor="start" dominantBaseline="middle">total cost</text>
+                        <text ref={totalCostRef} x={0} y={470} fill='#000000' stroke="none" fontSize={detailSize} fontWeight="400" textAnchor="start" dominantBaseline="middle">$20,999</text>
+                    </g>
 
 
                 </svg>

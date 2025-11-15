@@ -17,7 +17,7 @@ const WhatIs = () => {
                 The planner also allows you to play around with different scenarios - high or low rate of return on your investment, or inflation in tuition costs, to see how changes in your savings plan can impact your overall college funding strategy.
             </div>
             <div className={styles.paragraph}>
-                We've entered some sample values to get you started (<strong>$100/month</strong> contribution for <strong>17 years</strong> , costs for an <strong>Average Private College</strong>), but feel free to adjust them to fit your own situation.
+                We've entered some sample values to get you started (<strong>$100/month</strong> contribution for <strong>17 years</strong>, costs for an <strong>Average Private College</strong>), but feel free to adjust them to fit your own situation.
             </div>
             <p>
 
