@@ -32,9 +32,6 @@ const PieChart = forwardRef((_, ref) => {
     const vbHeight = 1000;
     const vbWidth = 1600;
     const vbMargin = 0;
-    const headingSize = 55;
-    const detailSize = 40;
-
 
     const updatePercentage = (percentage: number, futureCost: number) => {
         if (arcRef.current) {
