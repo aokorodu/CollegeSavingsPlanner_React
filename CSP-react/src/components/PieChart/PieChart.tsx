@@ -188,14 +188,14 @@ const PieChart = forwardRef((_, ref) => {
                     <text x={500} y={620} fill='#000000' stroke="none" fontSize={30} textAnchor="middle" dominantBaseline="middle">projected future Savings</text>
 
                     <g id="summaryText" transform="translate(1025 300)">
-                        <text x={0} y={0} fill='#000000' stroke="none" fontSize={headingSize} fontWeight="500" textAnchor="start" dominantBaseline="middle">projected 529 savings</text>
-                        <text ref={projectedSavingsRef} x={0} y={70} fill='#000000' stroke="none" fontSize={detailSize} fontWeight="400" textAnchor="start" dominantBaseline="middle">$20,999</text>
+                        <text x={0} y={0} className={styles.labelStyle} fill='#000000' stroke="none" textAnchor="start" dominantBaseline="middle">projected 529 savings</text>
+                        <text ref={projectedSavingsRef} className={styles.dollarStyle} x={0} y={70} fill='#000000' stroke="none" textAnchor="start" dominantBaseline="middle">$20,999</text>
 
-                        <text ref={amountNeededLabelRef} x={0} y={200} fill='#000000' stroke="none" fontSize={headingSize} fontWeight="500" textAnchor="start" dominantBaseline="middle">amount needed</text>
-                        <text ref={amountNeededRef} x={0} y={270} fill='#000000' stroke="none" fontSize={detailSize} fontWeight="400" textAnchor="start" dominantBaseline="middle">$20,999</text>
+                        <text ref={amountNeededLabelRef} className={styles.labelStyle} x={0} y={200} fill='#000000' stroke="none" textAnchor="start" dominantBaseline="middle">additional amount needed</text>
+                        <text ref={amountNeededRef} className={styles.dollarStyle} x={0} y={270} fill='#000000' stroke="none" textAnchor="start" dominantBaseline="middle">$20,999</text>
 
-                        <text x={0} y={400} fill='#000000' stroke="none" fontSize={headingSize} fontWeight="500" textAnchor="start" dominantBaseline="middle">total cost</text>
-                        <text ref={totalCostRef} x={0} y={470} fill='#000000' stroke="none" fontSize={detailSize} fontWeight="400" textAnchor="start" dominantBaseline="middle">$20,999</text>
+                        <text x={0} y={400} className={styles.labelStyle} fill='#000000' stroke="none" textAnchor="start" dominantBaseline="middle">total cost</text>
+                        <text ref={totalCostRef} className={styles.dollarStyle} x={0} y={470} fill='#000000' stroke="none" textAnchor="start" dominantBaseline="middle">$20,999</text>
                     </g>
 
 

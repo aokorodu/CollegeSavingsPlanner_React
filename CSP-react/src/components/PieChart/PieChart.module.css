@@ -37,3 +37,15 @@
   gap: 20px;
   margin-bottom: 2rem;
 }
+
+.dollarStyle {
+  font-size: 50px;
+  font-weight: bold;
+  fill: #212121;
+}
+
+.labelStyle {
+  font-size: 55px;
+  font-weight: 400;
+  fill: #212121;
+}
