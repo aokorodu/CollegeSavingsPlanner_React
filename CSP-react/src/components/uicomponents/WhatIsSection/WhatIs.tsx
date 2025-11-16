@@ -5,7 +5,7 @@ const WhatIs = () => {
         <div className={styles.holder}>
             <h2>How much will you need?</h2>
             <div className={styles.paragraph}>
-                The College Savings Planner is a tool designed to help parents estimate the future cost of a college education, and to plan their 529 savings accordingly. By inputting various parameters like the number of years from now you expect your child to start college and the amount and cadence of your contributions, you can get a clearer picture of how much you need to save to cover future college expenses.
+                The College Savings Planner is a tool designed to help parents estimate the future cost of a college education, and to plan their 529 savings accordingly. By inputting certain values, such as the number of years until your child stats college, and the amount and cadence of your contributions, you can get a clearer picture of how much you'll be able to save towards college expenses.
             </div>
             <h2>What's a 529?</h2>
             <div className={styles.paragraph}>A 529 plan is a savings plan designed to encourage saving for future education costs. These plans are sponsored by states and educational institutions, and contributions grow <strong>tax-free</strong> until withdrawn for qualified education expenses.</div>
