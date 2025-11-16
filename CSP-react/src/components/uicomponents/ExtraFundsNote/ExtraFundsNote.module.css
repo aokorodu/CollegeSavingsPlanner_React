@@ -1,6 +1,6 @@
 .extraContent {
   position: absolute;
-  top: 80%;
+  top: 75%;
   left: 0%;
   transform: translate(0, 0);
   width: 100%;
@@ -18,14 +18,14 @@
 
 @media (max-width: 600px) {
   .extraContent {
-    top: 78%;
+    top: 68%;
     font-size: small;
   }
 }
 
 @media (max-width: 400px) {
   .extraContent {
-    top: 70%;
+    top: 65%;
   }
 }
 
