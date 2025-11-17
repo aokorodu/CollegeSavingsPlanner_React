@@ -4,6 +4,8 @@ import GraduationCap from '../../assets/graduationCap';
 import classNames from 'classnames';
 // x
 import KeyItem from '../KeyItem/KeyItem';
+// types
+import type { calcObject } from '../../types/types';
 
 const PieChart = forwardRef((_, ref) => {
 
@@ -22,6 +24,9 @@ const PieChart = forwardRef((_, ref) => {
     const radius = 350;
 
     // textRefs
+    const contributionsLabelRef = React.useRef<SVGTextElement | null>(null);
+    const contributionsRef = React.useRef<SVGTextElement | null>(null);
+    const projectedSavingsLabelRef = React.useRef<SVGTextElement | null>(null);
     const projectedSavingsRef = React.useRef<SVGTextElement | null>(null);
     const amountNeededRef = React.useRef<SVGTextElement | null>(null);
     const amountNeededLabelRef = React.useRef<SVGTextElement | null>(null);
@@ -32,7 +37,10 @@ const PieChart = forwardRef((_, ref) => {
     const vbWidth = 1600;
     const vbMargin = 0;
 
-    const updatePercentage = (percentage: number, futureCost: number) => {
+
+    const updateChart = (calcData: calcObject) => {
+        const { futureCost, futureSaved } = calcData;
+        const percentage = (futureSaved / futureCost.futureCost) * 100;
         if (arcRef.current) {
             const offset = 100 - percentage < 0 ? 0 : 100 - percentage;
             arcRef.current.setAttribute("stroke-dashoffset", offset.toString());
@@ -41,8 +49,12 @@ const PieChart = forwardRef((_, ref) => {
             }
         }
 
-        const futureSavings = futureCost * (percentage / 100);
-        let amountNeeded = futureCost - futureSavings;
+        const futureSavings = futureCost.futureCost * (percentage / 100);
+        let amountNeeded = futureCost.futureCost - futureSavings;
+
+        if (projectedSavingsLabelRef.current) {
+            projectedSavingsLabelRef.current.textContent = `projected savings over ${calcData.yearsToCollege} years`;
+        }
 
         if (projectedSavingsRef.current) {
             projectedSavingsRef.current.textContent = `$${futureSavings.toLocaleString(undefined, { maximumFractionDigits: 0 })}`;
@@ -58,11 +70,47 @@ const PieChart = forwardRef((_, ref) => {
             amountNeededRef.current.textContent = `$${amountNeeded.toLocaleString(undefined, { maximumFractionDigits: 0 })}`;
         }
         if (totalCostRef.current) {
-            totalCostRef.current.textContent = `$${futureCost.toLocaleString(undefined, { maximumFractionDigits: 0 })}`;
+            totalCostRef.current.textContent = `$${futureCost.futureCost.toLocaleString(undefined, { maximumFractionDigits: 0 })}`;
+        }
+
+        if (contributionsLabelRef.current) {
+            const prefix = getPrefix(calcData.periods);
+            contributionsLabelRef.current.textContent = `with ${prefix} contributions of`;
+        }
+
+        if (contributionsRef.current) {
+            contributionsRef.current.textContent = `$${calcData.contribution.toLocaleString()}`;
         }
 
         showExtra(percentage);
-    };
+    }
+
+    const getPrefix = (num: number): string => {
+        let pre = "";
+        switch (num) {
+            case 1:
+                pre = "annual ";
+                break;
+            case 4:
+                pre = "quarterly ";
+                break;
+            case 12:
+                pre = "monthly ";
+                break;
+            case 24:
+                pre = "bi-monthly ";
+                break;
+            case 26:
+                pre = "bi-weekly ";
+                break;
+            case 52:
+                pre = "weekly ";
+                break;
+            default:
+                pre = "";
+        }
+        return pre;
+    }
 
     const updateColors = (colors: string[]) => {
         console.log("updating colors", colors);
@@ -96,7 +144,7 @@ const PieChart = forwardRef((_, ref) => {
     }
 
     useImperativeHandle(ref, () => ({
-        updatePercentage,
+        updateChart,
         updateColors
     }));
 
@@ -169,15 +217,19 @@ const PieChart = forwardRef((_, ref) => {
                     <text ref={percentTextRef} x={500} y={550} fill='#000000' stroke="none" fontSize={120} fontWeight="bold" textAnchor="middle" dominantBaseline="middle">%</text>
                     <text x={500} y={620} fill='#000000' stroke="none" fontSize={30} textAnchor="middle" dominantBaseline="middle">projected future Savings</text>
 
-                    <g id="summaryText" transform="translate(1025 300)">
-                        <text x={0} y={0} className={styles.labelStyle} fill='#000000' stroke="none" textAnchor="start" dominantBaseline="middle">projected 529 savings</text>
-                        <text ref={projectedSavingsRef} className={styles.dollarStyle} x={0} y={70} fill='#000000' stroke="none" textAnchor="start" dominantBaseline="middle">$20,999</text>
+                    <g id="summaryText" transform="translate(1025 175)">
+                        <text ref={contributionsLabelRef} className={styles.labelStyle} x={0} y={0} fill='#000000' stroke="none" textAnchor="start" dominantBaseline="middle">contributions</text>
+                        <text ref={contributionsRef} className={styles.dollarStyle} x={0} y={70} fill='#000000' stroke="none" textAnchor="start" dominantBaseline="middle">$20,999</text>
 
-                        <text ref={amountNeededLabelRef} className={styles.labelStyle} x={0} y={200} fill='#000000' stroke="none" textAnchor="start" dominantBaseline="middle">additional amount needed</text>
-                        <text ref={amountNeededRef} className={styles.dollarStyle} x={0} y={270} fill='#000000' stroke="none" textAnchor="start" dominantBaseline="middle">$20,999</text>
 
-                        <text x={0} y={400} className={styles.labelStyle} fill='#000000' stroke="none" textAnchor="start" dominantBaseline="middle">total cost</text>
-                        <text ref={totalCostRef} className={styles.dollarStyle} x={0} y={470} fill='#000000' stroke="none" textAnchor="start" dominantBaseline="middle">$20,999</text>
+                        <text ref={projectedSavingsLabelRef} className={styles.labelStyle} x={0} y={200} fill='#000000' stroke="none" textAnchor="start" dominantBaseline="middle">projected 529 savings</text>
+                        <text ref={projectedSavingsRef} className={styles.dollarStyle} x={0} y={270} fill='#000000' stroke="none" textAnchor="start" dominantBaseline="middle">$20,999</text>
+
+                        <text ref={amountNeededLabelRef} className={styles.labelStyle} x={0} y={400} fill='#000000' stroke="none" textAnchor="start" dominantBaseline="middle">additional amount needed</text>
+                        <text ref={amountNeededRef} className={styles.dollarStyle} x={0} y={470} fill='#000000' stroke="none" textAnchor="start" dominantBaseline="middle">$20,999</text>
+
+                        <text x={0} y={600} className={styles.labelStyle} fill='#000000' stroke="none" textAnchor="start" dominantBaseline="middle">total cost</text>
+                        <text ref={totalCostRef} className={styles.dollarStyle} x={0} y={670} fill='#000000' stroke="none" textAnchor="start" dominantBaseline="middle">$20,999</text>
                     </g>
                 </svg>
             </div></>

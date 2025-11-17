@@ -7,10 +7,7 @@ import KeyItem from '../KeyItem/KeyItem';
 
 const years = ['freshman', 'sohpmore', 'junior', 'senior'];
 
-// type BarRef = {
-//     updateSize: ({ percentage, value }: BarSizeProps) => void;
-//     updateColors: (c: string) => void;
-// };
+import type { calcObject } from '../../types/types';
 
 const BarGraph = forwardRef((_, ref) => {
 
@@ -64,13 +61,13 @@ const BarGraph = forwardRef((_, ref) => {
         });
     };
 
-    const updateBarValues = (futureSaved: number, yearlyCostsByYear: number[]) => {
+    const updateChart = (calcData: calcObject) => {
 
-        yearlyCosts = yearlyCostsByYear;
-        totalCosts = yearlyCostsByYear.reduce((a, b) => a + b, 0);
-        percentageSaved = futureSaved / totalCosts;
-        yearlySaved = yearlyCostsByYear.map(cost => Math.round(cost * percentageSaved));
-        maxYearlyCost = Math.max(...yearlyCostsByYear);
+        yearlyCosts = calcData.futureCost.yearlyCostByYear;
+        totalCosts = calcData.futureCost.yearlyCostByYear.reduce((a, b) => a + b, 0);
+        percentageSaved = calcData.futureSaved / totalCosts;
+        yearlySaved = calcData.futureCost.yearlyCostByYear.map(cost => Math.round(cost * percentageSaved));
+        maxYearlyCost = Math.max(...calcData.futureCost.yearlyCostByYear);
         yearlyMax = Math.max(...yearlySaved, maxYearlyCost, defaultMax);
         // iterate cost bars
         costBarRefs.forEach((barRef, index) => {
@@ -138,7 +135,7 @@ const BarGraph = forwardRef((_, ref) => {
     }
 
     useImperativeHandle(ref, () => ({
-        updateBarValues,
+        updateChart,
         updateaBarColors
     }));
 
