@@ -12,7 +12,6 @@ const PieChart = forwardRef((_, ref) => {
     const outlineRef = React.useRef<SVGCircleElement | null>(null);
     const bgRef = React.useRef<SVGCircleElement | null>(null);
     const arcRef = React.useRef<SVGCircleElement | null>(null);
-    //const dividerRef = React.useRef<SVGPathElement | null>(null);
     const percentTextRef = React.useRef<SVGTextElement | null>(null);
 
     // key
@@ -61,18 +60,6 @@ const PieChart = forwardRef((_, ref) => {
         if (totalCostRef.current) {
             totalCostRef.current.textContent = `$${futureCost.toLocaleString(undefined, { maximumFractionDigits: 0 })}`;
         }
-
-        //spinnerRef.current?.updateText(percentage, futureCost);
-        const op = percentage - 100;
-        console.log("op:", op);
-        //spinnerRef2.current?.updateText(percentage - 100, -futureCost);
-
-        // let angle = percentage > 100 ? 360 : (percentage / 100) * 360;
-        // let val = Math.round(percentage / 100 * futureCost);
-        // let adjustedAngle = angle / 2 - 180;
-        // spinnerRef.current?.setAttribute("transform", `rotate(${adjustedAngle} 500 500)`);
-        // spinnerTextRef.current!.setAttribute("transform", `rotate(${-adjustedAngle})`);
-        // spinnerTextRef.current!.textContent = `$${val.toLocaleString()}`;
 
         showExtra(percentage);
     };
@@ -175,8 +162,6 @@ const PieChart = forwardRef((_, ref) => {
                             </g>
                         </g>
                     </g>
-                    {/* <Spinnertext ref={spinnerRef} />
-                    <Spinnertext ref={spinnerRef2} /> */}
 
                     <g transform="translate(370 290)">
                         <GraduationCap />
@@ -194,8 +179,6 @@ const PieChart = forwardRef((_, ref) => {
                         <text x={0} y={400} className={styles.labelStyle} fill='#000000' stroke="none" textAnchor="start" dominantBaseline="middle">total cost</text>
                         <text ref={totalCostRef} className={styles.dollarStyle} x={0} y={470} fill='#000000' stroke="none" textAnchor="start" dominantBaseline="middle">$20,999</text>
                     </g>
-
-
                 </svg>
             </div></>
     );
