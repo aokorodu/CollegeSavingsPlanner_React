@@ -51,7 +51,7 @@ function App() {
 
   // graph refs
   const pieChartRef = React.useRef<{ updateChart: (co: calcObject) => void; updateColors: (c: string[]) => void } | null>(null);
-  const barGraphRef = React.useRef<{ updateBarValues: (f: number, c: number[]) => void; updateaBarColors: (c: string[]) => void } | null>(null);
+  const barGraphRef = React.useRef<{ updateChart: (calcData: calcObject) => void; updateaBarColors: (c: string[]) => void } | null>(null);
   const costKeyRectRef = React.useRef<SVGRectElement | null>(null);
   const savedKeyRectRef = React.useRef<SVGRectElement | null>(null);
   const extraContentRef = React.useRef<HTMLDivElement | null>(null);
@@ -184,7 +184,7 @@ function App() {
     }
 
     if (barGraphRef.current) {
-      barGraphRef.current.updateBarValues(data.current.futureSaved, data.current.futureCost.yearlyCostByYear);
+      barGraphRef.current.updateChart(data.current);
       barGraphRef.current.updateaBarColors(colors);
     }
     costKeyRectRef.current?.setAttribute("fill", colors[1]);
