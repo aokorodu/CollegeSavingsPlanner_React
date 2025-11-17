@@ -4,6 +4,8 @@ import GraduationCap from '../../assets/graduationCap';
 import classNames from 'classnames';
 // x
 import KeyItem from '../KeyItem/KeyItem';
+// types
+import type { College, calcObject } from '../../types/types';
 
 const PieChart = forwardRef((_, ref) => {
 
@@ -32,7 +34,11 @@ const PieChart = forwardRef((_, ref) => {
     const vbWidth = 1600;
     const vbMargin = 0;
 
-    const updatePercentage = (percentage: number, futureCost: number) => {
+
+    const updateChart = (calcData: calcObject) => {
+        console.log("updateChart called with calcData:", calcData);
+        const { futureCost, futureSaved } = calcData;
+        const percentage = (futureSaved / futureCost.futureCost) * 100;
         if (arcRef.current) {
             const offset = 100 - percentage < 0 ? 0 : 100 - percentage;
             arcRef.current.setAttribute("stroke-dashoffset", offset.toString());
@@ -41,8 +47,8 @@ const PieChart = forwardRef((_, ref) => {
             }
         }
 
-        const futureSavings = futureCost * (percentage / 100);
-        let amountNeeded = futureCost - futureSavings;
+        const futureSavings = futureCost.futureCost * (percentage / 100);
+        let amountNeeded = futureCost.futureCost - futureSavings;
 
         if (projectedSavingsRef.current) {
             projectedSavingsRef.current.textContent = `$${futureSavings.toLocaleString(undefined, { maximumFractionDigits: 0 })}`;
@@ -58,11 +64,42 @@ const PieChart = forwardRef((_, ref) => {
             amountNeededRef.current.textContent = `$${amountNeeded.toLocaleString(undefined, { maximumFractionDigits: 0 })}`;
         }
         if (totalCostRef.current) {
-            totalCostRef.current.textContent = `$${futureCost.toLocaleString(undefined, { maximumFractionDigits: 0 })}`;
+            totalCostRef.current.textContent = `$${futureCost.futureCost.toLocaleString(undefined, { maximumFractionDigits: 0 })}`;
         }
 
         showExtra(percentage);
-    };
+    }
+    // const updatePercentage = (percentage: number, futureCost: number) => {
+    //     if (arcRef.current) {
+    //         const offset = 100 - percentage < 0 ? 0 : 100 - percentage;
+    //         arcRef.current.setAttribute("stroke-dashoffset", offset.toString());
+    //         if (percentTextRef.current) {
+    //             percentTextRef.current.textContent = `${Math.round(percentage)}%`;
+    //         }
+    //     }
+
+    //     const futureSavings = futureCost * (percentage / 100);
+    //     let amountNeeded = futureCost - futureSavings;
+
+    //     if (projectedSavingsRef.current) {
+    //         projectedSavingsRef.current.textContent = `$${futureSavings.toLocaleString(undefined, { maximumFractionDigits: 0 })}`;
+    //     }
+    //     if (amountNeededRef.current) {
+
+    //         if (amountNeeded < 0) {
+    //             amountNeeded *= -1;
+    //             amountNeededLabelRef.current!.textContent = "excess savings *";
+    //         } else {
+    //             amountNeededLabelRef.current!.textContent = "amount needed";
+    //         }
+    //         amountNeededRef.current.textContent = `$${amountNeeded.toLocaleString(undefined, { maximumFractionDigits: 0 })}`;
+    //     }
+    //     if (totalCostRef.current) {
+    //         totalCostRef.current.textContent = `$${futureCost.toLocaleString(undefined, { maximumFractionDigits: 0 })}`;
+    //     }
+
+    //     showExtra(percentage);
+    // };
 
     const updateColors = (colors: string[]) => {
         console.log("updating colors", colors);
@@ -96,7 +133,7 @@ const PieChart = forwardRef((_, ref) => {
     }
 
     useImperativeHandle(ref, () => ({
-        updatePercentage,
+        updateChart,
         updateColors
     }));
 

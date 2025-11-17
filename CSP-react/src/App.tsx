@@ -23,31 +23,7 @@ import extraStyles from './components/uicomponents/ExtraFundsNote/ExtraFundsNote
 import Summary from './components/uicomponents/Summary/Summary';
 
 
-
-type College = {
-  name: string;
-  cost: number;
-  colors: string[];
-};
-
-type FCost = {
-  futureCost: number,
-  yearlyCostByYear: number[],
-};
-
-export type calcObject = {
-  selectedCollege?: College | null;
-  currentCost?: number;
-  yearsToCollege: number;
-  initialBalance: number;
-  annualRateOfReturn: number;
-  annalCostIncrease: number;
-  periods: number;
-  contribution: number;
-  futureSaved: number;
-  futureCost: FCost;
-  expenseRatio: number;
-}
+import type { calcObject, College } from './types/types';
 
 function App() {
   const defaultData: calcObject = {
@@ -74,7 +50,7 @@ function App() {
   let data = useRef<calcObject>(defaultData);
 
   // graph refs
-  const pieChartRef = React.useRef<{ updatePercentage: (p: number, c: number) => void; updateColors: (c: string[]) => void } | null>(null);
+  const pieChartRef = React.useRef<{ updateChart: (co: calcObject) => void; updateColors: (c: string[]) => void } | null>(null);
   const barGraphRef = React.useRef<{ updateBarValues: (f: number, c: number[]) => void; updateaBarColors: (c: string[]) => void } | null>(null);
   const costKeyRectRef = React.useRef<SVGRectElement | null>(null);
   const savedKeyRectRef = React.useRef<SVGRectElement | null>(null);
@@ -198,13 +174,12 @@ function App() {
   }
 
   const updateGraphs = () => {
-    const percentage = data.current.futureSaved / data.current.futureCost.futureCost * 100;
     let colors = collegeDropdownRef.current?.value ? JSON.parse(collegeDropdownRef.current.value).colors : defaultColors;
     if (colors.length === 0) {
       colors = defaultColors;
     }
     if (pieChartRef.current) {
-      pieChartRef.current?.updatePercentage(percentage, data.current.futureCost.futureCost);
+      pieChartRef.current?.updateChart(data.current);
       pieChartRef.current.updateColors(colors);
     }
 
