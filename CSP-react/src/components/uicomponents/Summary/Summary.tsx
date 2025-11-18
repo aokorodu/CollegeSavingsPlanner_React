@@ -1,5 +1,5 @@
 import { forwardRef, useImperativeHandle } from "react";
-import type { calcObject } from "../../../App";
+import type { calcObject } from "../../../types/types";
 import React from "react";
 import { getDollarString } from "../../../utils/Utils";
 import Disclaimer from "../../GraphButton/Disclaimer/Disclaimer";
