@@ -12,12 +12,23 @@
     ></script>
     <script>
       window.dataLayer = window.dataLayer || [];
+      console.log("Google Analytics initialized");
+      const params = new URLSearchParams(window.location.search);
+      const mode = params.get("mode");
+      console.log("mode param:", mode);
+
       function gtag() {
         dataLayer.push(arguments);
       }
-      gtag("js", new Date());
+      if (location.hostname === "localhost" || mode === "dev") {
+        console.log("GA disabled on localhost or in dev mode");
+      } else {
+        gtag("js", new Date());
+        gtag("config", "G-14JVJW6MVB");
+      }
+      // gtag("js", new Date());
 
-      gtag("config", "G-14JVJW6MVB");
+      // gtag("config", "G-14JVJW6MVB");
     </script>
   </head>
   <body>
